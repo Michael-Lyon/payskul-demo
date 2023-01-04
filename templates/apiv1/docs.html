@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>Payskul - Documentation</title>
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+
+        body {
+            margin: 0;
+
+        }
+
+        header {
+            background: purple;
+            height: 100px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            line-height: 100px;
+            margin: 0;
+        }
+
+
+
+        .row {
+            display: flex;
+            flex-flow: row wrap;
+        }
+
+        .col {
+            flex: 15%;
+            padding: 10px;
+            margin: 10px;
+            background: aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>API ENDPOINTS AND HOW TO USE</h1>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3>Register A User</h3>
+
+                <a href="{% url 'apiv1:account_url:list_create_user' %}">List Or Create Users</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:list_create_user' %}</span>
+                    <p>
+                        <p>This endpoint handles the creation and listing of users and returns the user object while a
+                            verification code is sent to the user email.</p>
+
+
+                        <pre>
+    <em>Sample data: </em>
+    <code>
+    {
+    "first_name": "Mich",
+    "username": "pygodtest",
+    "last_name": "Asomugha",
+    "password": "usabblacakjbalk",
+    "email": "demo@payuskul.com",
+    "profile": {
+        "phone_number": "+234706000004",
+        "dob": "2022-12-23",
+        "address": "somewhere on earth",
+        "nin": "0101199870993"
+    }
+    }
+    </code>
+    </pre>
+            </div>
+            <div class="col">
+                <h3>Verify Email</h3>
+                <p>This endpoint is ti veerify the user email with the code that was sent to the user. It expries after
+                    5 minutes.</p>
+                <p>Requires the id of the user and the code sent to the user email.</p>
+                <pre>
+    <em>Sample data: </em>
+    <code>
+    {
+    "id": id,
+    "code": "code that was sent to email",
+    }
+    </code>
+    </pre>
+
+                <p>On success: {'message': "Account Verified"}</p>
+                <p>If token expired: {'message': "Token expired"}</p>
+                <p>on fail: {'message': 'Invalid code or user id'}</p>
+
+            </div>
+
+
+
+            <div class="col">
+                <h3>Login A User</h3>
+                Login the user
+
+
+                <em>Sample data: </em>
+                <pre>
+                <code>
+                    {
+                        "username": kenan,
+                        "password": "GHOST",
+                    }
+                    </code>
+                </pre>
+                <p>on success: {"message": "User Logged in", "data": {'id':user.id }} </p>
+                <p>on fail: {"message": "Account not verified or wrong login info", } </p>
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="col">
+                <h3>Validate A User For Loan</h3>
+
+                <a href="{% url 'apiv1:core:validate_user_loan' %}">Validate User For Loan</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:validate_user_loan' %}</span>
+                        <p>Endpoint to certify that a user is eligible for loan facility access</p>
+            <pre>
+                <p>
+                fullname -- user full name
+                home_address -- user home address
+                bvn -- user bank verification number
+                nin -- user national identity number
+                phone_number -- user phone number
+                phone_number -- user phone number
+                account_number -- user bank account number
+                account_name -- user bank account name
+                bank_name -- user bank name
+                pin -- user pin
+                
+                On success: {"message": "User validated successfully", }
+                On fail: {"message": "An error occured please try again."}
+                if user is not logged in: {"message": "User is not authenticated! Login and try again"}
+                if user already verified: {"message": "User has already been verified!"}
+            </p>
+            </pre>
+
+            </div>
+            <div class="col">
+                <h3>Apply For Loan</h3>
+                
+                <a href="{% url 'apiv1:core:apply_loan' %}">Apply Loan</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:apply_loan' %}</span>
+                    
+                    <p>Endpoint to apply for the users loan</p>
+                    <p>
+                    <pre>
+                    <strong>On GET request</strong>
+                    Returns the user 
+                    {message: "User credit limit", data: {credit_limit: 100_000}}
+                    
+                    <strong>On POST request</strong>
+                    Keyword arguments:
+                    service -- what service is the user trying to apply for the loan the id of the service
+                    down_payment -- how much is the down payment supposed to be
+                    amount_needed -- how much does the user need?
+                    start_date -- when is this loan service active
+                    end_date -- when is this loan due
+                    amount_to_pay_back -- how much is the user supposed to pay back
+                    
+                    User has outstanding loan: {"message": "This user has an outstanding loan."}
+                    User insufficient funds in wallet: {"message": "User has no/insufficient money in wallet"}
+                    User has no wallet: {"message": "User has no  wallet"}
+                    User pin invalis: {"message": "Invalid pin"}
+                    <em>On success: 
+                            [
+                             {
+                                "id": 3,
+                                "user": 61,
+                                "service": 1,
+                                "down_payment": "9000.00",
+                                "amount_needed": "90000.00",
+                                "start_date": "2023-01-02",
+                                "end_date": "2023-12-31",
+                                "total_repayment": "0.00",
+                                "cleared": false
+                             }
+                            ]
+                    </em>
+                </p>
+                </pre>
+                
+
+            </div>
+
+
+
+            <div class="col">
+                <h3>Top User Wallet</h3>
+
+            <pre>
+                <p>
+                    To Top up the user wallet
+                    
+                    Args:
+                    id: id of the card the user is trying to make the top up from
+                    amount: amount the user wants to add to wallet
+                    pin: user transaction pip
+                    
+                    On success: {'message': 'Charge successful'})
+                    Not enough money on card: {'message': 'Insufficeint Funds'})
+                    wrong pin: {'message': 'Pin incorrect.'})
+                </p>
+            </pre>
+            </div>
+        </div>
+  
+  
+        <div class="row">
+            <div class="col">
+                <h3>List Or Create Transations</h3>
+
+                <a href="{% url 'apiv1:core:transaction_list_create' %}">List Create Transactions</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:transaction_list_create' %}</span>
+            
+            </div>
+            <div class="col">
+                <h3>Wallet List Create</h3>
+                
+                <a href="{% url 'apiv1:core:wallet_list_create' %}">Wallet Create</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:wallet_list_create' %}</span>
+
+            </div>
+
+
+
+            <div class="col">
+                <h3>Card List Create</h3>
+
+                <a href="{% url 'apiv1:core:card_list_create' %}">Card </a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:card_list_create' %}</span>
+            </div>
+            
+            <div class="col">
+                <h3>Service Category List Create</h3>
+
+                <a href="{% url 'apiv1:core:service_category' %}">Service Category</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service_category' %}</span>
+            </div>
+            
+            <div class="col">
+                <h3>Service List Create</h3>
+
+                <a href="{% url 'apiv1:core:service' %}">Service</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service' %}</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
