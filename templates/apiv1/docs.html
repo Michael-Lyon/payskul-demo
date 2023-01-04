@@ -85,6 +85,9 @@
             </div>
             <div class="col">
                 <h3>Verify Email</h3>
+
+                 <a href="{% url 'apiv1:account_url:confirm_email' %}">Verify Email</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:confirm_email' %}</span>
                 <p>This endpoint is ti veerify the user email with the code that was sent to the user. It expries after
                     5 minutes.</p>
                 <p>Requires the id of the user and the code sent to the user email.</p>
@@ -108,8 +111,9 @@
 
             <div class="col">
                 <h3>Login A User</h3>
-                Login the user
-
+                
+                 <a href="{% url 'apiv1:account_url:login' %}">Login</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:login' %}</span>
 
                 <em>Sample data: </em>
                 <pre>
@@ -205,7 +209,8 @@
 
             <div class="col">
                 <h3>Top User Wallet</h3>
-
+                <a href="{% url 'apiv1:core:top_wallet' %}">Top Wallet</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:top_wallet' %}</span>
             <pre>
                 <p>
                     To Top up the user wallet
