@@ -18,9 +18,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
     referrals = serializers.SerializerMethodField()
+    token = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
-        fields = ('id','first_name', 'username', 'last_name', 'password', 'email', 'profile', 'referrals')
+        fields = ('id','first_name', 'username', 'last_name', 'password', 'email', 'token', 'profile', 'referrals')
         
     def create(self, validated_data):
         # create user 
@@ -35,8 +36,10 @@ class UserSerializer(serializers.ModelSerializer):
             print(e)
             user.delete()
             raise serializers.ValidationError("Something went wrong please try again")
-
-
+        
+    def get_token(self, obj):
+        return Token.objects.get(user=obj).key
+    
     def get_referrals(self, obj):
         return Profile.objects.get(user=obj).get_recommened_profiles() if Profile.objects.filter(user=obj).exists() else "No referrals"
         

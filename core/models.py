@@ -26,6 +26,7 @@ class Service_Category(models.Model):
 
 class Service(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
+    service_category = models.ForeignKey(Service_Category, default=1, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
     deposit_rate = models.DecimalField(max_digits=5, default=0, decimal_places=2)
     decription = models.CharField(max_length=100, default="Demo")
