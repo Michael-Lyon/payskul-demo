@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from account.models import Profile, UserAuthCodes
 from account.serializers import LoginSerializer, ProfileSerializer, UserSerializer
-from account.tasks import send_auth_mail
+
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 
 User = get_user_model()
@@ -24,9 +24,9 @@ class UserListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         """How to add additional context to the create view if u needed to work with the data before saving"""
-        instance = serializer.save()
-        if isinstance(instance, User):
-            send_auth_mail.delay(instance.id)
+        # instance = serializer.save()
+        # if isinstance(instance, User):
+            
 
 
 @api_view(['POST'])

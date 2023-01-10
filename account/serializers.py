@@ -4,7 +4,7 @@ from django.utils.timezone import now
 from hashid_field import Hashid
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-
+from account.tasks import send_auth_mail
 from .models import Profile, UserAuthCodes
 
 User = get_user_model()
@@ -27,8 +27,9 @@ class UserSerializer(serializers.ModelSerializer):
         # create user 
         print(validated_data)
         profile_data = validated_data.pop('profile')
-        user = User.objects.create_user(**validated_data)
         try:
+            user = User.objects.create_user(**validated_data)
+            send_auth_mail.delay(user.id)
             profile_data["user"] = user
             Profile.objects.create(**profile_data)
             return user

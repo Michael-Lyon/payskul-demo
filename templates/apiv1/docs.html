@@ -112,8 +112,8 @@
             <div class="col">
                 <h3>Login A User</h3>
                 
-                 <a href="{% url 'apiv1:account_url:login' %}">Login</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:login' %}</span>
+                 <a href="{% url 'token_obtain_pair' %}">Login using JSON Web Token</a>
+                <p>Endpoint: <span class="endpoint">{% url 'token_obtain_pair' %}</span>
 
                 <em>Sample data: </em>
                 <pre>
@@ -124,8 +124,48 @@
                     }
                     </code>
                 </pre>
-                <p>on success: {"message": "User Logged in", "data": {'id':user.id }} </p>
-                <p>on fail: {"message": "Account not verified or wrong login info", } </p>
+                <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires in an hour and the refresh expires in 2.
+                    JSON Web Token    
+                </p>
+            </div>
+        </div>
+            
+        <div class="col">
+                <h3>Refresh JWT Token</h3>
+                
+                 <a href="{% url 'token_refresh' %}">Refresh the token</a>
+                <p>Endpoint: <span class="endpoint">{% url 'token_refresh' %}</span>
+
+                <em>Sample data: </em>
+                <pre>
+                <code>
+                    {
+                     "refresh": refresh key
+                    }
+                    </code>
+                </pre>
+                <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires in an hour and the refresh expires in 2.
+                    JSON Web Token    
+                </p>
+            </div>
+        </div>
+        <div class="col">
+                <h3>Verify JWT Token</h3>
+                
+                 <a href="{% url 'token_verify' %}">verify the token</a>
+                <p>Endpoint: <span class="endpoint">{% url 'token_verify' %}</span>
+
+                <em>Sample data: </em>
+                <pre>
+                <code>
+                    {
+                     "token": access key
+                    }
+                    </code>
+                </pre>
+                <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires in an hour and the refresh expires in 2.
+                    JSON Web Token    
+                </p>
             </div>
         </div>
         
