@@ -12,15 +12,22 @@ from . import utils
 
 User = get_user_model()
 
+"""
+first_name
+last_name
+email
+username
+password
+"""
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    phone_number = models.CharField(max_length=15)
-    ref_code = models.CharField(max_length=15)
-    pin = models.CharField(max_length=15, default="12345")
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    ref_code = models.CharField(max_length=15, null=True, blank=True)
+    pin = models.CharField(max_length=15, blank=True, null=True)
     recomended_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='ref_by')
     signup_confirmation = models.BooleanField(default=False)
-    dob = models.DateField()
+    dob = models.DateField(null=True, blank=True)
     address = models.CharField(max_length=400, null=True, blank=True)
     nin = models.CharField(max_length=200, blank=True, null=True)
     verified = models.BooleanField(default=False)

@@ -1,15 +1,16 @@
 import requests
+from pprint import pprint
 BASE = "http://localhost:8000/"
 ENDPOINT = "account/create-user/"
 
 data = {
-    "fullname": "Benny John Kosi",
-    "email": "Kenny@1234.com",
-    "phone_number":"1234567890",
-    "password": "123456",
-    "confirm_password": "123456",
+    "fullname": "Aeaddl Pdygod Kodsi",
+    "email": "real_1pygod123@icloud.com",
+    "phone_number":"11234567890",
+    "password": "11234dd56",
+    "confirm_password": "11234dd56",
 }
 
 
 user_response = requests.post(url=BASE+ENDPOINT, json=data)
-print(user_response.json())
+pprint(user_response.json(), indent=4)

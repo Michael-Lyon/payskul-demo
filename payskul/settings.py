@@ -153,13 +153,14 @@ HASHID_FIELD_SALT ="1*pjfyurp74dkt(3@4roi  # b@e_@l%!1vhj4xvv*f_jkapjm1!z"
 HASHID_FIELD_ALLOW_INT_LOOKUP = True
 HASHID_FIELD_ENABLE_HASHID_OBJECT = False
 
-ADMIN_USER = "admin@payskul.com"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = "mail.payskul.com"
+ADMIN_USER = "pygod.dev@mail.com"
+EMAIL_HOST = "smtp.mail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "pygod@payskul"
-EMAIL_HOST_PASSWORD = "pygod@pygod@payskul"
+EMAIL_HOST_USER = "pygod.dev@mail.com"
+EMAIL_HOST_PASSWORD = "1234rewqasdf!@#$"
 
 
 REST_FRAMEWORK = {
@@ -216,3 +217,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=1),
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(hours=2)
 }
+
+
+OKRA_PUBLIC = os.getenv("OKRA_PUBLIC")
+OKRA_SECRET = os.getenv("OKRA_SECRET")

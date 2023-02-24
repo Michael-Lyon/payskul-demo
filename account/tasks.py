@@ -18,9 +18,12 @@ def send_auth_mail(user_id):
     user = User.objects.get(id=user_id)
     token = UserAuthCodes.objects.get(user=user).code
     subject = f'PaySkul Pin Verification'
-    message = f'Dear {user.first_name},\n\n' \
-        f'You have successfully created an account.' \
-        f'This is the code to activate your account {token}.'
+    message = f"""
+    Dear {user.first_name},
+    You have successfully created an account.
+    Your username is {user.username}
+    This is the code to activate your account {token}.
+    """
     mail_sent = send_mail(subject,
                           message,
                           ADMIN_USER,

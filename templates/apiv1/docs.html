@@ -57,8 +57,9 @@
             <div class="col">
                 <h3>Register A User</h3>
 
-                <a href="{% url 'apiv1:account_url:list_create_user' %}">List Or Create Users</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:list_create_user' %}</span>
+                <a href="{% url 'apiv1:account_url:create_user' %}">Create Users</a>
+                <a href="{% url 'apiv1:account_url:list_user' %}">List Users</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:list_user' %}</span>
                     <p>
                         <p>This endpoint handles the creation and listing of users and returns the user object while a
                             verification code is sent to the user email.</p>
@@ -68,17 +69,12 @@
     <em>Sample data: </em>
     <code>
     {
-    "first_name": "Mich",
-    "username": "pygodtest",
+    "fullname": "Mich",
     "last_name": "Asomugha",
-    "password": "usabblacakjbalk",
+    "phone_number": "+2347098897654",
     "email": "demo@payuskul.com",
-    "profile": {
-        "phone_number": "+234706000004",
-        "dob": "2022-12-23",
-        "address": "somewhere on earth",
-        "nin": "0101199870993"
-    }
+    "password":"uqyvfkjdasc",
+    "confirm_password":"ldkanf;da;fd"
     }
     </code>
     </pre>
@@ -86,12 +82,13 @@
             <div class="col">
                 <h3>Verify Email</h3>
 
-                 <a href="{% url 'apiv1:account_url:confirm_email' %}">Verify Email</a>
+                <a href="{% url 'apiv1:account_url:confirm_email' %}">Verify Email</a>
                 <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:confirm_email' %}</span>
-                <p>This endpoint is ti veerify the user email with the code that was sent to the user. It expries after
-                    5 minutes.</p>
-                <p>Requires the id of the user and the code sent to the user email.</p>
-                <pre>
+                    <p>This endpoint is ti veerify the user email with the code that was sent to the user. It expries
+                        after
+                        5 minutes.</p>
+                    <p>Requires the id of the user and the code sent to the user email.</p>
+                    <pre>
     <em>Sample data: </em>
     <code>
     {
@@ -101,9 +98,9 @@
     </code>
     </pre>
 
-                <p>On success: {'message': "Account Verified"}</p>
-                <p>If token expired: {'message': "Token expired"}</p>
-                <p>on fail: {'message': 'Invalid code or user id'}</p>
+                    <p>On success: {'message': "Account Verified"}</p>
+                    <p>If token expired: {'message': "Token expired"}</p>
+                    <p>on fail: {'message': 'Invalid code or user id'}</p>
 
             </div>
 
@@ -111,12 +108,12 @@
 
             <div class="col">
                 <h3>Login A User</h3>
-                
-                 <a href="{% url 'token_obtain_pair' %}">Login using JSON Web Token</a>
+
+                <a href="{% url 'token_obtain_pair' %}">Login using JSON Web Token</a>
                 <p>Endpoint: <span class="endpoint">{% url 'token_obtain_pair' %}</span>
 
-                <em>Sample data: </em>
-                <pre>
+                    <em>Sample data: </em>
+                    <pre>
                 <code>
                     {
                         "username": kenan,
@@ -124,17 +121,18 @@
                     }
                     </code>
                 </pre>
-                <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires in an hour and the refresh expires in 2.
-                    JSON Web Token    
-                </p>
+                    <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires
+                        in an hour and the refresh expires in 2.
+                        JSON Web Token
+                    </p>
             </div>
         </div>
-            
+
         <div class="col">
-                <h3>Refresh JWT Token</h3>
-                
-                 <a href="{% url 'token_refresh' %}">Refresh the token</a>
-                <p>Endpoint: <span class="endpoint">{% url 'token_refresh' %}</span>
+            <h3>Refresh JWT Token</h3>
+
+            <a href="{% url 'token_refresh' %}">Refresh the token</a>
+            <p>Endpoint: <span class="endpoint">{% url 'token_refresh' %}</span>
 
                 <em>Sample data: </em>
                 <pre>
@@ -144,40 +142,42 @@
                     }
                     </code>
                 </pre>
-                <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires in an hour and the refresh expires in 2.
-                    JSON Web Token    
+                <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires in
+                    an hour and the refresh expires in 2.
+                    JSON Web Token
                 </p>
-            </div>
         </div>
-        <div class="col">
-                <h3>Verify JWT Token</h3>
-                
-                 <a href="{% url 'token_verify' %}">verify the token</a>
-                <p>Endpoint: <span class="endpoint">{% url 'token_verify' %}</span>
+    </div>
+    <div class="col">
+        <h3>Verify JWT Token</h3>
 
-                <em>Sample data: </em>
-                <pre>
+        <a href="{% url 'token_verify' %}">verify the token</a>
+        <p>Endpoint: <span class="endpoint">{% url 'token_verify' %}</span>
+
+            <em>Sample data: </em>
+            <pre>
                 <code>
                     {
                      "token": access key
                     }
                     </code>
                 </pre>
-                <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires in an hour and the refresh expires in 2.
-                    JSON Web Token    
-                </p>
-            </div>
-        </div>
-        
-        
-        <div class="row">
-            <div class="col">
-                <h3>Validate A User For Loan</h3>
+            <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires in an
+                hour and the refresh expires in 2.
+                JSON Web Token
+            </p>
+    </div>
+    </div>
 
-                <a href="{% url 'apiv1:core:validate_user_loan' %}">Validate User For Loan</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:validate_user_loan' %}</span>
-                        <p>Endpoint to certify that a user is eligible for loan facility access</p>
-            <pre>
+
+    <div class="row">
+        <div class="col">
+            <h3>Validate A User For Loan</h3>
+
+            <a href="{% url 'apiv1:core:validate_user_loan' %}">Validate User For Loan</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:validate_user_loan' %}</span>
+                <p>Endpoint to certify that a user is eligible for loan facility access</p>
+                <pre>
                 <p>
                 fullname -- user full name
                 home_address -- user home address
@@ -197,15 +197,15 @@
             </p>
             </pre>
 
-            </div>
-            <div class="col">
-                <h3>Apply For Loan</h3>
-                
-                <a href="{% url 'apiv1:core:apply_loan' %}">Apply Loan</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:apply_loan' %}</span>
-                    
-                    <p>Endpoint to apply for the users loan</p>
-                    <p>
+        </div>
+        <div class="col">
+            <h3>Apply For Loan</h3>
+
+            <a href="{% url 'apiv1:core:apply_loan' %}">Apply Loan</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:apply_loan' %}</span>
+
+                <p>Endpoint to apply for the users loan</p>
+                <p>
                     <pre>
                     <strong>On GET request</strong>
                     Returns the user 
@@ -241,17 +241,17 @@
                     </em>
                 </p>
                 </pre>
-                
-
-            </div>
 
 
+        </div>
 
-            <div class="col">
-                <h3>Top User Wallet</h3>
-                <a href="{% url 'apiv1:core:top_wallet' %}">Top Wallet</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:top_wallet' %}</span>
-            <pre>
+
+
+        <div class="col">
+            <h3>Top User Wallet</h3>
+            <a href="{% url 'apiv1:core:top_wallet' %}">Top Wallet</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:top_wallet' %}</span>
+                <pre>
                 <p>
                     To Top up the user wallet
                     
@@ -265,49 +265,49 @@
                     wrong pin: {'message': 'Pin incorrect.'})
                 </p>
             </pre>
-            </div>
         </div>
-  
-  
-        <div class="row">
-            <div class="col">
-                <h3>List Or Create Transations</h3>
-
-                <a href="{% url 'apiv1:core:transaction_list_create' %}">List Create Transactions</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:transaction_list_create' %}</span>
-            
-            </div>
-            <div class="col">
-                <h3>Wallet List Create</h3>
-                
-                <a href="{% url 'apiv1:core:wallet_list_create' %}">Wallet Create</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:wallet_list_create' %}</span>
-
-            </div>
+    </div>
 
 
+    <div class="row">
+        <div class="col">
+            <h3>List Or Create Transations</h3>
 
-            <div class="col">
-                <h3>Card List Create</h3>
+            <a href="{% url 'apiv1:core:transaction_list_create' %}">List Create Transactions</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:transaction_list_create' %}</span>
 
-                <a href="{% url 'apiv1:core:card_list_create' %}">Card </a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:card_list_create' %}</span>
-            </div>
-            
-            <div class="col">
-                <h3>Service Category List Create</h3>
-
-                <a href="{% url 'apiv1:core:service_category' %}">Service Category</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service_category' %}</span>
-            </div>
-            
-            <div class="col">
-                <h3>Service List Create</h3>
-
-                <a href="{% url 'apiv1:core:service' %}">Service</a>
-                <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service' %}</span>
-            </div>
         </div>
+        <div class="col">
+            <h3>Wallet List Create</h3>
+
+            <a href="{% url 'apiv1:core:wallet_list_create' %}">Wallet Create</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:wallet_list_create' %}</span>
+
+        </div>
+
+
+
+        <div class="col">
+            <h3>Card List Create</h3>
+
+            <a href="{% url 'apiv1:core:card_list_create' %}">Card </a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:card_list_create' %}</span>
+        </div>
+
+        <div class="col">
+            <h3>Service Category List Create</h3>
+
+            <a href="{% url 'apiv1:core:service_category' %}">Service Category</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service_category' %}</span>
+        </div>
+
+        <div class="col">
+            <h3>Service List Create</h3>
+
+            <a href="{% url 'apiv1:core:service' %}">Service</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service' %}</span>
+        </div>
+    </div>
 
     </div>
 
