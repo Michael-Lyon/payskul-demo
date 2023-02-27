@@ -1,6 +1,6 @@
 import requests
 from pprint import pprint
-BASE = "http://localhost:8000/"
+BASE = "https://payskul-demo.up.railway.app/"
 ENDPOINT = "account/create-user/"
 
 data = {

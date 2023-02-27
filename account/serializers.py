@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
         profile_data = validated_data.pop('profile')
         try:
             user = User.objects.create_user(**validated_data)
-            send_auth_mail.delay(user.id)
+            # send_auth_mail.delay(user.id)
             profile_data["user"] = user
             Profile.objects.create(**profile_data)
             return user
