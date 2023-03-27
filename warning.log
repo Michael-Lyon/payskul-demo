@@ -1,0 +1,576 @@
+Method Not Allowed: /account/create-user/
+Heyyyyyyyy
+Heyyyyyyyy
+Heyyyyyyyy
+Heyyyyyyyy
+Heyyyyyyyy
+Method Not Allowed: /account/create-user/
+Heyyyyyyyy
+Heyyyyyyyy
+Method Not Allowed: /account/create-user/
+Method Not Allowed: /account/create-user/
+Bad Request: /account/create-user/
+Method Not Allowed: /account/create-user/
+Method Not Allowed: /account/create-user/
+Method Not Allowed: /account/create-user/
+Bad Request: /account/create-user/
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    send_mail(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/mail/__init__.py", line 81, in send_mail
+    return mail.send()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/mail/message.py", line 298, in send
+    return self.get_connection(fail_silently).send_messages([self])
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/mail/backends/smtp.py", line 124, in send_messages
+    new_conn_created = self.open()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/mail/backends/smtp.py", line 80, in open
+    self.connection = self.connection_class(
+  File "/usr/lib/python3.9/smtplib.py", line 253, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/lib/python3.9/smtplib.py", line 341, in connect
+    (code, msg) = self.getreply()
+  File "/usr/lib/python3.9/smtplib.py", line 398, in getreply
+    raise SMTPServerDisconnected("Connection unexpectedly closed")
+smtplib.SMTPServerDisconnected: Connection unexpectedly closed
+Method Not Allowed: /account/create-user/
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2014, in get_prep_value
+    return int(value)
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'collections.OrderedDict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    data = serializer.data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 555, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 255, in data
+    self._data = self.to_representation(self.validated_data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 522, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/fields.py", line 1837, in to_representation
+    return method(value)
+  File "/home/michaellyon/python_projects/payskul/account/serializers.py", line 44, in get_token
+    return Token.objects.get(user=obj).key
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 629, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1413, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1431, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1438, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1524, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1554, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1470, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1295, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/lookups.py", line 21, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2016, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got OrderedDict([('first_name', 'Bemilola'), ('username', 'BemDema23'), ('last_name', 'Demo'), ('password', '11234dd56'), ('email', 'real_pygod@icloud.com'), ('profile', OrderedDict([('phone_number', '11234567811190')]))]).
+Method Not Allowed: /account/create-user/
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2014, in get_prep_value
+    return int(value)
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'collections.OrderedDict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    data = serializer.data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 555, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 255, in data
+    self._data = self.to_representation(self.validated_data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 522, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/fields.py", line 1837, in to_representation
+    return method(value)
+  File "/home/michaellyon/python_projects/payskul/account/serializers.py", line 44, in get_token
+    return Token.objects.get(user=obj).key
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 629, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1413, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1431, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1438, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1524, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1554, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1470, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1295, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/lookups.py", line 21, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2016, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got OrderedDict([('first_name', 'Bemilola'), ('username', 'BemDem0ab'), ('last_name', 'Demo'), ('password', '11234dd56'), ('email', 'real_pygod@icloud.com'), ('profile', OrderedDict([('phone_number', '11234567811190')]))]).
+Method Not Allowed: /account/create-user/
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2014, in get_prep_value
+    return int(value)
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'collections.OrderedDict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    data = serializer.data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 555, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 255, in data
+    self._data = self.to_representation(self.validated_data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 522, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/fields.py", line 1837, in to_representation
+    return method(value)
+  File "/home/michaellyon/python_projects/payskul/account/serializers.py", line 44, in get_token
+    return Token.objects.get(user=obj).key
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 629, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1413, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1431, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1438, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1524, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1554, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1470, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1295, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/lookups.py", line 21, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2016, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got OrderedDict([('first_name', 'Bemilola'), ('username', 'BemDema28'), ('last_name', 'Demo'), ('password', '11234dd56'), ('email', 'real_pygod@icloud.com'), ('profile', OrderedDict([('phone_number', '11234567811190')]))]).
+Method Not Allowed: /account/create-user/
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2014, in get_prep_value
+    return int(value)
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'collections.OrderedDict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    data = serializer.data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 555, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 255, in data
+    self._data = self.to_representation(self.validated_data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 522, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/fields.py", line 1837, in to_representation
+    return method(value)
+  File "/home/michaellyon/python_projects/payskul/account/serializers.py", line 44, in get_token
+    return Token.objects.get(user=obj).key
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 629, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1413, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1431, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1438, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1524, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1554, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1470, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1295, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/lookups.py", line 21, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2016, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got OrderedDict([('first_name', 'Bemilola'), ('username', 'BemDemfea'), ('last_name', 'Demo'), ('password', '11234dd56'), ('email', 'real_pygod@icloud.com'), ('profile', OrderedDict([('phone_number', '11234567811190')]))]).
+Method Not Allowed: /account/create-user/
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2014, in get_prep_value
+    return int(value)
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'collections.OrderedDict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    data = serializer.data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 555, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 255, in data
+    self._data = self.to_representation(self.validated_data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 522, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/fields.py", line 1837, in to_representation
+    return method(value)
+  File "/home/michaellyon/python_projects/payskul/account/serializers.py", line 45, in get_token
+    return Token.objects.get(user=obj).key
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 629, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1413, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1431, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1438, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1524, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1554, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1470, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1295, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/lookups.py", line 21, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2016, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got OrderedDict([('first_name', 'Bemilola'), ('username', 'BemDem62b'), ('last_name', 'Demo'), ('password', '11234dd56'), ('email', 'real_pygod@icloud.com'), ('profile', OrderedDict([('phone_number', '11234567811190')]))]).
+Method Not Allowed: /account/create-user/
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2014, in get_prep_value
+    return int(value)
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'collections.OrderedDict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    data = serializer.data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 555, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 255, in data
+    self._data = self.to_representation(self.validated_data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 522, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/fields.py", line 1837, in to_representation
+    return method(value)
+  File "/home/michaellyon/python_projects/payskul/account/serializers.py", line 45, in get_token
+    return Token.objects.get(user=obj).key
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 629, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1413, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1431, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1438, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1524, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1554, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1470, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1295, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/lookups.py", line 21, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2016, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got OrderedDict([('first_name', 'Bemilola'), ('username', 'BemDem7c5'), ('last_name', 'Demo'), ('password', '11234dd56'), ('email', 'real_pygod@icloud.com'), ('profile', OrderedDict([('phone_number', '11234567811190')]))]).
+Method Not Allowed: /account/create-user/
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2014, in get_prep_value
+    return int(value)
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'collections.OrderedDict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    data = serializer.data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 555, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 255, in data
+    self._data = self.to_representation(self.validated_data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 522, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/fields.py", line 1837, in to_representation
+    return method(value)
+  File "/home/michaellyon/python_projects/payskul/account/serializers.py", line 48, in get_referrals
+    return Profile.objects.get(user=obj).get_recommened_profiles() if Profile.objects.filter(user=obj).exists() else "No referrals"
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1413, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1431, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/query.py", line 1438, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1524, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1554, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1470, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1295, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/lookups.py", line 21, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/db/models/fields/__init__.py", line 2016, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got OrderedDict([('first_name', 'Bemilola'), ('username', 'BemDemb49'), ('last_name', 'Demo'), ('password', '11234dd56'), ('email', 'real_pygod@icloud.com'), ('profile', OrderedDict([('phone_number', '11234567811190')]))]).
+Method Not Allowed: /account/create-user/
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 86, in create_user
+    data = serializer.data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 555, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 255, in data
+    self._data = self.to_representation(self.validated_data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 522, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/fields.py", line 1837, in to_representation
+    return method(value)
+  File "/home/michaellyon/python_projects/payskul/account/serializers.py", line 48, in get_referrals
+    print(obj.id)
+AttributeError: 'collections.OrderedDict' object has no attribute 'id'
+Method Not Allowed: /account/create-user/
+Method Not Allowed: /account/create-user/
+Method Not Allowed: /account/create-user/
+Heyyyyyyyy
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/decorators.py", line 49, in handler
+    return func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 107, in create_user
+    serializer.save()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 198, in save
+    assert not hasattr(self, '_data'), (
+AssertionError: You cannot call `.save()` after accessing `serializer.data`.If you need to access data before committing to the database then inspect 'serializer.validated_data' instead. 
+Method Not Allowed: /account/create-user/
+Bad Request: /account/create-user/
+Heyyyyyyyy
+Heyyyyyyyy
+Heyyyyyyyy

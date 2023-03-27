@@ -17,7 +17,7 @@ class Service_Category(models.Model):
     class Meta:
         ordering = ('name',)
         verbose_name = "Service Category"
-        verbose_name_plural = "Services Category"
+        verbose_name_plural = "Service Categories"
 
     def __str__(self) -> str:
         return self.name

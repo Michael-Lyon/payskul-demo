@@ -25,6 +25,7 @@ def create_user_auth_codes(sender, instance=None, created=False, **kwargs):
     if created:
         UserAuthCodes.objects.create(user=instance)
 
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_wallet(sender, instance=None, created=False, **kwargs):
     if created:

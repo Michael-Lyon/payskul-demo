@@ -35,9 +35,9 @@ def validate_user_loan(request, *args, **kwargs):
     if request.user.is_authenticated:
         raw_data = request.data
         profile = request.user.profile
-        if not (profile.verified):
+        if  not (profile.verified):
             try:
-                limit = generate_random_credit()
+                limit = generate_random_credit() # user credit limit(demo)
                 if limit <= 25_000:
                     return Response({"message": "User has a low credit limit", })
                 nin = raw_data['nin']
@@ -87,6 +87,7 @@ def apply_loan(request, *args, **kwargs):
     user = request.user
     method = request.method
     profile = request.user.profile
+    #TODO: Re valluate the can-borrow logic
     if Loan.objects.filter(user=user).exists():
         can_borrow = True if Loan.objects.filter(user=user, cleared=True) else False
     else:

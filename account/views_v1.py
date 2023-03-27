@@ -13,6 +13,15 @@ from account.serializers import LoginSerializer, ProfileSerializer, UserSerializ
 from account.utils import get_code
 
 from payskul.settings import EMAIL_HOST_USER as admin_mail
+from payskul.settings import ADMIN_USER
+from payskul.settings import EMAIL_HOST_USER as admin_mail
+from django.core.mail import send_mail
+
+# import the logging library
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 User = get_user_model()
 # token = Token.objects.get_or_create(user=user)
@@ -24,10 +33,13 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    # def perform_create(self, serializer):
-    #     """How to add additional context to the create view if u needed to work with the data before saving"""
-    #     # instance = serializer.save()
-    # if isinstance(instance, User):
+    def perform_create(self, serializer):
+        """How to add additional context to the create view if u needed to work with the data before saving"""
+        
+        user = serializer.save()
+        print(user) 
+        # instance = serializer.save()
+        
 
 
 @api_view(['POST'])
@@ -66,12 +78,27 @@ def create_user(request):
                 "phone_number": phone_number
             }
         })
-
+        """
+        TODO: Change this process to a background process with celery
+        Sends auth code mails to users
+        """
         if serializer.is_valid():
             serializer.save()
             data = serializer.data
-            # TODO: REMOVE THIS PART PNCE SMTP IS SETUP PROPERLY
-            data['verification-code'] = UserAuthCodes.objects.get(id=data['id']).code
+            print("Heyyyyyyyyyyy")
+            # data['verification-code'] = UserAuthCodes.objects.get(id=data['id']).code
+            # user = User.objects.get(id=user_id)
+            token = UserAuthCodes.objects.get(id=data['id']).code
+            subject = f'PaySkul Pin Verification'
+            message = f"""
+            Dear {data['first_name']},
+            You have successfully created an account.
+            Your username is {data['username']}
+            This is the code to activate your account {token}.
+            
+            """
+            send_mail(subject, message, ADMIN_USER, [f"{data['email']}"],fail_silently=False,
+            )
             return Response(data)
         else:
             raise serializers.ValidationError(serializer.errors)
@@ -88,9 +115,6 @@ def confirm_email(request):
     id = request.data['id']
     user = User.objects.get(id=id)
     if UserAuthCodes.expired.filter(user=user).exists():
-        print(timezone.now())
-        print("===================")
-        print(UserAuthCodes.objects.get(user=user).expires_at)
         return Response({'message': "Token expired"})
     elif code == UserAuthCodes.objects.get(user=user).code:
         profile = Profile.objects.get(user=user)
