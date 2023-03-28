@@ -4,11 +4,11 @@ BASE = "http://localhost:8000/"
 ENDPOINT = "account/create-user/"
 
 data = {
-    "fullname": "milola Demo",
+    "fullname": "lilola Demo",
     "email": "pygod.dev@mail.com",
     "phone_number":"11234567811190",
     "password": "11234dd56",
-    "confirm_password": "11234dd56",
+    "confirm_password": "11234dd56"
 }
 
 

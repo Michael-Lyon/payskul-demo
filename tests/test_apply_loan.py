@@ -1,5 +1,8 @@
 import requests 
-BASE = "http://localhost:8000/apiv1/"
+local = False
+BASE= "https://payskul-demo.up.railway.app/"
+if local:
+    BASE = "http://localhost:8000/apiv1/"
 LOGIN_URL = "account/login/"
 APPLY_LOAN_URL = "core/apply_loan/"
 TOP_WALLET_URL = "core/top_wallet/"
