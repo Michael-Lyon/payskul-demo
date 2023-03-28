@@ -574,3 +574,49 @@ Bad Request: /account/create-user/
 Heyyyyyyyy
 Heyyyyyyyy
 Heyyyyyyyy
+Not Found: /favicon.ico
+Internal Server Error: /core/service/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 50, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 196, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 99, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 508, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 468, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 479, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/generics.py", line 198, in get
+    return self.list(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/mixins.py", line 43, in list
+    return self.get_paginated_response(serializer.data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 768, in data
+    ret = super().data
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 253, in data
+    self._data = self.to_representation(self.instance)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 686, in to_representation
+    return [
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 687, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 507, in to_representation
+    for field in fields:
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 368, in _readable_fields
+    for field in self.fields.values():
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/utils/functional.py", line 57, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Field name `description` is not valid for model `Service`.
