@@ -14,9 +14,14 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
+    
+    total_payments = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Transaction
-        fields = ('id', 'user', 'date', 'amount', 'description', 'type', 'loan')
+        fields = ('id', 'user', 'date', 'amount', 'description', 'type', 'loan', 'total_payments')
+        
+    def get_total_payments(self, obj):
+        return obj.get_total_payments()
 
 
 class WalletSerializer(serializers.ModelSerializer):

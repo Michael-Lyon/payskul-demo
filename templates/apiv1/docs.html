@@ -202,7 +202,7 @@
                 account_number -- user bank account number
                 account_name -- user bank account name
                 bank_name -- user bank name
-                pin -- user pin
+                
                 
                 On success: {"message": "User validated successfully", }
                 On fail: {"message": "An error occured please try again."}
@@ -241,8 +241,6 @@
                     <em>On success: 
                             [
                              {
-                                "id": 3,
-                                "user": 61,
                                 "service": 1,
                                 "down_payment": "9000.00",
                                 "amount_needed": "90000.00",
@@ -267,16 +265,7 @@
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:top_wallet' %}</span>
                 <pre>
                 <p>
-                    To Top up the user wallet
-                    
-                    Args:
-                    id: id of the card the user is trying to make the top up from
-                    amount: amount the user wants to add to wallet
-                    pin: user transaction pip
-                    
-                    On success: {'message': 'Charge successful'})
-                    Not enough money on card: {'message': 'Insufficeint Funds'})
-                    wrong pin: {'message': 'Pin incorrect.'})
+                    To return an authorized url where user can make payment
                 </p>
             </pre>
         </div>
@@ -320,6 +309,18 @@
 
             <a href="{% url 'apiv1:core:service' %}">Service</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service' %}</span>
+        </div>
+        <div class="col">
+            <h3>Get Banks</h3>
+
+            <a href="{% url 'apiv1:core:bank_list' %}">Banks List</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:bank_list' %}</span>
+        </div>
+        <div class="col">
+            <h3>Change Password</h3>
+
+            <a href="{% url 'apiv1:account:change_password' %}">Banks List</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:account:change_password' %}</span>
         </div>
     </div>
 

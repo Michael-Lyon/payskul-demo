@@ -7,11 +7,15 @@ from rest_framework import generics, mixins
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import Bank, Loan, Transaction, Wallet, Card, Service, Service_Category
 from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer, ServiceCategorySerializer
 from .utils import validate_bvn, validate_national_id, generate_random_credit
 from rest_framework import serializers
+
+from okra_things.list_banks import bank_list
 
 
 @api_view(['POST'])
@@ -27,7 +31,6 @@ def validate_user_loan(request, *args, **kwargs):
     account_number -- user bank account number
     account_name -- user bank account name
     bank_name -- user bank name
-    pin -- user pin
 
     Return:  {'meaage': True / False} if user is eligible or not
     """
@@ -128,10 +131,14 @@ def apply_loan(request, *args, **kwargs):
         return Response({"message": "Invalid pin"})
 
 
+@api_view(['GET'])
+def get_banks(request, *args, **kwargs):
+    data = bank_list()
+    return Response(data)
 
 @api_view(['GET'])
 def loan_list(request, pk=None, *args, **kwargs):
-    queryset = Loan.objects.all()
+    queryset = Loan.objects.filter(user=request.user)
     if request.method == 'GET':
         if pk is not None:
             # detail view
@@ -143,12 +150,17 @@ def loan_list(request, pk=None, *args, **kwargs):
         data = LoanSerializer(queryset, many=True).data
         return Response(data)
 
-
-
 class TransactionListCreateView(generics.ListCreateAPIView):
-    queryset = Transaction.objects.all()
+    # queryset = Transaction.objects.all()
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = TransactionSerializer
-
+    
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user) 
+        
+    
+    
     def perform_create(self, serializer):
         """
         Check the transaction so that to be able to monitor if the user is trying to payback the loan he took.
@@ -176,7 +188,9 @@ class TransactionListCreateView(generics.ListCreateAPIView):
 
 
 class WalletListCreateView(generics.ListAPIView):
-    queryset = Wallet.objects.all()
+    def get_queryset(self):
+        return Wallet.objects.filter(user=self.request.user)
+    
     serializer_class = WalletSerializer
 
 class ServiceListCreateView(generics.ListAPIView):
@@ -189,7 +203,8 @@ class ServiceCategoryListCreateView(generics.ListAPIView):
 
 
 class CardListCreateView(generics.ListCreateAPIView):
-    queryset = Card.objects.all()
+    def get_queryset(self):
+        return Card.objects.filter(user=self.request.user)
     serializer_class = CardSeriilizer
 
 

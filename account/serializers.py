@@ -9,6 +9,7 @@ from .models import Profile, UserAuthCodes
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from django.core.mail import send_mail
+from django.contrib.auth.password_validation import validate_password
 
 User = get_user_model()
 
@@ -59,3 +60,36 @@ class LoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
     
+    
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+    old_password = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'password', 'password2')
+        
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.context.get('request', None)
+        return context
+
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+
+        return attrs
+
+    def validate_old_password(self, value):
+        user = self.instance
+        if not user.check_password(value):
+            raise serializers.ValidationError({"message": "Old password is not correct"})
+        return value
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])
+        instance.save()
+
+        return instance

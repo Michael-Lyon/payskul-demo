@@ -5,6 +5,7 @@ from . import views_v1
 app_name="core"
 
 urlpatterns = [
+    path("get-banks/", views_v1.get_banks, name="bank_list"),
     path("loan-list/", views_v1.loan_list, name="loan_list"),
     path("validate-user-loan/", views_v1.validate_user_loan, name="validate_user_loan"),
     path("apply_loan/", views_v1.apply_loan, name="apply_loan"),

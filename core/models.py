@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.db.models import Sum
 
 from account.models import Profile
 
@@ -60,11 +61,14 @@ class Loan(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user } on loan of {self.amount_needed}  from {self.start_date} to {self.end_date}"
+    
+    @classmethod
+    def get_loan(self, user):
+        return Loan.objects.filter(user=user, cleared=False)[:1] if Loan.objects.filter(user=user, cleared=False).exists() else None
 
 
 class Transaction(models.Model):
     TRANSACTION_TYPE_CHOICES = [
-        ('LO', 'Loan'),
         ('FR', 'Fee Repayment'),
         ('WT', 'Wallet Top Up'),
     ]
@@ -76,8 +80,18 @@ class Transaction(models.Model):
     status = models.CharField(max_length=20, default="Pending")
     type = models.CharField(max_length=3, choices=TRANSACTION_TYPE_CHOICES, default='WT')
     
+    # total = Transactions.objects.filter(user=self.user, type="deposit", recieved=True).aggregate(Sum('amount'))
+    # return total['amount__sum']
+    
+    def get_total_payments(self):
+        loan = Loan.get_loan(self.user)
+        if loan == None:
+            return 0
+        total = Transaction.objects.filter(loan=loan, user=self.user, type="FR").aggregate(Sum('amount'))
+        return total['amount__sum'] or 0 if not total["amount__sum"] else total["amount__sum"]
 
-
+        
+        
 
 
 class Bank(models.Model):
