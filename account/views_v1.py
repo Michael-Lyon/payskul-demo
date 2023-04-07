@@ -31,12 +31,27 @@ User = get_user_model()
 # token = Token.objects.get_or_create(user=user)
 
 
+class UserDetailView(generics.RetrieveAPIView):
+    # print(timezone.make_aware(
+    #     datetime.utcnow() + timedelta(minutes=10),  timezone.get_current_timezone()))
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = "username"
+    
+    def perform_create(self, serializer):
+        """How to add additional context to the create view if u needed to work with the data before saving"""
+        
+        user = serializer.save()
+        print(user) 
+        # instance = serializer.save()
+
 class UserListView(generics.ListAPIView):
     # print(timezone.make_aware(
     #     datetime.utcnow() + timedelta(minutes=10),  timezone.get_current_timezone()))
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
+    lookup_field = "id"
+    
     def perform_create(self, serializer):
         """How to add additional context to the create view if u needed to work with the data before saving"""
         
