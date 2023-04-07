@@ -22,6 +22,7 @@ from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from django.core.mail import send_mail
 
+
 # import the logging library
 import logging
 # Get an instance of a logger
@@ -157,6 +158,8 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+   
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     authentication_classes = (JWTAuthentication,)

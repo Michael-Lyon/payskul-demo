@@ -6,9 +6,12 @@ from decimal import Decimal
 from rest_framework import generics, mixins
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
+
+from account.models import Profile
 
 from .models import Bank, Loan, Transaction, Wallet, Card, Service, Service_Category
 from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer, ServiceCategorySerializer
@@ -17,6 +20,7 @@ from rest_framework import serializers
 
 from okra_things.list_banks import bank_list
 
+User = get_user_model()
 
 @api_view(['POST'])
 def validate_user_loan(request, *args, **kwargs):
@@ -149,6 +153,8 @@ def loan_list(request, pk=None, *args, **kwargs):
         # list view
         data = LoanSerializer(queryset, many=True).data
         return Response(data)
+
+
 
 class TransactionListCreateView(generics.ListCreateAPIView):
     # queryset = Transaction.objects.all()

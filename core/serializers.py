@@ -46,4 +46,7 @@ class BankSerializer(serializers.ModelSerializer):
 class CardSeriilizer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ('id', 'user', 'name', 'number', 'cvv')
+        fields = ("id", "number", "name", 'user', "cvv")
+        
+        
+

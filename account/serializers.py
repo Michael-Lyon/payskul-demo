@@ -10,6 +10,7 @@ from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from django.core.mail import send_mail
 from django.contrib.auth.password_validation import validate_password
+from core.serializers import LoanSerializer, WalletSerializer, CardSeriilizer
 
 User = get_user_model()
 
@@ -21,6 +22,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
+    
     # referrals = serializers.SerializerMethodField()
     # token = serializers.SerializerMethodField(read_only=True)
     class Meta:
