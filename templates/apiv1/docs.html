@@ -287,6 +287,12 @@
 
             <a href="{% url 'apiv1:core:wallet_list_create' %}">Wallet Create</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:wallet_list_create' %}</span>
+            </p>
+
+            <p>
+            amount: amount the user wants to add to wallet
+            pin: user transaction pip
+            </p>
 
         </div>
 
@@ -297,6 +303,9 @@
 
             <a href="{% url 'apiv1:core:card_list_create' %}">Card </a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:card_list_create' %}</span>
+
+                <p>To Create card</p>
+                <p>{"number":"123456789", "name":"Kenny Card", "cvv":121}</p>
         </div>
 
         <div class="col">
@@ -321,8 +330,17 @@
         <div class="col">
             <h3>Change Password</h3>
 
-            <a href="{% url 'apiv1:account:change_password' %}">Banks List</a>
+            <a href="{% url 'apiv1:account:change_password' %}">change password</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:account:change_password' %}</span>
+
+                <p>
+                    data = {
+                        "old_password": "1234rewqasdf",
+                        "password":"1234qwerasdf",
+                        "password2":"1234qwerasdf",
+    
+                    }
+                </p>
         </div>
     </div>
 

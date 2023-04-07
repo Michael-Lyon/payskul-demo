@@ -3147,3 +3147,4 @@ Traceback (most recent call last):
   File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
     raise ImproperlyConfigured(
 django.core.exceptions.ImproperlyConfigured: Field name `cvc` is not valid for model `Card`.
+Not Found: /favicon.ico
