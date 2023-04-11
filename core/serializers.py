@@ -10,7 +10,7 @@ class ServiceCategorySerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = ('id', 'name', 'slug', 'deposit_rate', 'description')
+        fields = ('id',"service_category" ,'name', 'slug', 'deposit_rate', 'description')
 
 
 class TransactionSerializer(serializers.ModelSerializer):
