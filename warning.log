@@ -4001,3 +4001,4 @@ Traceback (most recent call last):
     raise self.model.DoesNotExist(
 account.models.Profile.DoesNotExist: Profile matching query does not exist.
 Not Found: /favicon.ico
+Not Found: /favicon.ico

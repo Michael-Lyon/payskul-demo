@@ -1,5 +1,6 @@
 import requests
-url = "http://localhost:8000/account/login/"
+url = "https://payskul-demo.up.railway.app/account/login/"
+# url = "http://localhost:8000/account/login/"
 # url = "http://localhost:8000/api/token/"
 
 data = {

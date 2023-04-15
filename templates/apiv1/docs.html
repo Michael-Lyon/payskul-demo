@@ -123,9 +123,9 @@
 
 
             <div class="col">
-                <h3>Login A User</h3>
+                <h3>Obtain User Token</h3>
 
-                <a href="{% url 'token_obtain_pair' %}">Login using JSON Web Token</a>
+                <a href="{% url 'token_obtain_pair' %}">Obtain User Token</a>
                 <p>Endpoint: <span class="endpoint">{% url 'token_obtain_pair' %}</span>
 
                     <em>Sample data: </em>
@@ -140,6 +140,27 @@
                     <p>Returns an access and refresh tokens taht would be used to access other endpoints. Access expires
                         in an hour and the refresh expires in 2.
                         JSON Web Token
+                    </p>
+            </div>
+            
+            <div class="col">
+                <h3>login User </h3>
+
+                <a href="{% url 'apiv1:account_url:login' %}">Login User</a>
+                <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:login' %}</span>
+
+                    <em>Sample data: </em>
+                    <pre>
+                <code>
+                    {
+                        "username": kenan,
+                        "password": "GHOST",
+                    }
+                    </code>
+                </pre>
+                    <p>
+                        <strong>Response</strong>
+                        {'message': 'User Logged in', 'data': {'id': 1, 'last_name': '', 'first_name': '', 'username': 'michaellyon', 'email': 'pygod@pauskul.com', 'profile': {'id': 99, 'nin': '4356436547', 'dob': '2023-04-15', 'address': '333 Fremont Street, San Fransisco, CA', 'phone_number': '+1 07098677653'}}}
                     </p>
             </div>
         </div>
