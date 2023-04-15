@@ -83,6 +83,7 @@ class Transaction(models.Model):
     # total = Transactions.objects.filter(user=self.user, type="deposit", recieved=True).aggregate(Sum('amount'))
     # return total['amount__sum']
     
+    
     def get_total_payments(self):
         loan = Loan.get_loan(self.user)
         if loan == None:

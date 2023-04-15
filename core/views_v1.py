@@ -14,7 +14,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from account.models import Profile
 
 from .models import Bank, Loan, Transaction, Wallet, Card, Service, Service_Category
-from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer, ServiceCategorySerializer
+from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer,ServiceCategorySerializer, DetailSerializer
 from .utils import validate_bvn, validate_national_id, generate_random_credit
 from rest_framework import serializers
 
@@ -212,6 +212,12 @@ class CardListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Card.objects.filter(user=self.request.user)
     serializer_class = CardSeriilizer
+
+
+class DetailListView(generics.ListAPIView):
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
+    serializer_class = DetailSerializer
 
 
 @api_view(['POST'])

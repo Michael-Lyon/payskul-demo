@@ -1,5 +1,10 @@
 from rest_framework import serializers
+
+from account.serializers import ProfileInlineSerializer
 from . models import *
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class ServiceCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,14 +20,23 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     
-    total_payments = serializers.SerializerMethodField(read_only=True)
+    my_total_payments = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Transaction
-        fields = ('id', 'user', 'date', 'amount', 'description', 'type', 'loan', 'total_payments')
+        fields = ('id', 'user', 'date', 'amount', 'description', 'type', 'loan', 'my_total_payments')
         
-    def get_total_payments(self, obj):
-        return obj.get_total_payments()
+    def get_my_total_payments(self, obj):
+        if not hasattr(obj, 'id'):
+            return None
+        else:
+            return obj.get_total_payments()
 
+
+class TransactionInlineSerializer(serializers.Serializer):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    user = serializers.CharField(read_only=True)
+    date = serializers.DateTimeField(read_only=True)
+    amount = serializers.DecimalField(read_only=True, max_digits=100, decimal_places=2)
 
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,3 +64,15 @@ class CardSeriilizer(serializers.ModelSerializer):
         
         
 
+
+
+class DetailSerializer(serializers.ModelSerializer):
+    wallet = WalletSerializer()
+    transactions = TransactionSerializer()
+    profile = ProfileInlineSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ("id", "username", "email", "profile", "wallet", "transactions", )
+    
+    def get_profile(self, obj):
+        return ProfileInlineSerializer(obj.profile, context=self.context).data

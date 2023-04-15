@@ -10,15 +10,23 @@ from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from django.core.mail import send_mail
 from django.contrib.auth.password_validation import validate_password
-from core.serializers import LoanSerializer, WalletSerializer, CardSeriilizer
 
 User = get_user_model()
+
+
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['phone_number', 'dob', 'address', 'nin']
+
+
+class ProfileInlineSerializer(serializers.Serializer):
+    nin = serializers.CharField(read_only=True)
+    dob = serializers.DateTimeField(read_only=True)
+    address = serializers.CharField(read_only=True)
+
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
@@ -35,6 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
         profile_data = validated_data.pop('profile')
         try:
             user = User.objects.create_user(**validated_data)
+            user.set_password(validated_data['password'])
+            user.save()
             profile_data["user"] = user
             Profile.objects.create(**profile_data)
             return user
@@ -55,12 +65,23 @@ class UserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
-
+    # email = serializers.CharField(read_only=True)
+    # profile = serializers.SerializerMethodField(read_only=True)
+    
+    # class Meta:
+    #     model = User
+        
     def validate(self, data):
+        print(data)
         user = authenticate(**data)
         if user and user.is_active:
             return user
+        # return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
+        # return data
+    
+    # def get_profile(self, obj):
+    #     return ProfileInlineSerializer(obj.profile, context=self.context).data
     
     
 class ChangePasswordSerializer(serializers.ModelSerializer):

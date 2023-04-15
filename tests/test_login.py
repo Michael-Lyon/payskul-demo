@@ -6,9 +6,7 @@ data = {
     "password":"1234rewqasdf"
 }
 
-AUTH = {'refresh': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcxNjYzMjg3NSwiaWF0IjoxNjgwNjMyODc1LCJqdGkiOiI3YjZhYzFlY2RkMzU0MzEwOTE4Yjk1MTBiZjdkMjM3MyIsInVzZXJfaWQiOjF9.OLSB0Ij_1QFut2pkRaKjJnuKCB1CbKpj8pWZT85vGQQ',
-        'access': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2NjMyODc1LCJpYXQiOjE2ODA2MzI4NzUsImp0aSI6IjA0NDQyZGVjZDcyYjRmZTc5OTZiNjk4Y2FiMDQ4NmI5IiwidXNlcl9pZCI6MX0.Y9yqlmGkRQjyk4acoKP35HtDtwjEgxKxfjJXF9hKQlQ'}
-
+AUTH = {'refresh': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcxNzU0OTUxMywiaWF0IjoxNjgxNTQ5NTEzLCJqdGkiOiIzNTg3NmExZTM1NmQ0ZTg1OGEzNzc3YWE1NGViMGYwNyIsInVzZXJfaWQiOjF9.Kv6VeChHgIG8C5lgvLDKFiXfgJDuJvt-2usZWQaqNsU', 'access': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3NTQ5NTEzLCJpYXQiOjE2ODE1NDk1MTMsImp0aSI6IjI5ZTQxYmQ3ZDYzOTQ5YjViMmE0ZTZkZTJjOTAxODY2IiwidXNlcl9pZCI6MX0.LIZqkEPryfgncDNrA9zFVuJIeV7FWMkCSC4fe1u2sFk'}
 
 response = requests.post(url=url, json=data)
 print(response.json())
