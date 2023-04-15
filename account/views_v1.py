@@ -149,11 +149,23 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data
-            if Profile.objects.get(user=user).signup_confirmation:
+            profile = Profile.objects.get(user=user)
+            if profile.signup_confirmation:
                 login(request, user)
                 return Response({"message": "User Logged in", "data": {
                     'id': user.id,
-                }})
+                    "last_name":user.last_name,
+                    "first_name":user.first_name,
+                    "username":user.username,
+                    'email':user.email,
+                    "profile":{
+                        "id":profile.id,
+                        "nin":profile.nin,
+                        "dob":profile.dob,
+                        "address":profile.address,
+                        "phone_number":profile.phone_number
+                    }
+                    }})
             return Response({"message": "Account not verified or wrong login info", })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
