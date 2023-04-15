@@ -70,9 +70,10 @@ class DetailSerializer(serializers.ModelSerializer):
     wallet = WalletSerializer()
     transactions = TransactionSerializer()
     profile = ProfileInlineSerializer(read_only=True)
+    loan = LoanSerializer()
     class Meta:
         model = User
-        fields = ("id", "username", "email", "profile", "wallet", "transactions", )
+        fields = ("id", "username", "email", "profile", "wallet", "transactions", "loan")
     
     def get_profile(self, obj):
         return ProfileInlineSerializer(obj.profile, context=self.context).data
