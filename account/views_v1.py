@@ -14,9 +14,9 @@ from rest_framework import generics
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.sites.shortcuts import get_current_site
 
-from account.models import Profile, UserAuthCodes
-from account.serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
-from account.utils import get_code
+from .models import Profile, UserAuthCodes
+from .serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
+from .utils import get_code
 
 from payskul.settings import ONLINE
 from payskul.settings import EMAIL_HOST_USER as admin_mail
@@ -176,8 +176,6 @@ class LoginView(APIView):
             return Response({"message": "Account not verified or wrong login info", })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
    
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
@@ -204,3 +202,26 @@ class ChangePasswordView(generics.UpdateAPIView):
             serializer.save()
             return Response({'status': True, 'message': 'Password changed successfully'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_new_token(request):
+    user = request.user
+    print(user)
+    token = UserAuthCodes.objects.get(user=user)
+    token.save()
+    
+    token = token.code
+    subject = f'PaySkul Pin Verification'
+    message = f"""
+            Dear {user.first_name},
+            You have successfully created an account.
+            Your username is {user.username}
+            This is the code to activate your account {token}.
+            
+            Token expires in 5 minutes.
+            """
+    send_mail(subject, message, ADMIN_USER, [f"{user.email}"], fail_silently=False,
+              )
+    
+    return Response({"message":"Token Sent"})
+    

@@ -163,7 +163,7 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'mail@payskul.com'
 EMAIL_HOST_PASSWORD = 'Simple@12'
 
-ONLINE = False
+ONLINE = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         "rest_framework.authentication.SessionAuthentication",
