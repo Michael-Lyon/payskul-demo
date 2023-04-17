@@ -166,9 +166,11 @@
         </div>
 
         <div class="col">
-            <h3>Refresh JWT Token</h3>
+            <h3>Renew Email verification token</h3>
 
-            <a href="{% url 'apiv1:account_url:get_new_token' %}">Refresh the token</a>
+            
+
+            <a href="{% url 'apiv1:account_url:get_new_token' %}">Renew Email Verifiction Token</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:get_new_token' %}</span>
                 <p>
                     A get request to send a verification token user. Must be done with jwt credential in the header
@@ -177,8 +179,7 @@
                 </p>
         </div>
         <div class="col">
-            <h3>Renew Email verification token</h3>
-
+            <h3>Refresh JWT Token</h3>
             <a href="{% url 'token_refresh' %}">Refresh the token</a>
             <p>Endpoint: <span class="endpoint">{% url 'token_refresh' %}</span>
 
