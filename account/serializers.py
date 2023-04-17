@@ -17,9 +17,11 @@ User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Profile
         fields = ['phone_number', 'dob', 'address', 'nin']
+        read_only_fields = ('signup_confirmation',)
 
 
 class ProfileInlineSerializer(serializers.Serializer):

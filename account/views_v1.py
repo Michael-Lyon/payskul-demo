@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
-
+import requests
+from django.urls import reverse
 from django.contrib.auth import get_user_model, login
 from django.utils import timezone
 from rest_framework import generics, mixins, status
@@ -11,12 +12,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import generics
 # from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from django.contrib.sites.shortcuts import get_current_site
 
 from account.models import Profile, UserAuthCodes
 from account.serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
 from account.utils import get_code
 
+from payskul.settings import ONLINE
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
@@ -145,12 +147,17 @@ def confirm_email(request):
 
 class LoginView(APIView):
     def post(self, request):
-        serializer = LoginSerializer(data=request.data)
+        current_site = get_current_site(request)
+        protocol = "https://" if ONLINE else "http://"
+        data = request.data
+        serializer = LoginSerializer(data=data)
         if serializer.is_valid():
             user = serializer.validated_data
             profile = Profile.objects.get(user=user)
             if profile.signup_confirmation:
                 login(request, user)
+                auth_token = requests.post(f'{protocol}{current_site}/api/token/', json=data)
+                auth_token = auth_token.json()
                 return Response({"message": "User Logged in", "data": {
                     'id': user.id,
                     "last_name":user.last_name,
@@ -163,7 +170,8 @@ class LoginView(APIView):
                         "dob":profile.dob,
                         "address":profile.address,
                         "phone_number":profile.phone_number
-                    }
+                    },
+                    "jwt_token": auth_token
                     }})
             return Response({"message": "Account not verified or wrong login info", })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

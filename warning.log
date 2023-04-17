@@ -4002,3 +4002,217 @@ Traceback (most recent call last):
 account.models.Profile.DoesNotExist: Profile matching query does not exist.
 Not Found: /favicon.ico
 Not Found: /favicon.ico
+Method Not Allowed: /account/email-verify/
+Not Found: /favicon.ico
+Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 151, in post
+    if serializer.is_valid():
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/serializers.py", line 220, in is_valid
+    assert hasattr(self, 'initial_data'), (
+AssertionError: Cannot call `.is_valid()` as no `data=` keyword argument was passed when instantiating the serializer instance.
+Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/urls/base.py", line 71, in reverse
+    extra, resolver = resolver.namespace_dict[ns]
+KeyError: 'account'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 156, in post
+    auth_token = requests.post(reverse("account:login"), json=data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/urls/base.py", line 82, in reverse
+    raise NoReverseMatch("%s is not a registered namespace" % key)
+django.urls.exceptions.NoReverseMatch: 'account' is not a registered namespace
+Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 156, in post
+    auth_token = requests.post(reverse("apiv1:account:login"), json=data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 573, in request
+    prep = self.prepare_request(req)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 484, in prepare_request
+    p.prepare(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/models.py", line 368, in prepare
+    self.prepare_url(url, params)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/models.py", line 439, in prepare_url
+    raise MissingSchema(
+requests.exceptions.MissingSchema: Invalid URL '/account/login/': No scheme supplied. Perhaps you meant http:///account/login/?
+Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 158, in post
+    auth_token = requests.post(reverse("apiv1:account:login"), json=data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 573, in request
+    prep = self.prepare_request(req)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 484, in prepare_request
+    p.prepare(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/models.py", line 368, in prepare
+    self.prepare_url(url, params)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/models.py", line 439, in prepare_url
+    raise MissingSchema(
+requests.exceptions.MissingSchema: Invalid URL '/account/login/': No scheme supplied. Perhaps you meant http:///account/login/?
+Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 158, in post
+    auth_token = requests.post(f'{current_site}{reverse("apiv1:account:login")}', json=data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 695, in send
+    adapter = self.get_adapter(url=request.url)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 792, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for 'localhost:8000/account/login/'
+Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 158, in post
+    auth_token = requests.post(f'{current_site}/api/token/', json=data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 695, in send
+    adapter = self.get_adapter(url=request.url)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 792, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for 'localhost:8000/api/token/'
+Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 158, in post
+    auth_token = requests.post(f'{current_site}/api/token/', json=data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 695, in send
+    adapter = self.get_adapter(url=request.url)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 792, in get_adapter
+    raise InvalidSchema(f"No connection adapters were found for {url!r}")
+requests.exceptions.InvalidSchema: No connection adapters were found for 'localhost:8000/api/token/'

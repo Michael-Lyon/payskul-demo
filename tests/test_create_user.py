@@ -1,10 +1,11 @@
 import requests
 from pprint import pprint
-BASE = "http://localhost:8000/"
+BASE = "https://payskul-demo.up.railway.app/"
+# BASE = "http://localhost:8000/"
 ENDPOINT = "account/create-user/"
 
 data = {
-    "fullname": "lilola Demo",
+    "fullname": "Testing2 Demo",
     "email": "pygod.dev@mail.com",
     "phone_number":"11234567811190",
     "password": "11234dd56",
