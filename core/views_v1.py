@@ -154,7 +154,13 @@ def loan_list(request, pk=None, *args, **kwargs):
         data = LoanSerializer(queryset, many=True).data
         return Response(data)
 
+from django.http import HttpResponse
 
+def read_file(request):
+    f = open('warning.log', 'r')
+    file_content = f.read()
+    f.close()
+    return HttpResponse(file_content, content_type="text/plain")
 
 class TransactionListCreateView(generics.ListCreateAPIView):
     # queryset = Transaction.objects.all()

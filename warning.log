@@ -4273,3 +4273,70 @@ Traceback (most recent call last):
     raise e.__class__(
 TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7fb8ea163340>.
 Not Found: /favicon.ico
+Internal Server Error: /account/login/
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/urllib3/connection.py", line 414, in connect
+    self.sock = ssl_wrap_socket(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/urllib3/util/ssl_.py", line 449, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/urllib3/util/ssl_.py", line 493, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+  File "/usr/lib/python3.9/ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "/usr/lib/python3.9/ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "/usr/lib/python3.9/ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLError: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1123)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='localhost', port=9000): Max retries exceeded with url: /api/token/ (Caused by SSLError(SSLError(1, '[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1123)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/account/views_v1.py", line 159, in post
+    auth_token = requests.post(f'{protocol}{current_site}/api/token/', json=data)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/michaellyon/python_projects/payskul/env/lib/python3.9/site-packages/requests/adapters.py", line 563, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='localhost', port=9000): Max retries exceeded with url: /api/token/ (Caused by SSLError(SSLError(1, '[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1123)')))
+Not Found: /logs
+Not Found: /favicon.ico
