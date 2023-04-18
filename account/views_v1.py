@@ -14,6 +14,8 @@ from rest_framework import generics
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.sites.shortcuts import get_current_site
 
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from .models import Profile, UserAuthCodes
 from .serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
 from .utils import get_code
@@ -145,10 +147,21 @@ def confirm_email(request):
     return Response({'message': 'Invalid code or user id'}, status=404)
 
 
+
+
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+
+
 class LoginView(APIView):
     def post(self, request):
-        current_site = get_current_site(request)
-        protocol = "https://" if ONLINE else "http://"
         data = request.data
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
@@ -156,8 +169,7 @@ class LoginView(APIView):
             profile = Profile.objects.get(user=user)
             if profile.signup_confirmation:
                 login(request, user)
-                auth_token = requests.post(f'{protocol}{current_site}/api/token/', json=data)
-                auth_token = auth_token.json()
+                auth_token = get_tokens_for_user(user=user)
                 return Response({"message": "User Logged in", "data": {
                     'id': user.id,
                     "last_name":user.last_name,
