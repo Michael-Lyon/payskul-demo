@@ -119,7 +119,7 @@ class Wallet(models.Model):
 
 
 class Card(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="card")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="card", blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     number = models.CharField(max_length=100, blank=True, null=True)
     cvv = models.CharField(max_length=100, blank=True, null=True)

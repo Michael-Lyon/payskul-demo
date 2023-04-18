@@ -20,6 +20,7 @@ from .models import Profile, UserAuthCodes
 from .serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
 from .utils import get_code
 
+from core.serializers import DetailSerializer
 from payskul.settings import ONLINE
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from payskul.settings import ADMIN_USER
@@ -167,25 +168,27 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data
             profile = Profile.objects.get(user=user)
-            if profile.signup_confirmation:
-                login(request, user)
-                auth_token = get_tokens_for_user(user=user)
-                return Response({"message": "User Logged in", "data": {
-                    'id': user.id,
-                    "last_name":user.last_name,
-                    "first_name":user.first_name,
-                    "username":user.username,
-                    'email':user.email,
-                    "profile":{
-                        "id":profile.id,
-                        "nin":profile.nin,
-                        "dob":profile.dob,
-                        "address":profile.address,
-                        "phone_number":profile.phone_number
-                    },
-                    "jwt_token": auth_token
-                    }})
-            return Response({"message": "Account not verified or wrong login info", })
+            # if profile.signup_confirmation:
+            login(request, user)
+            auth_token = get_tokens_for_user(user=user)
+            return Response({"message": "User Logged in", "data": {
+                'id': user.id,
+                "last_name":user.last_name,
+                "first_name":user.first_name,
+                "username":user.username,
+                'email':user.email,
+                "details": DetailSerializer(user).data,
+                "profile":{
+                    "id":profile.id,
+                    "nin":profile.nin,
+                    "dob":profile.dob,
+                    "verified": profile.signup_confirmation,
+                    "address":profile.address,
+                    "phone_number":profile.phone_number
+                },
+                "jwt_token": auth_token
+                }})
+        # return Response({"message": "Account not verified or wrong login info", })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
    
