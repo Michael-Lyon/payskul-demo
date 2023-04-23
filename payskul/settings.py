@@ -193,7 +193,7 @@ CORS_ALLOW_HEADERS = [
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # https://lanceproject-production-0863.up.railway.app/
-CSRF_TRUSTED_ORIGINS = ["*"]
+# CSRF_TRUSTED_ORIGINS = ["*"]
 
 
 REDIS_HOST = os.getenv("REDIS_HOST")
