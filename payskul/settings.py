@@ -170,6 +170,10 @@ REST_FRAMEWORK = {
         "apiv1.authentication.TokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    # TODO: REMOVE THIS AND ADD CSRF BACK
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
     'DEFAULT_PERMISSION_CLASSES ': [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ], 
