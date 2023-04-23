@@ -15,7 +15,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.sites.shortcuts import get_current_site
 
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from django.views.decorators.csrf import csrf_exempt
 from .models import Profile, UserAuthCodes
 from .serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
 from .utils import get_code
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 User = get_user_model()
 # token = Token.objects.get_or_create(user=user)
 
-
+@csrf_exempt
 class UserDetailView(generics.RetrieveAPIView):
     # print(timezone.make_aware(
     #     datetime.utcnow() + timedelta(minutes=10),  timezone.get_current_timezone()))
@@ -50,6 +50,7 @@ class UserDetailView(generics.RetrieveAPIView):
         print(user) 
         # instance = serializer.save()
 
+@csrf_exempt
 class UserListView(generics.ListAPIView):
     # print(timezone.make_aware(
     #     datetime.utcnow() + timedelta(minutes=10),  timezone.get_current_timezone()))
@@ -65,7 +66,7 @@ class UserListView(generics.ListAPIView):
         # instance = serializer.save()
         
 
-
+@csrf_exempt
 @api_view(['POST'])
 def create_user(request):
     """User gets created here
@@ -129,7 +130,7 @@ def create_user(request):
     else:
         raise serializers.ValidationError("Invalid signup data.")
 
-
+@csrf_exempt
 @api_view(['POST'])
 def confirm_email(request):
     """"Confirm The User Email Address
@@ -150,7 +151,7 @@ def confirm_email(request):
 
 
 
-
+@csrf_exempt
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
 
@@ -160,7 +161,7 @@ def get_tokens_for_user(user):
     }
 
 
-
+@csrf_exempt
 class LoginView(APIView):
     def post(self, request):
         data = request.data
@@ -191,7 +192,8 @@ class LoginView(APIView):
         # return Response({"message": "Account not verified or wrong login info", })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-   
+
+@csrf_exempt
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     authentication_classes = (JWTAuthentication,)
@@ -218,6 +220,8 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response({'status': True, 'message': 'Password changed successfully'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@csrf_exempt
 @api_view(['GET'])
 def get_new_token(request):
     user = request.user

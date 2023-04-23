@@ -22,6 +22,8 @@ from okra_things.list_banks import bank_list
 
 User = get_user_model()
 
+
+@csrf_exempt
 @api_view(['POST'])
 def validate_user_loan(request, *args, **kwargs):
     """Endpoint to certify that a user is eligible for loan facility access
@@ -74,6 +76,7 @@ def validate_user_loan(request, *args, **kwargs):
         return Response({"message": "User is not authenticated! Login and try again"})
 
 
+@csrf_exempt
 @api_view(['GET', 'POST'])
 def apply_loan(request, *args, **kwargs):
     """Endpoint to apply for the users loan
@@ -135,11 +138,13 @@ def apply_loan(request, *args, **kwargs):
         return Response({"message": "Invalid pin"})
 
 
+@csrf_exempt
 @api_view(['GET'])
 def get_banks(request, *args, **kwargs):
     data = bank_list()
     return Response(data)
 
+@csrf_exempt
 @api_view(['GET'])
 def loan_list(request, pk=None, *args, **kwargs):
     queryset = Loan.objects.filter(user=request.user)
@@ -156,12 +161,14 @@ def loan_list(request, pk=None, *args, **kwargs):
 
 from django.http import HttpResponse
 
+@csrf_exempt
 def read_file(request):
     f = open('warning.log', 'r')
     file_content = f.read()
     f.close()
     return HttpResponse(file_content, content_type="text/plain")
 
+@csrf_exempt
 class TransactionListCreateView(generics.ListCreateAPIView):
     # queryset = Transaction.objects.all()
     authentication_classes = (JWTAuthentication,)
@@ -199,33 +206,39 @@ class TransactionListCreateView(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
+@csrf_exempt
 class WalletListCreateView(generics.ListAPIView):
     def get_queryset(self):
         return Wallet.objects.filter(user=self.request.user)
     
     serializer_class = WalletSerializer
 
+@csrf_exempt
 class ServiceListCreateView(generics.ListAPIView):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
+@csrf_exempt
 class ServiceCategoryListCreateView(generics.ListAPIView):
     queryset = Service_Category.objects.all()
     serializer_class = ServiceCategorySerializer
 
 
+@csrf_exempt
 class CardListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Card.objects.filter(user=self.request.user)
     serializer_class = CardSeriilizer
 
 
+@csrf_exempt
 class DetailListView(generics.ListAPIView):
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id)
     serializer_class = DetailSerializer
 
 
+@csrf_exempt
 @api_view(['POST'])
 def top_wallet(request, *args, **kwrgs):
     """To Top up the user wallet
