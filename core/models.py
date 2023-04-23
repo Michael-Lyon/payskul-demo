@@ -129,4 +129,4 @@ class Card(models.Model):
         verbose_name_plural = "Cards"
         
     def __str__(self):
-        return f"Card for {self.user}"
+        return f"Card for {self.user}"r

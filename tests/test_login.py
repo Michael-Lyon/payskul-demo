@@ -1,13 +1,18 @@
 from pprint import pprint
 import requests
 # url = "http://localhost:9000/account/login/"
-# url = "https://payskul-demo.up.railway.app/account/login/"
-url = "http://localhost:8000/account/login/"
+# url = "http://localhost:8000/account/login/"
 # url = "http://localhost:8000/api/token/"
 
+# data = {
+#     "username":"michaellyon",
+#     "password":"1234rewqasdf"
+# }
+
+url = "https://payskul-demo.up.railway.app/account/login/"
 data = {
-    "username":"michaellyon",
-    "password":"1234rewqasdf"
+    "username": "JamAmi2d7",
+    "password": "Password1"
 }
 # data = {
 #     "username":"TesDem8e2",
