@@ -35,7 +35,6 @@ logger = logging.getLogger(__name__)
 User = get_user_model()
 # token = Token.objects.get_or_create(user=user)
 
-@csrf_exempt
 class UserDetailView(generics.RetrieveAPIView):
     # print(timezone.make_aware(
     #     datetime.utcnow() + timedelta(minutes=10),  timezone.get_current_timezone()))
@@ -50,7 +49,6 @@ class UserDetailView(generics.RetrieveAPIView):
         print(user) 
         # instance = serializer.save()
 
-@csrf_exempt
 class UserListView(generics.ListAPIView):
     # print(timezone.make_aware(
     #     datetime.utcnow() + timedelta(minutes=10),  timezone.get_current_timezone()))
@@ -151,7 +149,7 @@ def confirm_email(request):
 
 
 
-@csrf_exempt
+# @csrf_exempt
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
 
@@ -161,8 +159,9 @@ def get_tokens_for_user(user):
     }
 
 
-@csrf_exempt
 class LoginView(APIView):
+    
+    @csrf_exempt
     def post(self, request):
         data = request.data
         serializer = LoginSerializer(data=data)
@@ -193,7 +192,6 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     authentication_classes = (JWTAuthentication,)
@@ -211,6 +209,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         })
         return context
     
+    @csrf_exempt
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
         request = self.request
@@ -221,7 +220,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
+# @csrf_exempt
 @api_view(['GET'])
 def get_new_token(request):
     user = request.user
