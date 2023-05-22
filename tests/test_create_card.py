@@ -1,25 +1,22 @@
 import requests
-BASE = "http://localhost:8000/apiv1/"
+BASE = "http://localhost:8000/"
 LOGIN_URL = "account/login/"
 CREATE_CARD_URL = "core/card/"
 
 session = requests.Session()
-headers = {'Authorization': 'Bearer ee330f9bb89d142778bb844bb7712ce88df38231'}
-login_data = {
-    "username": "pygodtest",
-    "password": "1234rewqasdf"
-}
-login_response = requests.post(url=BASE+LOGIN_URL, json=login_data, headers=headers)
-print(login_response.json())
+AUTH = {'access': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIwNzYwNjM2LCJpYXQiOjE2ODQ3NjA2MzYsImp0aSI6IjM5YmU1NTdhNTU0NjRjNGM4ZDI5Y2YyZTYzMjIzMWNkIiwidXNlcl9pZCI6MX0.r4Qj3Zz_pIGnB5tCGU53Doc0kszjTAM9OKS99VDpnws',
+           'refresh': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcyMDc2MDYzNiwiaWF0IjoxNjg0NzYwNjM2LCJqdGkiOiI2Y2FmYmE4NjY4ZjY0ZGFlYjM1ZWY5MWZkMTliZTVmOCIsInVzZXJfaWQiOjF9.8ev1VTLVGIEm29q5eYGBHYzMtYMJItU6xDr7X0PaMVU'}
 
-id = int(login_response.json()['data']['id'])
+headers = {
+    "accept": "application/json; charset=utf-8",
+    "authorization": f"Bearer {AUTH['access']}"
+}
 
 card_data = {
-    "user": id,
-    "name":"Pygod .M. PyGod",
-    "number": "123222256789",
-    "cvv":"120"
+    "name":"Pygod .M7. PyGod",
+    "number": "123209856780",
+    "cvv":"110"
 }
-card_create_response = requests.post(url=BASE+CREATE_CARD_URL, json=card_data, headers=headers)
+card_create_response = requests.get(url=BASE+CREATE_CARD_URL, json=card_data, headers=headers)
 print(card_create_response.json())
 

@@ -19,6 +19,7 @@ from .utils import validate_bvn, validate_national_id, generate_random_credit
 from rest_framework import serializers
 from django.utils.decorators import method_decorator
 from okra_things.list_banks import bank_list
+from django.contrib.auth import authenticate
 
 User = get_user_model()
 
@@ -228,7 +229,13 @@ class ServiceCategoryListCreateView(generics.ListAPIView):
 class CardListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Card.objects.filter(user=self.request.user)
+    
     serializer_class = CardSeriilizer
+    
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
+        return serializers.ValidationError("Something went wrong")
 
 
 class DetailListView(generics.ListAPIView):
@@ -250,6 +257,7 @@ def top_wallet(request, *args, **kwrgs):
     Returns:
         message: Success or Failed
     """
+    
     rand_amount = generate_random_credit()
     raw_data = request.data
     pk=raw_data['id']
@@ -257,7 +265,8 @@ def top_wallet(request, *args, **kwrgs):
     profile = request.user.profile
     if not Card.objects.filter(user=profile.user).exists():
         return Response({"message":"User has no existing card"})
-    if raw_data['pin'] == profile.pin:
+    user = authenticate(request, username=request.user.username, password=raw_data['pin'])
+    if user:
         card = get_object_or_404(Card, id=pk)
         amount = rand_amount - to_withdraw
         if amount > 0:
