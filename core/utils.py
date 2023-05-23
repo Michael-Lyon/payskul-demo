@@ -22,7 +22,7 @@ def validate_national_id(national_id: str) -> bool:
     """
     if not national_id or len(national_id) != 11:
         return False
-
+    return True
     # # Extract the first 12 digits of the national identity number
     # first_12_digits = national_id[:12]
 
