@@ -4917,3 +4917,7 @@ Traceback (most recent call last):
   File "/home/michaellyon/python_projects/payskul/core/views_v1.py", line 273, in top_wallet
     wallet = card.user.wallet
 AttributeError: 'NoneType' object has no attribute 'wallet'
+Method Not Allowed: /core/webhook/
+Method Not Allowed: /core/webhook/
+Method Not Allowed: /core/webhook/
+Not Found: /favicon.ico

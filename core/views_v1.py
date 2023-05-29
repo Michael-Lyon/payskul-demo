@@ -1,3 +1,5 @@
+import json
+import requests
 from rest_framework import status
 from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
@@ -282,3 +284,21 @@ def top_wallet(request, *args, **kwrgs):
             return Response({'message': 'Charge successful'})
         return Response({'message': 'Insufficeint Funds'})
     return Response({'message': 'Pin incorrect.'})
+
+
+@csrf_exempt
+@api_view(['POST'])
+def webhook_view(request):
+    if request.method == 'POST':
+        # Get the payload sent by the webhook
+        payload = json.loads(request.body)
+        print(payload)
+
+        # Process the payload and perform required actions
+        # ...
+
+        # Return a response
+        
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=405)
