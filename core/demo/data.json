@@ -1,0 +1,57 @@
+{
+    "100": {
+        "name": "James Savage",
+        "internetSpeed": 4,
+        "type": "ind",
+        "bank": "Union Bank of Nigeria",
+        "password": "Peace",
+        "username": "Jeniffer123",
+        "noOfAccount": 1,
+        "identity": 100,
+        "volume": "low"
+    },
+    "30": {
+        "name": "Emmanuel Evans",
+        "internetSpeed": 3,
+        "type": "corp",
+        "bank": "Alat",
+        "password": "Prosper",
+        "username": "Mary123",
+        "noOfAccount": 4,
+        "identity": 30,
+        "volume": "medium"
+    },
+    "10": {
+        "name": "Williams Ford",
+        "internetSpeed": 3,
+        "type": "ind",
+        "bank": "First Bank of Nigeria",
+        "password": "Monday",
+        "username": "Emily123",
+        "noOfAccount": 2,
+        "identity": 10,
+        "volume": "medium"
+    },
+    "60": {
+        "name": "Happiness Green",
+        "internetSpeed": 5,
+        "type": "ind",
+        "bank": "Ecobank Nigeria",
+        "password": "Maryam",
+        "username": "Friday123",
+        "noOfAccount": 4,
+        "identity": 60,
+        "volume": "high"
+    },
+    "75": {
+        "name": "David Green",
+        "internetSpeed": 5,
+        "type": "corp",
+        "bank": "SunTrust Bank",
+        "password": "Thelma",
+        "username": "Maryam123",
+        "noOfAccount": 1,
+        "identity": 75,
+        "volume": "high"
+    }
+}

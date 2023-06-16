@@ -287,9 +287,9 @@ class Okra(OkraSetup):
 
     
     @staticmethod
-    def bank_list(cls):
+    def bank_list():
         try:
-            response = requests.get(url=cls._BANKS_LIST_URL, headers=cls._HEADERS)
+            response = requests.get(url=Okra._BANKS_LIST_URL, headers=Okra._HEADERS)
             data = response.json()['data']['banks']
             if not data:
                 return []
