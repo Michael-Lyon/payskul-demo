@@ -1,0 +1,384 @@
+{
+  "status": "success",
+  "message": "Income retrieved successfully",
+  "data": {
+    "income": {
+      "customer": {
+        "name": "John Musa Peters"
+      },
+      "__v": 0,
+      "confidence": 96.82,
+      "created_at": "2022-10-25T13:35:04.691Z",
+      "env": "production",
+      "last_updated": "2022-11-02T15:17:26.643Z",
+      "number_of_transactions": 2525,
+      "other_streams": [
+        "1357e608c067dcd068014c4b"
+      ],
+      "owner": [
+        "1da6358130a943486f33dced"
+      ],
+      "projects": [
+        "1ff62b99aea7a57a5c3baa01"
+      ],
+      "record": [
+        "1357e5fd9fd44f0157940283",
+        "135919279fd44f0157947c8a",
+        "135fb2f9ccfaaa01a964abcf",
+        "136242ca63712c2497b11f54",
+        "136289fa63712c2497b1890e"
+      ],
+      "streams": [
+        {
+          "stream_id": "1142188b965e0d0318fa4e43-1",
+          "__v": 0,
+          "account": [
+            "1142188b965e0d0318fa4e43"
+          ],
+          "bank": [
+            {
+              "name": "Okra Bank",
+              "colors": {
+                "primary": "#990D81",
+                "accent": "#990D81",
+                "bg": "#990D81",
+                "button": "#880972"
+              },
+              "logo": "https://okra.ng/logo/logo.svg",
+              "icon": "https://okra.ng/icons/okra.svg"
+            }
+          ],
+          "created_at": "2022-10-25T13:35:04.643Z",
+          "history": {
+            "past_six_months": {
+              "average_per_month": 36585.96,
+              "max_per_month": 27000,
+              "min_per_month": 1.88,
+              "occurrence": 6,
+              "total": 219515.76
+            },
+            "past_three_months": {
+              "average_per_month": 33916.59,
+              "max_per_month": 20698,
+              "min_per_month": 1.88,
+              "occurrence": 3,
+              "total": 101749.76
+            },
+            "past_twelve_months": {
+              "average_per_month": 20742.98,
+              "max_per_month": 27000,
+              "min_per_month": 1.88,
+              "occurrence": 12,
+              "total": 248915.76
+            }
+          },
+          "last_updated": "2022-11-02T15:17:26.595Z",
+          "monthly_amount": 300990.64,
+          "number_of_transactions": 43,
+          "occurrence": {
+            "first_date": "2020-07-15T00:00:00.000Z",
+            "last_date": "2021-09-20T00:00:00.000Z",
+            "occurrence_this_year": 0,
+            "projected_occurrence_this_year": 0,
+            "total_count": 15
+          },
+          "primary_stream": true,
+          "source": {
+            "name": "Multiple Sources",
+            "type": "other"
+          },
+          "stream_rank": 0.9999999999999998,
+          "type": "Unstructured",
+          "working_days_this_year": 0
+        },
+        {
+          "stream_id": "1142188b965e0d0318fa4e43-2",
+          "__v": 0,
+          "account": [
+            "1142188b965e0d0318fa4e43"
+          ],
+          "bank": [
+            {
+              "name": "Okra Bank",
+              "colors": {
+                "primary": "#990D81",
+                "accent": "#990D81",
+                "bg": "#990D81",
+                "button": "#880972"
+              },
+              "logo": "https://okra.ng/logo/logo.svg",
+              "icon": "https://okra.ng/icons/okra.svg"
+            }
+          ],
+          "created_at": "2022-10-25T13:35:04.643Z",
+          "history": {
+            "past_six_months": {
+              "average_per_month": 40000,
+              "max_per_month": 70000,
+              "min_per_month": 10000,
+              "occurrence": 4,
+              "total": 160000
+            },
+            "past_three_months": {
+              "average_per_month": 160000,
+              "max_per_month": 70000,
+              "min_per_month": 10000,
+              "occurrence": 1,
+              "total": 160000
+            },
+            "past_twelve_months": {
+              "average_per_month": 50000,
+              "max_per_month": 70000,
+              "min_per_month": 10000,
+              "occurrence": 6,
+              "total": 300000
+            }
+          },
+          "last_updated": "2022-11-02T15:17:26.595Z",
+          "monthly_amount": 150000,
+          "number_of_transactions": 8,
+          "occurrence": {
+            "first_date": "2021-02-15T00:00:00.000Z",
+            "last_date": "2021-07-15T00:00:00.000Z",
+            "occurrence_this_year": 0,
+            "projected_occurrence_this_year": 0,
+            "total_count": 6
+          },
+          "source": {
+            "name": "John Musa Peters",
+            "type": "other"
+          },
+          "stream_rank": 0.8131059981494424,
+          "type": "Recurrent Credit",
+          "working_days_this_year": 0
+        },
+        {
+          "stream_id": "1142188b965e0d0318fa4e43-3",
+          "__v": 0,
+          "account": [
+            "1142188b965e0d0318fa4e43"
+          ],
+          "bank": [
+            {
+              "name": "Okra Bank",
+              "colors": {
+                "primary": "#990D81",
+                "accent": "#990D81",
+                "bg": "#990D81",
+                "button": "#880972"
+              },
+              "logo": "https://okra.ng/logo/logo.svg",
+              "icon": "https://okra.ng/icons/okra.svg"
+            }
+          ],
+          "created_at": "2022-10-25T13:35:04.643Z",
+          "history": {
+            "past_six_months": {
+              "average_per_month": 11692,
+              "max_per_month": 12000,
+              "min_per_month": 30,
+              "occurrence": 5,
+              "total": 58460
+            },
+            "past_three_months": {
+              "average_per_month": 13230,
+              "max_per_month": 6000,
+              "min_per_month": 30,
+              "occurrence": 2,
+              "total": 26460
+            },
+            "past_twelve_months": {
+              "average_per_month": 29922.86,
+              "max_per_month": 23300,
+              "min_per_month": 30,
+              "occurrence": 7,
+              "total": 209460
+            }
+          },
+          "last_updated": "2022-11-02T15:17:26.595Z",
+          "monthly_amount": 34910,
+          "number_of_transactions": 44,
+          "occurrence": {
+            "first_date": "2021-02-15T00:00:00.000Z",
+            "last_date": "2021-08-04T00:00:00.000Z",
+            "occurrence_this_year": 0,
+            "projected_occurrence_this_year": 0,
+            "total_count": 7
+          },
+          "source": {
+            "name": "John Musa Peters",
+            "type": "other"
+          },
+          "stream_rank": 0.6944853796438775,
+          "type": "Recurrent Credit",
+          "working_days_this_year": 0
+        },
+        {
+          "stream_id": "1142188b965e0d0318fa4e43-4",
+          "__v": 0,
+          "account": [
+            "1142188b965e0d0318fa4e43"
+          ],
+          "bank": [
+            {
+              "name": "Okra Bank",
+              "colors": {
+                "primary": "#990D81",
+                "accent": "#990D81",
+                "bg": "#990D81",
+                "button": "#880972"
+              },
+              "logo": "https://okra.ng/logo/logo.svg",
+              "icon": "https://okra.ng/icons/okra.svg"
+            }
+          ],
+          "created_at": "2022-10-26T11:25:39.624Z",
+          "history": {
+            "past_six_months": {
+              "average_per_month": 66000,
+              "max_per_month": 33000,
+              "min_per_month": 33000,
+              "occurrence": 1,
+              "total": 66000
+            },
+            "past_three_months": {
+              "average_per_month": 66000,
+              "max_per_month": 33000,
+              "min_per_month": 33000,
+              "occurrence": 1,
+              "total": 66000
+            },
+            "past_twelve_months": {
+              "average_per_month": 66000,
+              "max_per_month": 33000,
+              "min_per_month": 33000,
+              "occurrence": 1,
+              "total": 66000
+            }
+          },
+          "last_updated": "2022-11-02T15:17:26.595Z",
+          "monthly_amount": 66000,
+          "number_of_transactions": 2,
+          "occurrence": {
+            "first_date": "2021-09-14T00:00:00.000Z",
+            "last_date": "2021-09-14T00:00:00.000Z",
+            "occurrence_this_year": 0,
+            "projected_occurrence_this_year": 0,
+            "total_count": 1
+          },
+          "source": {
+            "name": "John Musa Peters",
+            "type": "other"
+          },
+          "stream_rank": 0.590443853272314,
+          "type": "Recurrent Credit",
+          "working_days_this_year": 0
+        },
+        {
+          "stream_id": "1142188b965e0d0318fa4e43-5",
+          "__v": 0,
+          "account": [
+            "1142188b965e0d0318fa4e43"
+          ],
+          "bank": [
+            {
+              "name": "Okra Bank",
+              "colors": {
+                "primary": "#990D81",
+                "accent": "#990D81",
+                "bg": "#990D81",
+                "button": "#880972"
+              },
+              "logo": "https://okra.ng/logo/logo.svg",
+              "icon": "https://okra.ng/icons/okra.svg"
+            }
+          ],
+          "created_at": "2022-10-26T11:25:39.624Z",
+          "history": {
+            "past_six_months": {
+              "average_per_month": 27800,
+              "max_per_month": 13000,
+              "min_per_month": 100,
+              "occurrence": 2,
+              "total": 55600
+            },
+            "past_three_months": {
+              "average_per_month": 27800,
+              "max_per_month": 13000,
+              "min_per_month": 100,
+              "occurrence": 2,
+              "total": 55600
+            },
+            "past_twelve_months": {
+              "average_per_month": 27800,
+              "max_per_month": 13000,
+              "min_per_month": 100,
+              "occurrence": 2,
+              "total": 55600
+            }
+          },
+          "last_updated": "2022-11-02T15:17:26.595Z",
+          "monthly_amount": 27800,
+          "number_of_transactions": 10,
+          "occurrence": {
+            "first_date": "2021-08-09T00:00:00.000Z",
+            "last_date": "2021-09-14T00:00:00.000Z",
+            "occurrence_this_year": 0,
+            "projected_occurrence_this_year": 0,
+            "total_count": 2
+          },
+          "source": {
+            "name": "John Musa Peters",
+            "type": "other"
+          },
+          "stream_rank": 0.4415437636637305,
+          "type": "Recurrent Credit",
+          "working_days_this_year": 0
+        }
+      ],
+      "summary": {
+        "account_age_months": 15,
+        "average_monthly_income": 115940.13,
+        "current_year": 2022,
+        "last_two_years_income": 8583323.14,
+        "last_two_years_to_this_year_projected_income": 5722215.43,
+        "last_year_income": 8583323.14,
+        "last_year_to_this_year_projected_income": 4291661.57,
+        "number_of_streams": 5,
+        "past_six_months": {
+          "average_per_month": 31087.54,
+          "max_per_month": 70000,
+          "min_per_month": 1.88,
+          "occurrence": 18,
+          "total": 559575.76
+        },
+        "past_three_months": {
+          "average_per_month": 45534.42,
+          "max_per_month": 70000,
+          "min_per_month": 1.88,
+          "occurrence": 9,
+          "total": 409809.76
+        },
+        "past_twelve_months": {
+          "average_per_month": 31427.71,
+          "max_per_month": 70000,
+          "min_per_month": 1.88,
+          "occurrence": 28,
+          "total": 879975.76
+        },
+        "primary_stream_age_months": 15,
+        "this_year_projected_sum": 0
+      },
+      "transactions": [
+        {
+          "stream_ids": [
+            "1142188b965e0d0318fa4e43-1"
+          ],
+          "id": "114218beabfcf35206834183",
+          "term": "past_three_months"
+        },
+        "..."
+      ]
+    }
+  }
+}

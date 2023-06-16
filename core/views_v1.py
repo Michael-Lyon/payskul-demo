@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, status
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
@@ -13,113 +13,99 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from account.models import Profile
+from account.models import OkraLinkedUser, Profile
+from core.utils import Okra
 
 from .models import Bank, Loan, Transaction, Wallet, Card, Service, Service_Category
 from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer,ServiceCategorySerializer, DetailSerializer
 from .utils import validate_bvn, validate_national_id, generate_random_credit
 from rest_framework import serializers
 from django.utils.decorators import method_decorator
-from okra_things.list_banks import bank_list
 from django.contrib.auth import authenticate
+# import the logging library
+import logging
 
+# Get an instance of a logger
+logger = logging.getLogger('okra_validator') 
 User = get_user_model()
 
 
 @csrf_exempt
-@api_view(['POST'])
+@api_view(['Get'])
 def validate_user_loan(request, *args, **kwargs):
     """Endpoint to certify that a user is eligible for loan facility access
 
-    Keyword arguments:
-    fullname -- user full name
-    home_address -- user home address
-    bvn -- user bank verification number
-    nin -- user national identity number
-    phone_number -- user phone number
-    account_number -- user bank account number
-    account_name -- user bank account name
-    bank_name -- user bank name
-
-    Return:  {'meaage': True / False} if user is eligible or not
+     A get request to get that the user is eligible for loan facility access
+    User would be identofied using JWT
+    
+    On success: {"message": "User validated successfully", "credit_limit": 10000}
+    On fail: {"message": "An error occured please try again."}
     """
+    can_borrow = False
+    try:
+        user = request.user
+        if Loan.objects.filter(user=user).exists():
+            can_borrow = True if Loan.objects.filter(user=user, cleared=True) else False
 
-    if request.user.is_authenticated:
-        raw_data = request.data
-        profile = request.user.profile
-        if  not (profile.verified):
-            try:
-                limit = generate_random_credit() # user credit limit(demo)
-                if limit <= 25_000:
-                    return Response({"message": "User has a low credit limit", })
-                nin = raw_data['nin']
-                bvn = raw_data['bvn']
-                if validate_bvn(bvn) and validate_national_id(nin):
-                    profile.credit_limit = limit
-                    profile.nin = nin
-                    profile.verified = True
-                    profile.save()
-                    if not Bank.objects.filter(user=request.user).exists():
-                        bank = Bank.objects.create(
-                            user=request.user,
-                            name=raw_data['bank_name'],
-                            account_number=raw_data['account_number'],
-                            account_name=raw_data['account_name'],
-                            bvn=bvn
-                        )
-                        bank.save()
-                    return Response({"message": "User validated successfully", })
-                else:
-                    return Response({"message": "Bvn and or Nin not valid", })
-            except Exception as e:
-                print(e)
-                return Response({"message": "An error occured please try again."})
-        return Response({"message": "User has already been verified!"})
-    else:
-        return Response({"message": "User is not authenticated! Login and try again"})
+        # link = OkraLinkedUser.objects.get(user=user)
+        ok = Okra()
+        customerId = user.linked_user.customer_id
+        data = ok.update_customer_income_data(user, customerId)
+        data["data"] = {"can_borrow":can_borrow}
+        data["message"] = "User validated successfully"
+        data["success"] = True
+        return Response(data, status.HTTP_200_OK)
+    except Exception as e:
+            print(e)
+            logger.exception("Exception Occured while validating user loan: " + str(e))
+            data = { "success": False, "message": "An error occured please try again."}
+            return Response(data, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @csrf_exempt
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def apply_loan(request, *args, **kwargs):
     """Endpoint to apply for the users loan
-    On GET request
-        Returns the user {message: "User credit limit", data: {credit_limit: 100_000}}        
 
     On POST request
         Keyword arguments:
-        service -- what service is the user trying to apply for the loan the id of the service
-        down_payment -- how much is the down payment supposed to be
-        amount_needed -- how much does the user need?
-        start_date -- when is this loan service active
-        end_date -- when is this loan due
-        amount_to_pay_back -- how much is the user supposed to pay back
+        
+        loan_details : {
+            service -- what service is the user trying to apply for the loan the id of the service
+            down_payment -- how much is the down payment supposed to be
+            amount_needed -- how much does the user need?
+            start_date -- when is this loan service active
+            end_date -- when is this loan due
+            amount_to_pay_back -- how much is the user supposed to pay back},
+        
+        bank_details : {
+            bank_name -- from the list of bank from the get bank api,
+            bank_account_number -- acccount for the money to be paid into
+            description -- description of the payment
+            amount -- amount to be paid into the bank account
+        }
 
-        Return:  {'message': True / False} if user is eligible or not
+        auth : {
+            pin: user transaction pin
+        }
     """
     user = request.user
     method = request.method
     profile = request.user.profile
+    can_borrow = False
     #TODO: Re valluate the can-borrow logic
     if Loan.objects.filter(user=user).exists():
         can_borrow = True if Loan.objects.filter(user=user, cleared=True) else False
-    else:
-        can_borrow = True
-
-    if method == 'GET':
-        credit_limit = profile.credit_limit
-
-        return Response({"message": "User credit limit status", 'data': {
-            'credit_limit': credit_limit,
-            'can_borrow': can_borrow
-        }}, status=200)
-
+    
     if method == "POST":
-        if profile.pin == request.data['pin']:
-            del request.data['pin']
+        loan_data = request.data["loan_details"]
+        bank_data = request.data["bank_details"]
+        auth_data = request.data["auth"]
+        if profile.pin == auth_data['pin']:
+            del request.data['auth']
             if not can_borrow:
                 return Response({"message": "This user has an outstanding loan."})
-            serializer = LoanSerializer(data=request.data)
+            serializer = LoanSerializer(data=loan_data)
             if serializer.is_valid():
 
                 # Remove the down_payment amount fromt he users wallet
@@ -129,23 +115,39 @@ def apply_loan(request, *args, **kwargs):
 
                     # if user has less 0 in wallet then user is broke
                     if amount <= 0 or amount < serializer.validated_data['down_payment']:
-                        return Response({"message": "User has no/insufficient money in wallet"})
+                        data = {"success": False, "message": "User has no/insufficient money in wallet"}
+                        return Response(data, status=status.HTTP_424_FAILED_DEPENDENCY)
                     amount -= Decimal(serializer.validated_data['down_payment'])
                 else:
-                    return Response({"message": "User has no wallet"})
+                    return Response({"success":False, "message": "User has no wallet"}, status=status.HTTP_424_FAILED_DEPENDENCY)
 
                 # Save the loan if everything is good
                 serializer.save(user=request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"message": "Invalid pin"})
+        return Response({"status":False,"message": "Invalid pin"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # @csrf_exempt
 @api_view(['GET'])
 def get_banks(request, *args, **kwargs):
-    data = bank_list()
+    data = Okra.bank_list()
     return Response(data)
+
+
+@api_view(["GET", ])
+def update_client_income_status(request, *args, **kwargs):
+    try:
+        user = request.user
+        link = OkraLinkedUser.objects.get(user=user)
+        ok = Okra()
+        customerId = user.linked_user.customer_id
+        data = ok.update_customer_income_data(user, customerId)
+
+        return Response(data, status=ok)
+    except Exception as e:
+            print(e)
+            return Response({"message": "An error occured please try again."}, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # @csrf_exempt
 @api_view(['GET'])
@@ -172,8 +174,21 @@ def read_file(request):
     return HttpResponse(file_content, content_type="text/plain")
 
 
+
 @method_decorator(csrf_exempt, name='dispatch')
-class TransactionListCreateView(generics.ListCreateAPIView):
+class TransactionListCreateView(generics.ListAPIView):
+    """ Create or list transactions for a given user.
+
+    A GET request to list all transactions for a given user.
+
+    POST request:
+        'amount',
+        'description',
+        'type' is one of these FR/WT  [('FR', 'Fee Repayment'),('WT', 'Wallet Top Up'),]
+        'loan', loan id the repayment 
+        'my_total_payments'
+    """
+
     # queryset = Transaction.objects.all()
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -181,8 +196,6 @@ class TransactionListCreateView(generics.ListCreateAPIView):
     
     def get_queryset(self):
         return Transaction.objects.filter(user=self.request.user) 
-        
-    
     
     def perform_create(self, serializer):
         """
@@ -291,14 +304,12 @@ def top_wallet(request, *args, **kwrgs):
 def webhook_view(request):
     if request.method == 'POST':
         # Get the payload sent by the webhook
-        payload = json.loads(request.body)
-        print(payload)
-
-        # Process the payload and perform required actions
-        # ...
-
-        # Return a response
-        
+        payload = request.body
+        okra = Okra()
+        status = okra.validate_update_user_status(payload=payload)
+        print(status)
         return HttpResponse(status=200)
     else:
-        return HttpResponse(status=405)
+        payload = json.loads(request.body)
+        print(payload)
+        return HttpResponse(status=200)

@@ -61,7 +61,8 @@
                 <a href="{% url 'apiv1:account_url:list_user' %}">List Users</a>
                 <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:list_user' %}</span>
                     <p>
-                        <strong>To view a particular user detail "{% url 'apiv1:account_url:list_user' %}username"</strong>
+                        <strong>To view a particular user detail
+                            "{% url 'apiv1:account_url:list_user' %}username"</strong>
 
                         <p>This endpoint handles the creation and listing of users and returns the user object while a
                             verification code is sent to the user email.</p>
@@ -80,21 +81,21 @@
     </code>
     </pre>
 
-    Response:
-    {   'email': 'pygod_pyoer123@icloud.com',
-    'first_name': 'Ayobami',
-    'id': 45,
-    'last_name': 'Lodindsi',
-    'password': 'user - password',
-    'profile': {   'address': None,
-                   'dob': None,
-                   'nin': None,
-                   'phone_number': '11234567811190'},
-    'referrals': [],
-    'token': '459cce6dbaa029f692e612fa745bbcc0beb98432',
-    'username': 'AyoLod5ca',
-    'verification-code': '5d0f79'}
-</div>
+                        Response:
+                        { 'email': 'pygod_pyoer123@icloud.com',
+                        'first_name': 'Ayobami',
+                        'id': 45,
+                        'last_name': 'Lodindsi',
+                        'password': 'user - password',
+                        'profile': { 'address': None,
+                        'dob': None,
+                        'nin': None,
+                        'phone_number': '11234567811190'},
+                        'referrals': [],
+                        'token': '459cce6dbaa029f692e612fa745bbcc0beb98432',
+                        'username': 'AyoLod5ca',
+                        'verification-code': '5d0f79'}
+            </div>
             <div class="col">
                 <h3>Verify Email</h3>
 
@@ -142,7 +143,7 @@
                         JSON Web Token
                     </p>
             </div>
-            
+
             <div class="col">
                 <h3>login User </h3>
 
@@ -160,7 +161,10 @@
                 </pre>
                     <p>
                         <strong>Response</strong>
-                        {'message': 'User Logged in', 'data': {'id': 1, 'last_name': '', 'first_name': '', 'username': 'michaellyon', 'email': 'pygod@pauskul.com', 'profile': {'id': 99, 'nin': '4356436547', 'dob': '2023-04-15', 'address': '333 Fremont Street, San Fransisco, CA', 'phone_number': '+1 07098677653'}}}
+                        {'message': 'User Logged in', 'data': {'id': 1, 'last_name': '', 'first_name': '', 'username':
+                        'michaellyon', 'email': 'pygod@pauskul.com', 'profile': {'id': 99, 'nin': '4356436547', 'dob':
+                        '2023-04-15', 'address': '333 Fremont Street, San Fransisco, CA', 'phone_number': '+1
+                        07098677653'}}}
                     </p>
             </div>
         </div>
@@ -168,7 +172,7 @@
         <div class="col">
             <h3>Renew Email verification token</h3>
 
-            
+
 
             <a href="{% url 'apiv1:account_url:get_new_token' %}">Renew Email Verifiction Token</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:get_new_token' %}</span>
@@ -218,7 +222,6 @@
     </div>
     </div>
 
-
     <div class="row">
         <div class="col">
             <h3>Validate A User For Loan</h3>
@@ -227,22 +230,14 @@
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:validate_user_loan' %}</span>
                 <p>Endpoint to certify that a user is eligible for loan facility access</p>
                 <pre>
+
                 <p>
-                fullname -- user full name
-                home_address -- user home address
-                bvn -- user bank verification number
-                nin -- user national identity number
-                phone_number -- user phone number
-                phone_number -- user phone number
-                account_number -- user bank account number
-                account_name -- user bank account name
-                bank_name -- user bank name
+
+                A get request to get that the user is eligible for loan facility access
+                User would be identofied using JWT
                 
-                
-                On success: {"message": "User validated successfully", }
-                On fail: {"message": "An error occured please try again."}
-                if user is not logged in: {"message": "User is not authenticated! Login and try again"}
-                if user already verified: {"message": "User has already been verified!"}
+                On success: {"success": true, "message": "User validated successfully", "data": {"credit_limit": 10000, "can_borrow": true/false}}
+                On fail: {"success": false,"message": "An error occured please try again."}
             </p>
             </pre>
 
@@ -255,39 +250,32 @@
 
                 <p>Endpoint to apply for the users loan</p>
                 <p>
-                    <pre>
-                    <strong>On GET request</strong>
-                    Returns the user 
-                    {message: "User credit limit", data: {credit_limit: 100_000}}
+                <strong>On POST request</strong>
+                 <pre>
+                    loan_details : {
+                        service -- what service is the user trying to apply for the loan the id of the service
+                        down_payment -- how much is the down payment supposed to be
+                        amount_needed -- how much does the user need?
+                        start_date -- when is this loan service active
+                        end_date -- when is this loan due
+                        amount_to_pay_back -- how much is the user supposed to pay back},
                     
-                    <strong>On POST request</strong>
-                    Keyword arguments:
-                    service -- what service is the user trying to apply for the loan the id of the service
-                    down_payment -- how much is the down payment supposed to be
-                    amount_needed -- how much does the user need?
-                    start_date -- when is this loan service active
-                    end_date -- when is this loan due
-                    amount_to_pay_back -- how much is the user supposed to pay back
-                    
-                    User has outstanding loan: {"message": "This user has an outstanding loan."}
-                    User insufficient funds in wallet: {"message": "User has no/insufficient money in wallet"}
-                    User has no wallet: {"message": "User has no  wallet"}
-                    User pin invalis: {"message": "Invalid pin"}
-                    <em>On success: 
-                            [
-                             {
-                                "service": 1,
-                                "down_payment": "9000.00",
-                                "amount_needed": "90000.00",
-                                "start_date": "2023-01-02",
-                                "end_date": "2023-12-31",
-                                "total_repayment": "0.00",
-                                "cleared": false
-                             }
-                            ]
-                    </em>
-                </p>
+                    bank_details : {
+                        bank_name -- from the list of bank from the get bank api,
+                        bank_account_number -- acccount for the money to be paid into
+                        description -- description of the payment
+                        amount -- amount to be paid into the bank account
+                    }
+
+                    auth : {
+                        pin: user transaction pin
+                    }
                 </pre>
+
+            <p><strong>On Responsse: </strong></p>
+            <p>success &rarr;  {"success": true, message:"Loan approved."}</p>
+            <p>error &rarr;  {"success": false, message:"An error has occured."}</p>
+            
 
 
         </div>
@@ -299,9 +287,14 @@
             <a href="{% url 'apiv1:core:top_wallet' %}">Top Wallet</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:top_wallet' %}</span>
                 <pre>
-                <p>
-                    To return an authorized url where user can make payment
-                </p>
+                To Top up the user wallet
+                Args:
+                    id: id of the card the user is trying to make the top up from
+                    amount: amount the user wants to add to wallet
+                    pin: user transaction pip
+
+                Returns:
+                    message: Success or Failed
             </pre>
         </div>
     </div>
@@ -311,20 +304,19 @@
         <div class="col">
             <h3>List Or Create Transations</h3>
 
-            <a href="{% url 'apiv1:core:transaction_list_create' %}">List Create Transactions</a>
+            <a href="{% url 'apiv1:core:transaction_list_create' %}">List Transactions filters transactions based on user</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:transaction_list_create' %}</span>
 
         </div>
         <div class="col">
-            <h3>Wallet List Create</h3>
+            <h3>Wallet List</h3>
 
-            <a href="{% url 'apiv1:core:wallet_list_create' %}">Wallet Create</a>
+            <a href="{% url 'apiv1:core:wallet_list_create' %}">Wallet List</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:wallet_list_create' %}</span>
             </p>
 
             <p>
-            amount: amount the user wants to add to wallet
-            pin: user transaction pip
+               Return the user wallet
             </p>
 
         </div>
@@ -337,23 +329,25 @@
             <a href="{% url 'apiv1:core:card_list_create' %}">Card </a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:card_list_create' %}</span>
 
+                <p><strong>On get</strong>
+                    Returns a list of a users cars
+                </p>
+
+
                 <p>To Create card</p>
                 <p>{"number":"123456789", "name":"Kenny Card", "cvv":121}</p>
+
         </div>
 
         <div class="col">
-            <h3>Service Category List Create</h3>
+            <h3>Service List </h3>
 
+            <p>A list of all Services</p>
+            
             <a href="{% url 'apiv1:core:service_category' %}">Service Category</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service_category' %}</span>
         </div>
 
-        <div class="col">
-            <h3>Service List Create</h3>
-
-            <a href="{% url 'apiv1:core:service' %}">Service</a>
-            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service' %}</span>
-        </div>
         <div class="col">
             <h3>Get Banks</h3>
 
@@ -368,10 +362,10 @@
 
                 <p>
                     data = {
-                        "old_password": "1234rewqasdf",
-                        "password":"1234qwerasdf",
-                        "password2":"1234qwerasdf",
-    
+                    "old_password": "1234rewqasdf",
+                    "password":"1234qwerasdf",
+                    "password2":"1234qwerasdf",
+
                     }
                 </p>
         </div>

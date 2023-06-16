@@ -1,0 +1,46 @@
+{
+    "100": {
+        "name": "Maryam Savage",
+        "internetSpeed": 2,
+        "type": "ind",
+        "bank": "Alat",
+        "password": "Endurance",
+        "username": "John123",
+        "noOfAccount": 3,
+        "identity": 100,
+        "volume": "high"
+    },
+    "60": {
+        "name": "Williams Severin",
+        "internetSpeed": 3,
+        "type": "ind",
+        "bank": "United Bank For Africa",
+        "password": "Gisele",
+        "username": "Celestine123",
+        "noOfAccount": 1,
+        "identity": 60,
+        "volume": "high"
+    },
+    "75": {
+        "name": "Mary Agusto",
+        "internetSpeed": 2,
+        "type": "corp",
+        "bank": "Standard Chartered Bank",
+        "password": "Friday",
+        "username": "Jason123",
+        "noOfAccount": 4,
+        "identity": 75,
+        "volume": "high"
+    },
+    "30": {
+        "name": "Faith Green",
+        "internetSpeed": 5,
+        "type": "ind",
+        "bank": "First City Monument Bank",
+        "password": "Peace",
+        "username": "Thelma123",
+        "noOfAccount": 1,
+        "identity": 30,
+        "volume": "medium"
+    }
+}

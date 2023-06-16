@@ -1,0 +1,57 @@
+{
+    "100": {
+        "name": "James Savage",
+        "internetSpeed": 4,
+        "type": "ind",
+        "bank": "5d6fe57a4099cc4b210bbeb9",
+        "password": "Peace",
+        "username": "Jeniffer123",
+        "noOfAccount": 1,
+        "identity": 100,
+        "volume": "low"
+    },
+    "30": {
+        "name": "Emmanuel Evans",
+        "internetSpeed": 3,
+        "type": "corp",
+        "bank": "5d6fe57a4099cc4b210bbebe",
+        "password": "Prosper",
+        "username": "Mary123",
+        "noOfAccount": 4,
+        "identity": 30,
+        "volume": "medium"
+    },
+    "10": {
+        "name": "Williams Ford",
+        "internetSpeed": 3,
+        "type": "ind",
+        "bank": "5d6fe57a4099cc4b210bbeb1",
+        "password": "Monday",
+        "username": "Emily123",
+        "noOfAccount": 2,
+        "identity": 10,
+        "volume": "medium"
+    },
+    "60": {
+        "name": "Happiness Green",
+        "internetSpeed": 5,
+        "type": "ind",
+        "bank": "5d6fe57a4099cc4b210bbeae",
+        "password": "Maryam",
+        "username": "Friday123",
+        "noOfAccount": 4,
+        "identity": 60,
+        "volume": "high"
+    },
+    "75": {
+        "name": "David Green",
+        "internetSpeed": 5,
+        "type": "corp",
+        "bank": "611ff0f4412b11f1b2143d6f",
+        "password": "Thelma",
+        "username": "Maryam123",
+        "noOfAccount": 1,
+        "identity": 75,
+        "volume": "high"
+    }
+}

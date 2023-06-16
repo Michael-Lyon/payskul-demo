@@ -31,7 +31,8 @@ class Profile(models.Model):
     address = models.CharField(max_length=400, null=True, blank=True)
     nin = models.CharField(max_length=200, blank=True, null=True)
     verified = models.BooleanField(default=False)
-    credit_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    credit_limit = models.DecimalField(max_digits=100, decimal_places=2, default=0.0)
+    has_active_loan = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
@@ -70,3 +71,17 @@ class UserAuthCodes(models.Model):
         self.code = utils.get_code()
         self.expires_at = timezone.now() + timedelta(minutes=5)
         super().save(*args, **kwargs)
+
+
+class OkraLinkedUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="linked_user")
+    customer_id = models.CharField(max_length=100)
+    registered_bank_id = models.CharField(max_length=100)
+    registered_record = models.CharField(max_length=100)
+    income_accounts = models.CharField(max_length=1000)
+    income_banks = models.CharField(max_length=1000)
+    avg_income = models.DecimalField(decimal_places=2, max_digits=100, default=0.0)
+    initial_limit = models.DecimalField(decimal_places=2, max_digits=100, default=0.0)
+
+    def __str__(self):
+        return 'Linked user {}'.format(self.user.username)

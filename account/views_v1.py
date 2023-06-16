@@ -30,7 +30,7 @@ from django.core.mail import send_mail
 # import the logging library
 import logging
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('okra_validator') 
 
 User = get_user_model()
 # token = Token.objects.get_or_create(user=user)
@@ -101,6 +101,7 @@ def create_user(request):
                 "phone_number": phone_number
             }
         })
+
         """
         TODO: Change this process to a background process with celery
         Sends auth code mails to users
@@ -122,7 +123,8 @@ def create_user(request):
             """
             send_mail(subject, message, ADMIN_USER, [f"{data['email']}"],fail_silently=False,
             )
-            return Response(data)
+            
+            return Response(data, status.HTTP_201_CREATED)
         else:
             raise serializers.ValidationError(serializer.errors)
     else:
@@ -143,8 +145,8 @@ def confirm_email(request):
         profile = Profile.objects.get(user=user)
         profile.signup_confirmation = True
         profile.save()
-        return Response({'message': "Account Verified"})
-    return Response({'message': 'Invalid code or user id'}, status=404)
+        return Response({'message': "Account Verified"}, status.HTTP_200_OK)
+    return Response({'message': 'Invalid code or user id'}, status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -184,12 +186,14 @@ class LoginView(APIView):
                     "dob":profile.dob,
                     "verified": profile.signup_confirmation,
                     "address":profile.address,
-                    "phone_number":profile.phone_number
+                    "phone_number":profile.phone_number,
+                    "has_activae_loan": profile.has_activae_loan,
+                    "credit_limit":profile.credit_limit,
                 },
                 "jwt_token": auth_token
-                }})
+                }}, status.HTTP_200_OK)
         # return Response({"message": "Account not verified or wrong login info", })
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordView(generics.UpdateAPIView):
@@ -216,30 +220,33 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer = self.serializer_class(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'status': True, 'message': 'Password changed successfully'})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': True, 'message': 'Password changed successfully'}, status.HTTP_200_OK )
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 # @csrf_exempt
 @api_view(['GET'])
 def get_new_token(request):
-    user = request.user
-    print(user)
-    token = UserAuthCodes.objects.get(user=user)
-    token.save()
-    
-    token = token.code
-    subject = f'PaySkul Pin Verification'
-    message = f"""
-            Dear {user.first_name},
-            You have successfully created an account.
-            Your username is {user.username}
-            This is the code to activate your account {token}.
-            
-            Token expires in 5 minutes.
-            """
-    send_mail(subject, message, ADMIN_USER, [f"{user.email}"], fail_silently=False,
-              )
-    
-    return Response({"message":"Token Sent"})
-    
+    try:
+        user = request.user
+        print(user)
+        token = UserAuthCodes.objects.get(user=user)
+        token.save()
+        
+        token = token.code
+        subject = f'PaySkul Pin Verification'
+        message = f"""
+                Dear {user.first_name},
+                You have successfully created an account.
+                Your username is {user.username}
+                This is the code to activate your account {token}.
+                
+                Token expires in 5 minutes.
+                """
+        send_mail(subject, message, ADMIN_USER, [f"{user.email}"], fail_silently=False,
+                )
+        
+        return Response({"message":"Token Sent"}, status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception(f"Error while sending auth code to user: {e}")
+        return Response({"message":"Error occured"}, status.HTTP_200_OK)

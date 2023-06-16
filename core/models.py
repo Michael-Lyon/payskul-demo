@@ -92,8 +92,6 @@ class Transaction(models.Model):
         return total['amount__sum'] or 0 if not total["amount__sum"] else total["amount__sum"]
 
         
-        
-
 
 class Bank(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bank")
@@ -130,3 +128,4 @@ class Card(models.Model):
         
     def __str__(self):
         return f"Card for {self.user}"
+    

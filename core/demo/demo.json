@@ -1,0 +1,49 @@
+{
+    "status": "success",
+    "message": "Auth retrieved successfully",
+    "data": {
+        "pagination": {
+            "totalDocs": 3,
+            "limit": 2,
+            "hasPrevPage": true,
+            "hasNextPage": false,
+            "page": 2,
+            "totalPages": 2,
+            "pagingCounter": 3,
+            "prevPage": 1,
+            "nextPage": null
+        },
+        "auths": [
+            {
+                "_id": "647bcf741cf6909beb176fe5",
+                "record": "647bcf4c1ca2bb002cad1ead",
+                "__v": 0,
+                "bank": {
+                    "colors": {
+                        "primary": "#CA0302",
+                        "button": "#CA0302",
+                        "accent": "#CA0302"
+                    },
+                    "icon": "https://okra-images.s3.eu-west-3.amazonaws.com/Rubies+Bank+Icon.svg",
+                    "logo": "https://okra-images.s3.eu-west-3.amazonaws.com/Rubies+Bank+Logo.svg",
+                    "name": "Rubies Bank",
+                    "status": "healthy"
+                },
+                "created_at": "2023-06-03T23:40:36.698Z",
+                "current_project": "63f157fb1a0f603b1b58423f",
+                "customer": {
+                    "_id": "647b92b01519bc002f0c00c3",
+                    "name": "Mercy  Green"
+                },
+                "env": "production-sandbox",
+                "last_updated": "2023-06-03T23:40:36.698Z",
+                "owner": "63f157fbbad20d13e7664894",
+                "projects": [
+                    "63f157fb1a0f603b1b58423f"
+                ],
+                "validated": true,
+                "id": "647bcf741cf6909beb176fe5"
+            }
+        ]
+    }
+}

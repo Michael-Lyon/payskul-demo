@@ -7,6 +7,7 @@ app_name="core"
 urlpatterns = [
     path("logs/", views_v1.read_file, name="read_file"),
     path("get-banks/", views_v1.get_banks, name="bank_list"),
+    path("get-limit/", views_v1.update_client_income_status, name="update_client_income_status"),
     path("details/", views_v1.DetailListView.as_view(), name="detail"),
     path("loan-list/", views_v1.loan_list, name="loan_list"),
     path("validate-user-loan/", views_v1.validate_user_loan, name="validate_user_loan"),

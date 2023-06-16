@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'core',
     'book_store',
     'apiv1',
+    # "okra_things",
     
     # packages
     'corsheaders',
@@ -91,12 +92,6 @@ WSGI_APPLICATION = "payskul.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
 
 # Password validation
@@ -153,9 +148,9 @@ HASHID_FIELD_SALT ="1*pjfyurp74dkt(3@4roi  # b@e_@l%!1vhj4xvv*f_jkapjm1!z"
 HASHID_FIELD_ALLOW_INT_LOOKUP = True
 HASHID_FIELD_ENABLE_HASHID_OBJECT = False
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ADMIN_USER = "pygod.dev@mail.com"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.payskul.com'
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
@@ -194,8 +189,14 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+
+secret = os.getenv("OKRA_SECRET")
+API_KEY = os.getenv("OKRA_PUBLIC")
+
+
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # https://lanceproject-production-0863.up.railway.app/
 # CSRF_TRUSTED_ORIGINS = ["*"]
 
@@ -209,12 +210,22 @@ REDIS_URL = os.getenv("REDIS_URL")
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND=REDIS_URL
 
+ENV = os.getenv("ENV")
 
-DATABASE_URL = os.getenv("DATABASE_URL")
 
-DATABASES = {
-    "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
-}
+if ENV == "LOCAL":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+else:
+    DATABASE_URL = os.getenv("DATABASE_URL")
+
+    DATABASES = {
+        "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
+    }
 
 
 SIMPLE_JWT = {
@@ -230,23 +241,27 @@ OKRA_SECRET = os.getenv("OKRA_SECRET")
 
 LOGGING = {
     'version': 1,
-    # The version number of our log
     'disable_existing_loggers': False,
-    # django uses some of its own loggers for internal operations. In case you want to disable them just replace the False above with true.
-    # A handler for WARNING. It is basically writing the WARNING messages into a file called WARNING.log
     'handlers': {
         'file': {
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': BASE_DIR / 'warning.log',
         },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
     },
-    # A logger for WARNING which has a handler called 'file'. A logger can have multiple handler
     'loggers': {
-        # notice the blank '', Usually you would put built in loggers like django or root here based on your needs
-        '': {
-            'handlers': ['file'],  # notice how file variable is called in handler which has been defined above
-            'level': 'WARNING',
+        'okra_validator': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'ERROR',
             'propagate': True,
         },
     },
