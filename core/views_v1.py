@@ -108,18 +108,18 @@ def apply_loan(request, *args, **kwargs):
             serializer = LoanSerializer(data=loan_data)
             if serializer.is_valid():
 
-                # Remove the down_payment amount fromt he users wallet
-                if Wallet.objects.filter(user=user).exists():  # check if the user has a wallet
-                    wallet = Wallet.objects.get(user=user)
-                    amount = wallet.amount
+                # # Remove the down_payment amount fromt he users wallet
+                # if Wallet.objects.filter(user=user).exists():  # check if the user has a wallet
+                #     wallet = Wallet.objects.get(user=user)
+                #     amount = wallet.amount
 
-                    # if user has less 0 in wallet then user is broke
-                    if amount <= 0 or amount < serializer.validated_data['down_payment']:
-                        data = {"success": False, "message": "User has no/insufficient money in wallet"}
-                        return Response(data, status=status.HTTP_424_FAILED_DEPENDENCY)
-                    amount -= Decimal(serializer.validated_data['down_payment'])
-                else:
-                    return Response({"success":False, "message": "User has no wallet"}, status=status.HTTP_424_FAILED_DEPENDENCY)
+                #     # if user has less 0 in wallet then user is broke
+                #     if amount <= 0 or amount < serializer.validated_data['down_payment']:
+                #         data = {"success": False, "message": "User has no/insufficient money in wallet"}
+                #         return Response(data, status=status.HTTP_424_FAILED_DEPENDENCY)
+                #     amount -= Decimal(serializer.validated_data['down_payment'])
+                # else:
+                #     return Response({"success":False, "message": "User has no wallet"}, status=status.HTTP_424_FAILED_DEPENDENCY)
 
                 # Save the loan if everything is good
                 serializer.save(user=request.user)
