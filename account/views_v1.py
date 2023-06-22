@@ -112,18 +112,6 @@ def create_user(request):
             print("Heyyyyyyyyyyy")
             # data['verification-code'] = UserAuthCodes.objects.get(id=data['id']).code
             # user = User.objects.get(id=user_id)
-            token = UserAuthCodes.objects.get(id=data['id']).code
-            subject = f'PaySkul Pin Verification'
-            message = f"""
-            Dear {data['first_name']},
-            You have successfully created an account.
-            Your username is {data['username']}
-            This is the code to activate your account {token}.
-            
-            """
-            send_mail(subject, message, ADMIN_USER, [f"{data['email']}"],fail_silently=False,
-            )
-            
             return Response(data, status.HTTP_201_CREATED)
         else:
             raise serializers.ValidationError(serializer.errors)
@@ -187,8 +175,9 @@ class LoginView(APIView):
                     "verified": profile.signup_confirmation,
                     "address":profile.address,
                     "phone_number":profile.phone_number,
-                    "has_activae_loan": profile.has_activae_loan,
+                    "has_active_loan": profile.has_active_loan,
                     "credit_limit":profile.credit_limit,
+                    "credit_validated":profile.credit_validated
                 },
                 "jwt_token": auth_token
                 }}, status.HTTP_200_OK)

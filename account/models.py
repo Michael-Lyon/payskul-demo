@@ -33,6 +33,7 @@ class Profile(models.Model):
     verified = models.BooleanField(default=False)
     credit_limit = models.DecimalField(max_digits=100, decimal_places=2, default=0.0)
     has_active_loan = models.BooleanField(default=False)
+    credit_validated = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)

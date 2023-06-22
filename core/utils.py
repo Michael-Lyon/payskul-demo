@@ -166,7 +166,7 @@ class Okra(OkraSetup):
                                 self._to_save["avg_income"] = avg_income
                                 self._to_save["initial_limit"] = credit_limit
                                 profile.credit_limit = credit_limit
-                                profile.verified = True
+                                profile.credit_validated = True
                                 profile.save()
                                 obj = OkraLinkedUser.objects.get_or_create(**self._to_save)
                                 obj.save()
@@ -204,7 +204,7 @@ class Okra(OkraSetup):
                     self._to_save["avg_income"] = avg_income
                     self._to_save["initial_limit"] = credit_limit
                     profile.credit_limit = credit_limit
-                    profile.verified = True
+                    profile.credit_validated = True
                     profile.save()
                     OkraLinkedUser.objects.update(**self._to_save)
                     self._LOGGER.info(f"New user created: {self._to_save}")
