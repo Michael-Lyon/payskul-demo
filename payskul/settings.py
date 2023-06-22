@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'django_celery_beat', 
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -265,4 +266,18 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+
+Q_CLUSTER = {
+    'name': 'myproject',
+    'workers': 8,
+    'recycle': 500,
+    'timeout': 60,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'cpu_affinity': 1,
+    'label': 'Django Q',
+    'redis': CELERY_BROKER_URL
 }

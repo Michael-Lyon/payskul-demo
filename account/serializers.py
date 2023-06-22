@@ -49,8 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
             profile_data["user"] = user
             Profile.objects.create(**profile_data)
-            x = send_auth_mail.delay(user.id)
-            print("X:", x)
+            send_auth_mail.delay(user.id)
             return user
         except Exception as e:
             print(e)

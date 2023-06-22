@@ -109,7 +109,6 @@ def create_user(request):
         if serializer.is_valid():
             serializer.save()
             data = serializer.data
-            print("Heyyyyyyyyyyy")
             # data['verification-code'] = UserAuthCodes.objects.get(id=data['id']).code
             # user = User.objects.get(id=user_id)
             return Response(data, status.HTTP_201_CREATED)
@@ -117,6 +116,7 @@ def create_user(request):
             raise serializers.ValidationError(serializer.errors)
     else:
         raise serializers.ValidationError("Invalid signup data.")
+
 
 @csrf_exempt
 @api_view(['POST'])
