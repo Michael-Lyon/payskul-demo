@@ -134,7 +134,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 DATABASE_URL = os.getenv("DATABAE_URL")
-
+ENV = os.getenv("ENV")
 # Extra lookup directories for collectstatic to find static files
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
@@ -148,9 +148,11 @@ HASHID_FIELD_SALT ="1*pjfyurp74dkt(3@4roi  # b@e_@l%!1vhj4xvv*f_jkapjm1!z"
 HASHID_FIELD_ALLOW_INT_LOOKUP = True
 HASHID_FIELD_ENABLE_HASHID_OBJECT = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if ENV == "LOCAL":
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ADMIN_USER = "pygod.dev@mail.com"
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.payskul.com'
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
@@ -208,7 +210,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
-ENV = os.getenv("ENV")
+
 
 
 if ENV == "LOCAL":
