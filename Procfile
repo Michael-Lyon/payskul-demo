@@ -1,1 +1,1 @@
-web: celery --app=payskul worker -l INFO && python manage.py migrate && gunicorn payskul.wsgi
+web:  python manage.py migrate && gunicorn payskul.wsgi & & celery -A payskul worker --pool=prefork --concurrency=8
