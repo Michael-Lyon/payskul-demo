@@ -10,19 +10,24 @@ from rest_framework.views import APIView
 from rest_framework import serializers
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import generics
-# from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.sites.shortcuts import get_current_site
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.decorators.csrf import csrf_exempt
 from .models import Profile, UserAuthCodes
 from .serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
-from .utils import get_code
+from .utils import get_code, send_verification_code
 
 from core.serializers import DetailSerializer
-from payskul.settings import ONLINE
-from payskul.settings import EMAIL_HOST_USER as admin_mail
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from django.core.mail import send_mail
@@ -137,8 +142,6 @@ def confirm_email(request):
     return Response({'message': 'Invalid code or user id'}, status.HTTP_400_BAD_REQUEST)
 
 
-
-
 # @csrf_exempt
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -215,6 +218,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 # @csrf_exempt
 @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
 def get_new_token(request):
     try:
         user = request.user
@@ -239,3 +243,89 @@ def get_new_token(request):
     except Exception as e:
         logger.exception(f"Error while sending auth code to user: {e}")
         return Response({"message":"Error occured"}, status.HTTP_200_OK)
+
+
+@api_view(['GET', 'POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def reset_password_view(request):
+    """
+    Reset password for a user.
+
+    GET:
+    Send a verification code to the user's email address.
+
+    - `email` (request data): The email address of the user.
+    
+    POST:
+    Reset the user's password using the verification code.
+
+    - `email` (request data): The email address of the user.
+    - `verification_code` (request data): The verification code received by the user.
+    - `password` (request data): The new password for the user.
+
+    Returns a JSON response with the following format:
+
+    {
+        "status": <bool>,
+        "message": <str>
+    }
+
+    - `status`: Indicates the status of the operation (True for success, False for failure).
+    - `message`: A message describing the result of the operation.
+
+    GET Example Response (HTTP 200 OK):
+    {
+        "status": true,
+        "message": "Verification code sent"
+    }
+
+    POST Example Response (HTTP 200 OK):
+    {
+        "status": true,
+        "message": "Password reset successfully"
+    }
+
+    Error Responses:
+    - HTTP 400 BAD REQUEST: If the required parameters are missing or invalid.
+    - HTTP 404 NOT FOUND: If the user associated with the provided email address is not found.
+    """
+    
+    
+    if request.method == 'GET':
+        # Send verification code to the user
+        email = request.data.get('email')
+        if not email:
+            return Response({'status': False, 'message': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        verification_code = default_token_generator.make_token(user)
+        send_verification_code(email, verification_code)  # Implement your own email sending logic
+        
+        return Response({'status': True, 'message': 'Verification code sent'}, status=status.HTTP_200_OK)
+    
+    elif request.method == 'POST':
+        # Reset user password
+        email = request.data.get('email')
+        verification_code = request.data.get('verification_code')
+        password = request.data.get('password')
+        
+        if not email or not verification_code or not password:
+            return Response({'status': False, 'message': 'Email, verification code, and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        if not default_token_generator.check_token(user, verification_code):
+            return Response({'status': False, 'message': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.set_password(password)
+        user.save()
+        
+        return Response({'status': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)

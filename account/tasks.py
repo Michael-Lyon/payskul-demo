@@ -1,8 +1,8 @@
 from celery import shared_task
 from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
 from rest_framework.authtoken.models import Token
 
+from django.core.mail import send_mail
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 

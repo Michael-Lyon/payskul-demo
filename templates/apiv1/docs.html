@@ -183,6 +183,54 @@
                 </p>
         </div>
         <div class="col">
+            <h3>Reset Password</h3>
+
+            <a href="{% url 'apiv1:account_url:reset_password' %}">Reset Password</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:account_url:reset_password' %}</span>
+                <pre>
+                        Reset password for a user.
+
+    GET:
+    Send a verification code to the user's email address.
+
+    - `email` (request data): The email address of the user.
+    
+    POST:
+    Reset the user's password using the verification code.
+
+    - `email` (request data): The email address of the user.
+    - `verification_code` (request data): The verification code received by the user.
+    - `password` (request data): The new password for the user.
+
+    Returns a JSON response with the following format:
+
+    {
+        "status": <bool>,
+        "message": <str>
+    }
+
+    - `status`: Indicates the status of the operation (True for success, False for failure).
+    - `message`: A message describing the result of the operation.
+
+    GET Example Response (HTTP 200 OK):
+    {
+        "status": true,
+        "message": "Verification code sent"
+    }
+
+    POST Example Response (HTTP 200 OK):
+    {
+        "status": true,
+        "message": "Password reset successfully"
+    }
+
+    Error Responses:
+    - HTTP 400 BAD REQUEST: If the required parameters are missing or invalid.
+    - HTTP 404 NOT FOUND: If the user associated with the provided email address is not found.
+    
+                </pre>
+        </div>
+        <div class="col">
             <h3>Refresh JWT Token</h3>
             <a href="{% url 'token_refresh' %}">Refresh the token</a>
             <p>Endpoint: <span class="endpoint">{% url 'token_refresh' %}</span>
@@ -250,8 +298,8 @@
 
                 <p>Endpoint to apply for the users loan</p>
                 <p>
-                <strong>On POST request</strong>
-                 <pre>
+                    <strong>On POST request</strong>
+                    <pre>
                     loan_details : {
                         service -- what service is the user trying to apply for the loan the id of the service
                         down_payment -- how much is the down payment supposed to be
@@ -272,10 +320,10 @@
                     }
                 </pre>
 
-            <p><strong>On Responsse: </strong></p>
-            <p>success &rarr;  {"success": true, message:"Loan approved."}</p>
-            <p>error &rarr;  {"success": false, message:"An error has occured."}</p>
-            
+                    <p><strong>On Responsse: </strong></p>
+                    <p>success &rarr; {"success": true, message:"Loan approved."}</p>
+                    <p>error &rarr; {"success": false, message:"An error has occured."}</p>
+
 
 
         </div>
@@ -304,7 +352,8 @@
         <div class="col">
             <h3>List Or Create Transations</h3>
 
-            <a href="{% url 'apiv1:core:transaction_list_create' %}">List Transactions filters transactions based on user</a>
+            <a href="{% url 'apiv1:core:transaction_list_create' %}">List Transactions filters transactions based on
+                user</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:transaction_list_create' %}</span>
 
         </div>
@@ -316,7 +365,7 @@
             </p>
 
             <p>
-               Return the user wallet
+                Return the user wallet
             </p>
 
         </div>
@@ -343,7 +392,7 @@
             <h3>Service List </h3>
 
             <p>A list of all Services</p>
-            
+
             <a href="{% url 'apiv1:core:service_category' %}">Service Category</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service_category' %}</span>
         </div>
