@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from core.utils import Okra
-
+from django.core.mail import send_mail
+from payskul.settings import ADMIN_USER
+from payskul.settings import EMAIL_HOST_USER as admin_mail
 
 payload = """{
   "method": "AUTH",
@@ -52,4 +54,17 @@ def home(request):
     # ok = Okra()
     # data = ok.validate_update_user_status(payload=payload)
     # print(data)
+    # subject = f'PaySkul Pin Verification'
+    # message = f"""
+    # Dear Mike,
+    # You have successfully created an account.
+    # Your username is Mike
+    # This is the code to activate your account.
+    # """
+    # mail_sent = send_mail(subject,
+    #                       message,
+    #                       admin_mail,
+    #                       ["pygod.dev@mail.com",],
+    #                       fail_silently=False)
+    # print(mail_sent)
     return render(request, "apiv1/docs.html")

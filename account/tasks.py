@@ -24,10 +24,12 @@ def send_auth_mail(user_id):
     Your username is {user.username}
     This is the code to activate your account {token}.
     """
-    mail_sent = send_mail(subject,
-                          message,
-                          admin_mail,
-                          [user.email]
+    print(user.email)
+    mail_sent = send_mail(subject=subject,
+                          message=message,
+                          from_email=admin_mail,
+                          recipient_list=[user.email],
+                          fail_silently=False
                           )
     return mail_sent
 

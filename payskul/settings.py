@@ -152,8 +152,8 @@ HASHID_FIELD_ENABLE_HASHID_OBJECT = False
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-if ENV == "LOCAL":
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# if ENV == "LOCAL":
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ADMIN_USER = "pygod.dev@mail.com"
 EMAIL_HOST = 'mail.payskul.com'
 EMAIL_PORT = 465
