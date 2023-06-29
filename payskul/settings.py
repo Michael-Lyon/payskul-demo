@@ -202,7 +202,7 @@ API_KEY = os.getenv("OKRA_PUBLIC")
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # https://lanceproject-production-0863.up.railway.app/
-CSRF_TRUSTED_ORIGINS = ["https://payskul-demo.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = ["https://payskul-demo.up.railway.app/"]
 
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
