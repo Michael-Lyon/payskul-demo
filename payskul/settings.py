@@ -160,7 +160,7 @@ EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'mail@payskul.com'
-EMAIL_HOST_PASSWORD = 'Simple@12'
+EMAIL_HOST_PASSWORD = 'Attention@123'
 
 ONLINE = True
 REST_FRAMEWORK = {
@@ -202,7 +202,7 @@ API_KEY = os.getenv("OKRA_PUBLIC")
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # https://lanceproject-production-0863.up.railway.app/
-# CSRF_TRUSTED_ORIGINS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["https://payskul-demo.up.railway.app"]
 
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
