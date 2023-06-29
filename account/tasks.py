@@ -26,7 +26,7 @@ def send_auth_mail(user_id):
     """
     mail_sent = send_mail(subject,
                           message,
-                          ADMIN_USER,
+                          admin_mail,
                           [user.email]
                           )
     return mail_sent
