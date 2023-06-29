@@ -73,6 +73,9 @@ class UserAuthCodes(models.Model):
         self.expires_at = timezone.now() + timedelta(minutes=5)
         super().save(*args, **kwargs)
 
+    def __str__(self) -> str:
+        return f"{self.user} ({self.code})"
+
 
 class OkraLinkedUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="linked_user")
