@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "data": {
+    "income": {
+      "confidence": "81%",
+      "last_year_income": 1810759.47,
+      "max_number_of_overlapping_income_streams": 2,
+      "number_of_income_streams": 2,
+      "projected_yearly_income": 4744969.49,
+      "last_two_years_income": 107182.3,
+      "last_two_years_to_this_year_projected_income": 830027.29,
+      "last_year_to_this_year_projected_income": 1191449.78,
+      "streams": [
+        {
+          "account": "5ef9050ce017d657c43e7a90",
+          "avg_monthly_income": 177905,
+          "bank": "5d6fe57a4099cc4b210bbeb7",
+          "days": 110,
+          "monthly_income": 2511637,
+          "type": "unstructured"
+        },
+        {
+          "account": "5ef9050ce017d657c43e7a90",
+          "avg_monthly_income": 2406069,
+          "bank": "5d6fe57a4099cc4b210bbeb7",
+          "days": 114,
+          "employer": "Jova Inc",
+          "income_start_date": "2023-06-29T12:32:52.062Z",
+          "monthly_income": 2469767,
+          "type": "salary"
+        }
+      ],
+      "customer": "647e179b1519bc002f0d27e1",
+      "env": "production-sandbox",
+      "version": "1.1"
+    },
+    "msg": "Income successfully retrieved"
+  }
+}

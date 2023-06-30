@@ -49,12 +49,40 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
             profile_data["user"] = user
             Profile.objects.create(**profile_data)
-            send_auth_mail.delay(user.id)
-            return user
+            try:
+                token = UserAuthCodes.objects.get(user=user).code
+                subject = f"PaySkul Password Reset Pin"
+                message = f"""
+                Dear {user.first_name},
+                You have successfully created an account.
+                Your username is {user.username}
+                This is the code to activate your account {token}.
+                """
+                send_mail(subject=subject,
+                                    message=message,
+                                    from_email=admin_mail,
+                                    recipient_list=[user.email],
+                                    fail_silently=False
+                                    )
+                return user
+            except  Exception as e:
+                user.delete()
+                raise serializers.ValidationError(
+                {
+                    "status": False,
+                    "message": "Something went wrong. Please try again."
+                }, code="400"
+                    )
+            
         except Exception as e:
             print(e)
             user.delete()
-            raise serializers.ValidationError("Something went wrong please try again")
+            raise serializers.ValidationError(
+                {
+            "status": False,
+            "message": "Something went wrong. Please try again."
+            }, code="400"
+                )
         
     # def get_token(self, obj):
     #     print(obj)
@@ -79,8 +107,11 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(**data)
         if user and user.is_active:
             return user
-        # return user
-        raise serializers.ValidationError("Unable to log in with provided credentials.")
+        print(user)
+        raise serializers.ValidationError({
+            "status": False,
+            "message": "Username and or password incorrect."
+        }, code="400")
         # return data
     
     # def get_profile(self, obj):

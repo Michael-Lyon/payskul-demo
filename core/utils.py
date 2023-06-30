@@ -189,7 +189,6 @@ class Okra(OkraSetup):
            self._LOGGER.error("Auth auth: %s", data)
         return  False
     
-
     
     def update_customer_income_data(self, user, customerId):
         try:
