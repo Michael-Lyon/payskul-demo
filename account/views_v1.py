@@ -134,7 +134,11 @@ def confirm_email(request):
     """
     code = request.data['code']
     id = request.data['id']
-    user = User.objects.get(id=id)
+
+    if not User.filter.get(id=id).exists() : return Response({"status":False,'message': 'Invalid code or user id'}, status.HTTP_400_BAD_REQUEST)
+
+
+    user = User.objects.get(id=id) 
 
     if int(code) == 123456:
         profile = Profile.objects.get(user=user)
