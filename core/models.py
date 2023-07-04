@@ -70,7 +70,7 @@ class Loan(models.Model):
 class Transaction(models.Model):
     TRANSACTION_TYPE_CHOICES = [
         ('FR', 'Fee Repayment'),
-        ('WT', 'Wallet Top Up'),
+        ('SFP', 'School Fees Payment'),
     ]
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE, related_name='loan_transaction', blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="transactions", blank=True, null=True)

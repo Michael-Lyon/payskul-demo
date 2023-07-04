@@ -121,6 +121,12 @@ class OkraSetup:
     # BANK URLS
     _BANKS_LIST_URL = _BASE + "banks/list"
 
+    # ACCOUNT URLS
+    _ACCOUNT_CUSTOMER_URL = _BASE + "accounts/getByCustomer"
+
+    # PAYMENT URLS
+    _INITIATE_PAYMENT_URL = _BASE + "pay/initiate"
+
     # KEYS
     _SECRET = os.getenv("OKRA_SECRET")
     _PUBLIC = os.getenv("OKRA_PUBLIC")
@@ -274,6 +280,20 @@ class Okra(OkraSetup):
         self._to_save["income_banks"] = banks
         return avg_income, credit_limit
     
+    def _get_account_numbers(self, customer):
+        accounts_response = requests.post(url=self._ACCOUNT_CUSTOMER_URL, json={"customer":customer}, headers= self._HEADERS)
+        details = accounts_response.json()
+        accounts = details["account"]
+        nuban = ':'.join(account["nuban"] for account in accounts)
+        OkraLinkedUser.income_accounts = nuban
+
+    def _initiate_payment(self, acc_deb, acc_cred, amount):
+        payload = {
+            "account_to_debit" : acc_deb,
+            "account_to_credit" : acc_cred,
+            "amount" : amount
+        }
+        payment_response = requests.post(url=self._INITIATE_PAYMENT_URL, json=payload, headers=self._HEADERS)
 
     def _send_mail(self, message, error):
         try:
