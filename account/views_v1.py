@@ -25,7 +25,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.decorators.csrf import csrf_exempt
 from .models import Profile, UserAuthCodes
 from .serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
-from .utils import get_code, send_verification_code
+from .utils import get_code, send_verification_code, verify_email_smtp
 
 from core.serializers import DetailSerializer
 from payskul.settings import ADMIN_USER

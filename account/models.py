@@ -89,3 +89,7 @@ class OkraLinkedUser(models.Model):
 
     def __str__(self):
         return 'Linked user {}'.format(self.user.username)
+
+
+
+""

@@ -115,6 +115,8 @@ class OkraSetup:
     _INCOME_CUSTOMER_URLS = _BASE + "income/getByCustomer"
     _INCOME_ID_URL = _BASE + "income/getById"
 
+    _GET_ACCOUNT_CUSTOMER = _BASE + "accounts/getByCustomer"
+
     # IDENTITY URLS
     _IDENTITY_URL =  _BASE + "identity/getByCustomer"
 

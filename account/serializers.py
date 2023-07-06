@@ -5,6 +5,7 @@ from hashid_field import Hashid
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from account.tasks import send_auth_mail
+from .utils import verify_email_smtp
 from .models import Profile, UserAuthCodes
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail

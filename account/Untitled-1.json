@@ -2,7 +2,7 @@
   "status": "success",
   "data": {
     "income": {
-      "confidence": "81%",
+      "confidence": "91%",
       "last_year_income": 1810759.47,
       "max_number_of_overlapping_income_streams": 2,
       "number_of_income_streams": 2,
@@ -13,20 +13,20 @@
       "streams": [
         {
           "account": "5ef9050ce017d657c43e7a90",
-          "avg_monthly_income": 177905,
+          "avg_monthly_income": 431144,
           "bank": "5d6fe57a4099cc4b210bbeb7",
-          "days": 110,
-          "monthly_income": 2511637,
+          "days": 163,
+          "monthly_income": 161100,
           "type": "unstructured"
         },
         {
           "account": "5ef9050ce017d657c43e7a90",
-          "avg_monthly_income": 2406069,
+          "avg_monthly_income": 1112752,
           "bank": "5d6fe57a4099cc4b210bbeb7",
-          "days": 114,
+          "days": 110,
           "employer": "Jova Inc",
-          "income_start_date": "2023-06-29T12:32:52.062Z",
-          "monthly_income": 2469767,
+          "income_start_date": "2023-07-01T07:34:44.579Z",
+          "monthly_income": 1828636,
           "type": "salary"
         }
       ],
