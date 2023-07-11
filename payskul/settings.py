@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'django_celery_beat', 
-    'django_q',
     'drf_yasg',
 ]
 
@@ -151,10 +150,10 @@ HASHID_FIELD_ALLOW_INT_LOOKUP = True
 HASHID_FIELD_ENABLE_HASHID_OBJECT = False
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # CELERY_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # if ENV == "LOCAL":
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ADMIN_USER = "pygod.dev@mail.com"
 EMAIL_HOST = 'mail.payskul.com'
 EMAIL_PORT = 465
@@ -272,15 +271,17 @@ LOGGING = {
 }
 
 
-Q_CLUSTER = {
-    'name': 'myproject',
-    'workers': 8,
-    'recycle': 500,
-    'timeout': 60,
-    'compress': True,
-    'save_limit': 250,
-    'queue_limit': 500,
-    'cpu_affinity': 1,
-    'label': 'Django Q',
-    'redis': CELERY_BROKER_URL
-}
+PAYSKUL_ACCOUNT = "123456789787"
+
+# This scheduler config will:
+# - Store jobs in the project database
+# - Execute jobs in threads inside the application process
+# SCHEDULER_CONFIG = {
+#     "apscheduler.jobstores.default": {
+#         "class": "django_apscheduler.jobstores:DjangoJobStore"
+#     },
+#     'apscheduler.executors.processpool': {
+#         "type": "threadpool"
+#     },
+# }
+# SCHEDULER_AUTOSTART = True

@@ -23,7 +23,6 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_auth_codes(sender, instance=None, created=False, **kwargs):
     if created:
-        print("I WORKED")
         UserAuthCodes.objects.create(user=instance)
 
 

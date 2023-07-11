@@ -16,7 +16,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from account.models import OkraLinkedUser, Profile
 from core.utils import Okra
 
-from .models import Bank, Loan, Transaction, Wallet, Card, Service, Service_Category
+from .models import Bank, Loan, PaymentSlip, SchoolBank, Transaction, Wallet, Card, Service, Service_Category
 from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer,ServiceCategorySerializer, DetailSerializer
 from .utils import validate_bvn, validate_national_id, generate_random_credit
 from rest_framework import serializers
@@ -45,7 +45,7 @@ def validate_user_loan(request, *args, **kwargs):
     try:
         user = request.user
         if Loan.objects.filter(user=user).exists():
-            can_borrow = True if Loan.objects.filter(user=user, cleared=True) else False
+            can_borrow = False if Loan.objects.filter(user=user, cleared=False).exists() else True
 
         # link = OkraLinkedUser.objects.get(user=user)
         ok = Okra()
@@ -72,13 +72,13 @@ def apply_loan(request, *args, **kwargs):
         
         loan_details : {
             service -- what service is the user trying to apply for the loan the id of the service
-            down_payment -- how much is the down payment supposed to be
             amount_needed -- how much does the user need?
             start_date -- when is this loan service active
             end_date -- when is this loan due
             amount_to_pay_back -- how much is the user supposed to pay back},
         
         bank_details : {
+            receivers_name -- who is to recieve the money
             bank_name -- from the list of bank from the get bank api,
             bank_account_number -- acccount for the money to be paid into
             description -- description of the payment
@@ -93,40 +93,77 @@ def apply_loan(request, *args, **kwargs):
     method = request.method
     profile = request.user.profile
     can_borrow = False
-    #TODO: Re valluate the can-borrow logic
+
     if Loan.objects.filter(user=user).exists():
-        can_borrow = True if Loan.objects.filter(user=user, cleared=True) else False
-    
+        can_borrow = False if Loan.objects.filter(user=user, cleared=False).exists() else True
+
     if method == "POST":
         loan_data = request.data["loan_details"]
         bank_data = request.data["bank_details"]
         auth_data = request.data["auth"]
+        limit = OkraLinkedUser.objects.get(user=request.user).initial_limit
+
+        # Validate user transaction pin
         if profile.pin == auth_data['pin']:
             del request.data['auth']
             if not can_borrow:
-                return Response({"message": "This user has an outstanding loan."})
+                return Response({"message": "This user has an outstanding loan."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Check if the loan amount is valid and add it to the database
+            if loan_data["amount_needed"] > limit:
+                return Response({"status": False, "message": "Loan amount exceeds limit"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Save loan to Loan model
             serializer = LoanSerializer(data=loan_data)
             if serializer.is_valid():
-
-                # # Remove the down_payment amount fromt he users wallet
-                # if Wallet.objects.filter(user=user).exists():  # check if the user has a wallet
-                #     wallet = Wallet.objects.get(user=user)
-                #     amount = wallet.amount
-
-                #     # if user has less 0 in wallet then user is broke
-                #     if amount <= 0 or amount < serializer.validated_data['down_payment']:
-                #         data = {"success": False, "message": "User has no/insufficient money in wallet"}
-                #         return Response(data, status=status.HTTP_424_FAILED_DEPENDENCY)
-                #     amount -= Decimal(serializer.validated_data['down_payment'])
-                # else:
-                #     return Response({"success":False, "message": "User has no wallet"}, status=status.HTTP_424_FAILED_DEPENDENCY)
+                # Add loan amount to wallet
+                if Wallet.objects.filter(user=user).exists():
+                    wallet = Wallet.objects.get(user=user)
+                    wallet.amount += loan_data["amount_needed"]
+                    wallet.save()
 
                 # Save the loan if everything is good
-                serializer.save(user=request.user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"status":False,"message": "Invalid pin"}, status=status.HTTP_401_UNAUTHORIZED)
+                loan = serializer.save(user=request.user)
+                transaction = None
+                # Create a transaction for fee payment
+                try:
+                    transaction = Transaction.objects.create(
+                        user=request.user,
+                        loan=loan,
+                        description=bank_data["description"],
+                        type="SFP",
+                        amount=bank_data["amount"],
+                    )
+                except Exception as e:
+                    print("Error")
+                    return Response({"status": False, "message": "Error creating transaction"},
+                                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    # Subtract the bank_amount from the amount in wallet
+                    wallet.amount -= bank_data["amount"]
+                    wallet.save()
 
+                    # Create the school bank and payment slip
+                    school = SchoolBank.objects.create(
+                        bank_name=bank_data["bank_name"],
+                        account_number=bank_data["bank_account_number"],
+                    )
+
+                    PaymentSlip.objects.create(
+                        user=request.user,
+                        amount=bank_data["amount"],
+                        school=school,
+                        reference=transaction.reference,
+                    )
+
+                    return Response({"status": True, "message": "Loan applied successfully"},
+                                    status=status.HTTP_201_CREATED)
+            else:
+                return Response({"status": False, "message": serializer.errors},
+                                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"status": False, "message": "Invalid pin"},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
 # @csrf_exempt
 @api_view(['GET'])
