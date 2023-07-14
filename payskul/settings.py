@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # internal apps
     'account',
-    'core',
+    'core.apps.CoreConfig',
     'book_store',
     'apiv1',
     # "okra_things",

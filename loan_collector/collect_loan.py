@@ -6,6 +6,7 @@ from payskul.settings import PAYSKUL_ACCOUNT
 
 PAYMENT_RATE = 0.3 # 30% of the person montly salary
 def check_expired_loans():
+    print("Hello")
     okra = Okra()
     # Get current datetime
     current_datetime = timezone.now()
@@ -26,17 +27,16 @@ def check_expired_loans():
                 # CHECK BALANCE IN EACH ACCOUNT 
                 balances = okra_link.balance_ids.split(":") # THE ":" is a delimeter for all balance ids
                 nubans = okra_link.income_accounts.split(":") # THE ":" is a delimeter for
-                # LOOP THROOUGH EACH BALANCE TO MAKE A CHARGE ON ACCOUNT
+                banks = okra_link.income_banks.split(":")
+                # LOOP THROOUGH EACH BALANCE TO MAKE A CHARGE ON ACCOUNT WITH SUFFICIENT BALANCE
                 for i in range(len(balances)):
                     nuban = nubans[i]
                     balance = balances[i] 
+                    bank = banks[i]
                     bal = okra.get_balance(balance_id=balance)
                     if bal >= charge:
-                        api_data = okra._initiate_payment(nuban, PAYSKUL_ACCOUNT, charge)
-                # 
-                # Make API call to payment gateway to create a transaction
-                
-
+                        api_data = okra._initiate_payment(nuban, okra_link.user, bank, charge)
+            
                     # Check if API call was successful
                         # Parse API response and extract necessary information
                         api_reference = api_data.get("ref")
@@ -49,15 +49,19 @@ def check_expired_loans():
                             api_reference=api_reference,
                             user=loan.user,
                             date=current_datetime,
-                            amount=charge
+                            amount=charge,
                             description="Loan repayment",
                             status=api_status,
                             type="FR"
                         )
 
+                        if api_status == "success":
                         # Update loan model
-                        loan.cleared = True
+                            loan.total_repayment += charge
+                            if loan.total_repayment == loan.amount_to_pay_back:
+                                loan.cleared = True
+                        # loan.cleared = True
                         loan.save()
-
+                        transaction.save()
                         # Perform any additional actions with the transaction data if needed
                         # ...

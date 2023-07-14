@@ -18,7 +18,6 @@ from core.utils import Okra
 
 from .models import Bank, Loan, PaymentSlip, SchoolBank, Transaction, Wallet, Card, Service, Service_Category
 from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer,ServiceCategorySerializer, DetailSerializer
-from .utils import validate_bvn, validate_national_id, generate_random_credit
 from rest_framework import serializers
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate

@@ -1,0 +1,90 @@
+[
+  {
+    "status": "success",
+    "message": "Identity successfully retrieved",
+    "data": {
+      "id": "63ff2cfcddec1a7e578447fa",
+      "firstname": "Raimot",
+      "middlename": "Olorunwa",
+      "lastname": "Hassan",
+      "fullname": "Raimot Olorunwa Hassan",
+      "dob": "1999-05-20",
+      "bvn": "22701486899",
+      "gender": "Female",
+      "customer": "63ff2cfc03f5d6017604fba6",
+      "verification_country": "NG",
+      "aliases": [],
+      "phone": [
+        "09160040731"
+      ],
+      "email": [],
+      "address": [
+        "33 Omu Town Omu Ijebu"
+      ],
+      "nationality": "Nigeria",
+      "lga_of_origin": "Odogbolu",
+      "lga_of_residence": "Odogbolu",
+      "state_of_origin": "Ogun State",
+      "state_of_residence": "Ogun State",
+      "marital_status": "Single",
+      "next_of_kins": [],
+      "nin": null,
+      "photo_id": [
+        {
+          "url": "https://dv7b45oo546j4.cloudfront.net/MjI3MDE0ODY4OTk%3D.png",
+          "image_type": "bvn_photo"
+        }
+      ],
+      "enrollment": {
+        "bank": "044",
+        "branch": null,
+        "registration_date": "2022-07-04"
+      },
+      "record": "63ff2d196f13820012ae09bb",
+      "receipt": {
+        "status": true,
+        "msg": "Receipt has been successfully created",
+        "data": {
+          "receipt": {
+            "adjustment": {
+              "receipts": []
+            },
+            "charge_breakdown": {
+              "vat": 0
+            },
+            "breakdown": {
+              "discount": 0,
+              "billable_products": []
+            },
+            "billingStatus": true,
+            "adjusted": null,
+            "adjusted_receipt": false,
+            "paid": false,
+            "fixed": false,
+            "adjusted_type": null,
+            "method": "wallet",
+            "charge": 180,
+            "wallet_balance": 40073.85,
+            "addons": [],
+            "archived": false,
+            "micro_lending": false,
+            "ussd_pricing": false,
+            "ussd_pricing_discount": 0,
+            "micro_lending_discount": 0,
+            "_id": "63ff2d1d6f13820012ae09c1",
+            "plan_term": "postpaid",
+            "owner": "5da6358130a943486f33dced",
+            "type": "customer-verify",
+            "currency": "NGN",
+            "plan": "payg",
+            "plan_type": "5da478aa9ce2295ff32a5131",
+            "record": "63ff2d196f13820012ae09bb",
+            "created_at": "2023-03-01T10:46:53.242Z",
+            "last_updated": "2023-03-01T10:46:53.242Z",
+            "__v": 0
+          }
+        }
+      }
+    }
+  }
+]
