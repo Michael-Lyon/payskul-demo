@@ -102,6 +102,6 @@ def check_expired_loans():
                         else:
                             logger.warning("Insufficient balance for loan repayment.")
                     else:
-                        logger.error("COLLECT LOAN: No Bank Match found for", user)
+                        logger.error("COLLECT LOAN: No Bank Match found for user", user)
             else:
                 logger.warning("No nuban balances found for user", user)

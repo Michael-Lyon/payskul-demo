@@ -86,6 +86,7 @@ class Loan(models.Model):
     amount_to_pay_back = models.DecimalField(decimal_places=2, max_digits=10, default=0.0)
     total_repayment = models.DecimalField(decimal_places=2, max_digits=10, default=0.0)
     cleared = models.BooleanField(default=False)
+    updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('-start_date',)

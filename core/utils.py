@@ -246,7 +246,7 @@ class Okra(OkraSetup):
 
     def _initiate_payment(self, acc_deb, user, bank_code, amount):
         profile = profile.objects.get(user=user)
-        amount = f"{int(amount * 100)}" # convert amount to KOBO
+        amount = str(amount * 100) # convert amount to KOBO
         payload = { "email": user.email, 
             "amount": amount, 
             "bank": {
