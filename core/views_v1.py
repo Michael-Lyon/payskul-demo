@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 
 from rest_framework import generics, mixins, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
@@ -21,8 +21,11 @@ from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer
 from rest_framework import serializers
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate
+from rest_framework.permissions import IsAuthenticated
 # import the logging library
 import logging
+from django.http import HttpResponse
+
 
 # Get an instance of a logger
 logger = logging.getLogger('okra_validator') 
@@ -163,6 +166,80 @@ def apply_loan(request, *args, **kwargs):
         else:
             return Response({"status": False, "message": "Invalid pin"},
                             status=status.HTTP_401_UNAUTHORIZED)
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def payment_slip(request, *args, **kwargs):
+    """
+    Endpoint to apply for the user's loan.
+
+    On POST request:
+        - bank_details: {
+            "receivers_name": "Name of the receiver",
+            "bank_name": "Name of the bank",
+            "bank_account_number": "Account number",
+            "description": "Description of the payment",
+            "amount": "Amount to be paid into the bank account"
+        }
+
+        - auth: {
+            "pin": "User transaction pin"
+        }
+    """
+    user = request.user
+    method = request.method
+    profile = user.profile
+    wallet = Wallet.objects.get(user=user)
+
+    if method == "POST":
+        bank_data = request.data.get("bank_details", {})
+        auth_data = request.data.get("auth", {})
+
+        # Validate user transaction pin
+        if profile.pin == auth_data.get('pin'):
+            try:
+                # Get the latest uncleared loan
+                loan = Loan.objects.filter(user=user, cleared=False).latest('start_date')
+
+                # Create a transaction for fee payment
+                transaction = Transaction.objects.create(
+                    user=user,
+                    loan=loan,
+                    description=bank_data.get("description", ""),
+                    type="SFP",
+                    amount=bank_data.get("amount", 0),
+                )
+
+                # Subtract the bank_amount from the amount in the wallet
+
+                wallet.amount -= transaction.amount
+                wallet.save()
+
+                # Create the school bank and payment slip
+                school, created = SchoolBank.objects.get_or_create(
+                    bank_name=bank_data.get("bank_name", ""),
+                    account_number=bank_data.get("bank_account_number", ""),
+                )
+
+                PaymentSlip.objects.create(
+                    user=user,
+                    amount=transaction.amount,
+                    school=school,
+                    reference=transaction.reference,
+                )
+
+                return Response({"status": True, "message": "Payment applied successfully"}, status=status.HTTP_201_CREATED)
+            except Loan.DoesNotExist:
+                return Response({"status": False, "message": "No uncleared loan found"}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({"status": False, "message": "Error creating transaction"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({"status": False, "message": "Invalid pin"}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"status": False, "message": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+
 
 # @csrf_exempt
 @api_view(['GET'])
@@ -187,20 +264,13 @@ def update_client_income_status(request, *args, **kwargs):
 
 # @csrf_exempt
 @api_view(['GET'])
-def loan_list(request, pk=None, *args, **kwargs):
-    queryset = Loan.objects.filter(user=request.user)
-    if request.method == 'GET':
-        if pk is not None:
-            # detail view
-            # raise a 404 if not exists
-            obj = get_object_or_404(Loan, pk=pk)
-            data = LoanSerializer(obj, many=False)
-            return Response(data)
-        # list view
-        data = LoanSerializer(queryset, many=True).data
-        return Response(data)
+def loan_list(request):
+    # get the users latest loan
+    queryset = Loan.objects.filter(user=request.user, cleared=False).latest('start_date')
+    # queryset = Loan.objects.filter(user=request.user)
+    data = LoanSerializer(queryset, many=True).data
+    return Response(data)
 
-from django.http import HttpResponse
 
 # @csrf_exempt
 def read_file(request):
@@ -213,18 +283,6 @@ def read_file(request):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class TransactionListCreateView(generics.ListAPIView):
-    """ Create or list transactions for a given user.
-
-    A GET request to list all transactions for a given user.
-
-    POST request:
-        'amount',
-        'description',
-        'type' is one of these FR/WT  [('FR', 'Fee Repayment'),('WT', 'Wallet Top Up'),]
-        'loan', loan id the repayment 
-        'my_total_payments'
-    """
-
     # queryset = Transaction.objects.all()
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -233,36 +291,35 @@ class TransactionListCreateView(generics.ListAPIView):
     def get_queryset(self):
         return Transaction.objects.filter(user=self.request.user) 
     
-    def perform_create(self, serializer):
-        """
-        Check the transaction so that to be able to monitor if the user is trying to payback the loan he took.
-        """
+    # def perform_create(self, serializer):
+    #     """
+    #     Check the transaction so that to be able to monitor if the user is trying to payback the loan he took.
+    #     """
 
-        type = serializer.validated_data.get('type', None)
-        # Check that the user is trying to re-pay his debt
-        if type == "FR":
-            repayment_amount = serializer.validated_data.get('amount', None)
-            loan_id = serializer.validated_data.get('loan', None)
+    #     type = serializer.validated_data.get('type', None)
+    #     # Check that the user is trying to re-pay his debt
+    #     if type == "FR":
+    #         repayment_amount = serializer.validated_data.get('amount', None)
+    #         loan_id = serializer.validated_data.get('loan', None)
 
-            # Find the loan instance with the given ID
-            loan = Loan.objects.get(id=loan_id)
+    #         # Find the loan instance with the given ID
+    #         loan = Loan.objects.get(id=loan_id)
 
-            # Update the total repayment amount for the loan
-            loan.total_repayment += repayment_amount
-            loan.save()
+    #         # Update the total repayment amount for the loan
+    #         loan.total_repayment += repayment_amount
+    #         loan.save()
 
-            # Check if the loan has been fully repaid
-            if loan.total_repayment == loan.amount_needed:
-                # Mark the loan as cleared
-                loan.cleared = True
-                loan.save()
-        serializer.save(user=self.request.user)
+    #         # Check if the loan has been fully repaid
+    #         if loan.total_repayment == loan.amount_needed:
+    #             # Mark the loan as cleared
+    #             loan.cleared = True
+    #             loan.save()
+        # serializer.save(user=self.request.user)
 
 
 class WalletListCreateView(generics.ListAPIView):
     def get_queryset(self):
         return Wallet.objects.filter(user=self.request.user)
-    
     serializer_class = WalletSerializer
 
 
@@ -309,30 +366,30 @@ def top_wallet(request, *args, **kwrgs):
         message: Success or Failed
     """
     
-    rand_amount = generate_random_credit()
-    raw_data = request.data
-    pk=raw_data['id']
-    to_withdraw = raw_data.get('amount')
-    profile = request.user.profile
-    if not Card.objects.filter(user=profile.user).exists():
-        return Response({"message":"User has no existing card"})
-    user = authenticate(request, username=request.user.username, password=raw_data['pin'])
-    if user:
-        card = get_object_or_404(Card, id=pk)
-        amount = rand_amount - to_withdraw
-        if amount > 0:
-            wallet = card.user.wallet
-            wallet.amount += Decimal(amount)
-            wallet.save()
-            Transaction.objects.create(
-                user=card.user,
-                amount=to_withdraw,
-                status='Complete',
-                type='WT',
-            )
-            return Response({'message': 'Charge successful'})
-        return Response({'message': 'Insufficeint Funds'})
-    return Response({'message': 'Pin incorrect.'})
+    # rand_amount = generate_random_credit()
+    # raw_data = request.data
+    # pk=raw_data['id']
+    # to_withdraw = raw_data.get('amount')
+    # profile = request.user.profile
+    # if not Card.objects.filter(user=profile.user).exists():
+    #     return Response({"message":"User has no existing card"})
+    # user = authenticate(request, username=request.user.username, password=raw_data['pin'])
+    # if user:
+    #     card = get_object_or_404(Card, id=pk)
+    #     amount = rand_amount - to_withdraw
+    #     if amount > 0:
+    #         wallet = card.user.wallet
+    #         wallet.amount += Decimal(amount)
+    #         wallet.save()
+    #         Transaction.objects.create(
+    #             user=card.user,
+    #             amount=to_withdraw,
+    #             status='Complete',
+    #             type='WT',
+    #         )
+    #         return Response({'message': 'Charge successful'})
+        # return Response({'message': 'Insufficeint Funds'})
+    return Response({'message': 'No longer available'})
 
 
 @csrf_exempt

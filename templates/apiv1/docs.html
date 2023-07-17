@@ -327,30 +327,70 @@
 
 
         </div>
+        <div class="col">
+            <h3>Payment Slip</h3>
+
+            <a href="{% url 'apiv1:core:apply_loan' %}">Paymetn Slip</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:apply_loan' %}</span>
+
+                <p>This is an endpoint that allows a user to make payments for the schools fees aside from the immidiate payment when applying for the loan</p>
+                <p>
+                    <strong>On POST request</strong>
+                    <pre>
+                        """
+                        Endpoint to apply for the user's loan.
+
+                        On POST request:
+                            - bank_details: {
+                                "receivers_name": "Name of the receiver",
+                                "bank_name": "Name of the bank",
+                                "bank_account_number": "Account number",
+                                "description": "Description of the payment",
+                                "amount": "Amount to be paid into the bank account"
+                            }
+
+                            - auth: {
+                                "pin": "User transaction pin"
+                            }
+                        """
+                </pre>
+
+                    <p><strong>On Responsse: </strong></p>
+                    <p>success &rarr; {"status": True, "message": "Payment applied successfully"}, status=status.HTTP_201_CREATED</p>
+                    <p>error &rarr; {"status": False, "message": "No uncleared loan found"}, status=status.HTTP_404_NOT_FOUND</p>
+                    <p>error &rarr; {"status": False, "message": "Error creating transaction"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)</p>
+                    <p>error &rarr; {"status": False, "message": "Invalid pin"}, status=status.HTTP_400_BAD_REQUEST</p>
+                    <p>error &rarr; {"success": false, message:"An error has occured."}</p>
+
+
+
+        </div>
 
 
 
         <div class="col">
-            <h3>Top User Wallet</h3>
-            <a href="{% url 'apiv1:core:top_wallet' %}">Top Wallet</a>
-            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:top_wallet' %}</span>
+            <h3>User Loan</h3>
+            <a href="{% url 'apiv1:core:loan_list' %}">Get User Loan</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:loan_list' %}</span>
                 <pre>
-                To Top up the user wallet
-                Args:
-                    id: id of the card the user is trying to make the top up from
-                    amount: amount the user wants to add to wallet
-                    pin: user transaction pip
-
-                Returns:
-                    message: Success or Failed
-            </pre>
+                To get the current loan for a user:
+                
+                service 
+                amount_needed 
+                start_date 
+                end_date 
+                amount_to_pay_back
+                total_repayment
+                cleared
+                updated
+                </pre>
         </div>
     </div>
 
 
     <div class="row">
         <div class="col">
-            <h3>List Or Create Transations</h3>
+            <h3>List Transations</h3>
 
             <a href="{% url 'apiv1:core:transaction_list_create' %}">List Transactions filters transactions based on
                 user</a>
@@ -370,23 +410,6 @@
 
         </div>
 
-
-
-        <div class="col">
-            <h3>Card List Create</h3>
-
-            <a href="{% url 'apiv1:core:card_list_create' %}">Card </a>
-            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:card_list_create' %}</span>
-
-                <p><strong>On get</strong>
-                    Returns a list of a users cars
-                </p>
-
-
-                <p>To Create card</p>
-                <p>{"number":"123456789", "name":"Kenny Card", "cvv":121}</p>
-
-        </div>
 
         <div class="col">
             <h3>Service List </h3>
