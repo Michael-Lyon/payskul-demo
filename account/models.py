@@ -12,13 +12,6 @@ from . import utils
 
 User = get_user_model()
 
-"""
-first_name
-last_name
-email
-username
-password
-"""
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
@@ -82,11 +75,13 @@ class OkraLinkedUser(models.Model):
     customer_id = models.CharField(max_length=100)
     registered_bank_id = models.CharField(max_length=100)
     registered_record = models.CharField(max_length=100)
-    income_accounts = models.CharField(max_length=1000)
-    income_banks = models.CharField(max_length=1000)
+    income_accounts = models.CharField(max_length=1000, blank=True, null=True)
+    income_banks = models.CharField(max_length=1000, blank=True, null=True)
     avg_income = models.DecimalField(decimal_places=2, max_digits=100, default=0.0)
     initial_limit = models.DecimalField(decimal_places=2, max_digits=100, default=0.0)
-
+    balance_ids = models.CharField(max_length=1000, blank=True, null=True)
+    
+    # collected_nuban = models.BooleanField(default=False)
     def __str__(self):
         return 'Linked user {}'.format(self.user.username)
 

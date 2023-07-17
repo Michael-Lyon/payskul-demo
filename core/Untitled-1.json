@@ -1,0 +1,97 @@
+{
+  "status": "success",
+  "message": "Identity retrieved successfully",
+  "data": {
+    "pagination": {
+      "totalDocs": 3,
+      "limit": 20,
+      "hasPrevPage": false,
+      "hasNextPage": false,
+      "page": 1,
+      "totalPages": 1,
+      "pagingCounter": 1,
+      "prevPage": null,
+      "nextPage": null
+    },
+    "identity": [
+      {
+        "id": "647bda826c8878001479b9b0",
+        "firstname": "First",
+        "middlename": "Bank",
+        "lastname": "Wakanda",
+        "fullname": "First Bank of Wakanda",
+        "bvn": null,
+        "customer": {
+          "_id": "647b92b01519bc002f0c00be",
+          "name": "First Bank of Wakanda"
+        },
+        "verification_country": "NG",
+        "env": "production-sandbox",
+        "created_at": "2023-06-04T00:27:46.494Z",
+        "aliases": [
+          "First Bank of Wakanda"
+        ],
+        "phone": [],
+        "email": [],
+        "address": [
+          "1063 Ms. Mary Savage Corner, Moro Yobe"
+        ],
+        "next_of_kins": [],
+        "nin": null,
+        "photo_id": []
+      },
+      {
+        "id": "647bda826c8878001479b9af",
+        "firstname": "First",
+        "middlename": "Bank",
+        "lastname": "Wakanda",
+        "fullname": "First Bank of Wakanda",
+        "bvn": null,
+        "customer": {
+          "_id": "647b92b01519bc002f0c00be",
+          "name": "First Bank of Wakanda"
+        },
+        "verification_country": "NG",
+        "env": "production-sandbox",
+        "created_at": "2023-06-04T00:27:46.492Z",
+        "aliases": [
+          "First Bank of Wakanda"
+        ],
+        "phone": [],
+        "email": [],
+        "address": [
+          "1063 Ms. Mary Savage Corner, Moro Yobe"
+        ],
+        "next_of_kins": [],
+        "nin": null,
+        "photo_id": []
+      },
+      {
+        "id": "647bd8bc6c8878001479b9ae",
+        "firstname": "First",
+        "middlename": "Bank",
+        "lastname": "Wakanda",
+        "fullname": "First Bank of Wakanda",
+        "bvn": null,
+        "customer": {
+          "_id": "647b92b01519bc002f0c00be",
+          "name": "First Bank of Wakanda"
+        },
+        "verification_country": "NG",
+        "env": "production-sandbox",
+        "created_at": "2023-06-04T00:20:12.813Z",
+        "aliases": [
+          "First Bank of Wakanda"
+        ],
+        "phone": [],
+        "email": [],
+        "address": [
+          "1063 Ms. Mary Savage Corner, Moro Yobe"
+        ],
+        "next_of_kins": [],
+        "nin": null,
+        "photo_id": []
+      }
+    ]
+  }
+}

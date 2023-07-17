@@ -200,7 +200,6 @@ class LoginView(APIView):
         # return Response({"message": "Account not verified or wrong login info", })
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     authentication_classes = (JWTAuthentication,)
@@ -263,7 +262,7 @@ def get_new_token(request):
 @permission_classes([IsAuthenticated])
 def reset_password_view(request):
     """
-    Reset password for a user.
+    Reset pin for a user.
 
     GET:
     Send a verification code to the user's email address.
@@ -338,7 +337,8 @@ def reset_password_view(request):
         if not default_token_generator.check_token(user, verification_code):
             return Response({'status': False, 'message': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)
         
-        user.set_password(password)
-        user.save()
+        profile = Profile.objects.get(user=user)
+        profile.pin = password
+        profile.save()
         
         return Response({'status': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)

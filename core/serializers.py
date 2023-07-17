@@ -58,8 +58,7 @@ class WalletInlineSerializer(serializers.Serializer):
 class LoanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
-        fields = ('id', 'user', 'service', 'down_payment', 'amount_needed',
-                  'start_date', 'end_date', 'total_repayment', 'cleared')
+        fields = ('id', 'user', 'service', 'start_date', 'end_date', "amount_to_pay_back",'total_repayment', 'cleared')
 
 
 class LoanInlineSerializer(serializers.Serializer):
@@ -69,7 +68,6 @@ class LoanInlineSerializer(serializers.Serializer):
     type = serializers.CharField(read_only=True)
     start_date = serializers.DateTimeField(read_only=True)
     end_date = serializers.DateTimeField(read_only=True)
-    down_payment = serializers.DecimalField(read_only=True, max_digits=100, decimal_places=2)
     amount_needed = serializers.DecimalField(read_only=True, max_digits=100, decimal_places=2)
     amount_to_pay_back = serializers.DecimalField(read_only=True, max_digits=100, decimal_places=2)
     cleared = serializers.BooleanField(read_only=True)

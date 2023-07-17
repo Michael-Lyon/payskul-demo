@@ -1,3 +1,4 @@
+from datetime import datetime
 import random
 from dotenv import load_dotenv
 import os
@@ -12,100 +13,6 @@ import logging
 
 load_dotenv()
 
-
-
-def generate_random_credit():
-    """Takes no arguments and return a random credit."""
-
-    # Set the minimum and maximum credit limit values
-    min_credit_limit = 20_000
-    max_credit_limit = 200_000
-
-    return random.randint(min_credit_limit, max_credit_limit)
-
-
-
-def validate_national_id(national_id: str) -> bool:
-    """Validates a national identity number.
-
-    Args:
-        national_id: The national identity number to be validated.
-
-    Returns:
-        True if the national identity number is valid, False otherwise.
-    """
-    if not national_id or len(national_id) != 11:
-        return False
-    return True
-    # # Extract the first 12 digits of the national identity number
-    # first_12_digits = national_id[:12]
-
-    # # Calculate the 13th digit using a modulus 11 check
-    # check_digit = int(national_id[12])
-    # sum_ = sum(int(d) * (13 - i) for i, d in enumerate(first_12_digits))
-    # calculated_check_digit = (11 - sum_ % 11) % 11
-
-    # # Check if the calculated check digit matches the original check digit
-    # return check_digit == calculated_check_digit
-
-
-def validate_bvn(bvn: str) -> bool:
-    """Validates a bank verification number.
-
-    Args:
-        bvn: The bank verification number to be validated.
-
-    Returns:
-        True if the bank verification number is valid, False otherwise.
-    """
-    if not bvn or len(bvn) != 11:
-        return False
-    
-    return True
-    # # Extract the first 10 digits of the BVN
-    # first_10_digits = bvn[:10]
-
-    # # Calculate the 11th digit using a modulus 11 check
-    # check_digit = int(bvn[10])
-    # sum_ = sum(int(d) * (11 - i) for i, d in enumerate(first_10_digits))
-    # calculated_check_digit = (11 - sum_ % 11) % 11
-
-    # # Check if the calculated check digit matches the original check digit
-    # return check_digit == calculated_check_digit
-
-
-
-def get_natinal_id():
-
-    # Generate the first 12 digits of the national identity number
-    first_12_digits = "01011998" + "".join([str(random.randint(0, 9)) for _ in range(4)])
-
-    # Calculate the check digit
-    sum_ = sum(int(d) * (13 - i) for i, d in enumerate(first_12_digits))
-    calculated_check_digit = (11 - sum_ % 11) % 11
-
-    # Generate the national identity number
-    return first_12_digits + str(calculated_check_digit)
-
-
-def get_bvn():
-
-    # Generate the first 10 digits of the BVN
-    first_10_digits = "01011998" + "".join([str(random.randint(0, 9)) for _ in range(2)])
-
-    # Calculate the check digit
-    sum_ = sum(int(d) * (11 - i) for i, d in enumerate(first_10_digits))
-    calculated_check_digit = (11 - sum_ % 11) % 11
-
-    # Generate the BVN
-    bvn = first_10_digits + str(calculated_check_digit)
-    return bvn
-
-
-
-
-
-
 class OkraSetup:
     _BASE = "https://api.okra.ng/v2/sandbox/"
     _LOGGER = logging.getLogger('okra_validator')
@@ -118,14 +25,25 @@ class OkraSetup:
     _GET_ACCOUNT_CUSTOMER = _BASE + "accounts/getByCustomer"
 
     # IDENTITY URLS
-    _IDENTITY_URL =  _BASE + "identity/getByCustomer"
+    _IDENTITY_URL =  _BASE + "products/kyc/customer-verify"
 
     # BANK URLS
     _BANKS_LIST_URL = _BASE + "banks/list"
 
+    # ACCOUNT URLS
+    _ACCOUNT_CUSTOMER_URL = _BASE + "accounts/getByCustomer"
+
+    # PAYMENT URLS
+    _INITIATE_PAYMENT_URL = "https://api.paystack.co/charge"
+
+
+
     # KEYS
     _SECRET = os.getenv("OKRA_SECRET")
     _PUBLIC = os.getenv("OKRA_PUBLIC")
+    
+    _PAYSTACK_SECRET = os.getenv("PAYSATCK_SECRET")
+    _PAYSTACK_PUBLIC = os.getenv("PAYSATCK_PUBLIC")
 
     # HEADERS
     _HEADERS = {
@@ -133,6 +51,17 @@ class OkraSetup:
             "content-type": "application/json",
             "authorization": f"Bearer {_SECRET}"
         }
+    
+    _PAYSTACK_HEADERS = {
+            "accept": "application/json; charset=utf-8",
+            "content-type": "application/json",
+            "authorization": f"Bearer {_PAYSTACK_SECRET}"
+        }
+    
+
+    # PAYSTACK URLS
+    _PAYSTACK_BANKS_LIST_URL= "https://api.paystack.co/bank"
+
 
 
 
@@ -150,14 +79,23 @@ class Okra(OkraSetup):
             self._to_save["registered_record"] = data["record"]
             self._to_save["registered_bank_id"] = data["bankId"]
             try:
+                # TODO: IF IT'S NOT SECCESS AND DUMMY DATA TO JUST TEST WITH
                 identity_data = self._get_identity_details(customerId)
                 if self._is_identity_auth_success(identity_data):
-                    identity = identity_data["data"]["identity"][0]
+                    identity = identity_data["data"]
                     first_name = identity["firstname"]
                     last_name = identity["lastname"]
+                    dob = identity["dob"]
+                    phone_number = identity["phone"][0]
+                    bvn = identity["bvn"]
+                    address = identity["address"][0]
                     try:
                         user = self._get_user_from_database(first_name, last_name)
                         profile = user.profile
+                        profile.dob = datetime.strptime(dob, "%Y-%m-%d").date()
+                        profile.phone_number = phone_number
+                        profile.nin = bvn
+                        profile.address = address
                         self._to_save["user"] = user
                         income_data = self._get_processed_income(customerId)
                         if self._is_income_processing_success(income_data):
@@ -222,6 +160,29 @@ class Okra(OkraSetup):
         return None
 
 
+    def get_nuban_balances(self, customer):
+        okra_linked_user = OkraLinkedUser.objects.get(customer_id=customer)
+        accounts_response = requests.post(url=self._ACCOUNT_CUSTOMER_URL, json={"customer":customer}, headers= self._HEADERS).json()
+        if accounts_response["status"] == "success":
+            details = accounts_response
+            accounts = details["account"]
+            nuban, balance, names = self._get_account_numbers(accounts)
+            okra_linked_user.balance_ids = balance
+            okra_linked_user.income_accounts = nuban
+            okra_linked_user.income_banks = names
+            okra_linked_user.save()
+            return True
+        else:
+            return False
+        
+    
+    def get_balance(self, balance_id):
+        response = requests.post(url=self._ACCOUNT_CUSTOMER_URL, json={"id":balance_id}, headers= self._HEADERS).json()
+
+        return self._parse_balance(response)
+
+
+
     def _is_valid_auth_success(self, data):
         return (
             data["method"] == "AUTH" and
@@ -267,15 +228,51 @@ class Okra(OkraSetup):
 
     def _calculate_credit_limit(self, income):
         streams = income["streams"]
-        accounts = ':'.join(stream["account"] for stream in streams)
+        # accounts = ':'.join(stream["account"] for stream in streams)
         banks = ':'.join(stream["bank"] for stream in streams)
         total_income = sum(stream["avg_monthly_income"] for stream in streams)
         avg_income = total_income / len(streams)
         credit_limit = avg_income * (87.5 / 100)
-        self._to_save["income_accounts"] = accounts
-        self._to_save["income_banks"] = banks
+        # self._to_save["income_accounts"] = accounts
+        # self._to_save["income_banks"] = banks
         return avg_income, credit_limit
     
+    
+    def _get_account_numbers(self, accounts):
+            """Gets the user nuban, balance id and bank names"""
+            nuban = ':'.join(account["nuban"] for account in accounts)
+            balance = ':'.join(account["balance"] for account in accounts)
+            names = ":".join(account["bank"]["name"] for account in accounts)
+            return nuban, balance, names
+            
+
+    def _initiate_payment(self, acc_deb, user, bank_code, amount):
+        profile = profile.objects.get(user=user)
+        amount = str(amount * 100) # convert amount to KOBO
+        payload = { "email": user.email, 
+            "amount": amount, 
+            "bank": {
+                "code": f"{bank_code}", 
+                "account_number": f"{acc_deb}" 
+            },
+            "birthday": profile.dob.strftime("%Y-%m-%d")
+        }
+        payment_response = requests.post(url=self._INITIATE_PAYMENT_URL, json=payload, headers=self._HEADERS).json()
+        if payment_response["status"] == True:
+            status = payment_response["data"]["status"]
+            ref = payment_response["data"]["reference"]
+
+            return status, ref
+        return None
+    
+
+    # GET THE BALANCE
+    def _parse_balance(self, response):
+        if "data" in response and "balance" in response["data"]:
+            balance_data = response["data"]["balance"]
+            if "available_balance" in balance_data:
+                return balance_data["available_balance"]
+        return None
 
     def _send_mail(self, message, error):
         try:
@@ -295,6 +292,19 @@ class Okra(OkraSetup):
             if not data:
                 return []
             return [ {"id": bank['id'], "name":bank['name']} for bank in data]
+        except Exception as e:
+            print(e)
+        return []
+    
+
+    @staticmethod
+    def paystack_banks():
+        try:
+            response = requests.get(url=Okra._PAYSTACK_BANKS_LIST_URL, headers=Okra._PAYSTACK_HEADERS)
+            data = response.json()['data']
+            if not data:
+                return []
+            return [ {"code": bank['code'], "name":bank['name']} for bank in data]
         except Exception as e:
             print(e)
         return []
