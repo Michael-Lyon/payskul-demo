@@ -26,6 +26,7 @@ class OkraSetup:
 
     # IDENTITY URLS
     _IDENTITY_URL =  _BASE + "products/kyc/customer-verify"
+    _IDENTITY_URL_2 =  _BASE + "identity/getByCustomer"
 
     # BANK URLS
     _BANKS_LIST_URL = _BASE + "banks/list"
@@ -83,17 +84,18 @@ class Okra(OkraSetup):
                 identity_data = self._get_identity_details(customerId)
                 if self._is_identity_auth_success(identity_data):
                     identity = identity_data["data"]
-                    dob = identity["dob"]
+                    # dob = identity["dob"]
                     phone_number = identity["phone"][0]
                     bvn = identity["bvn"]
                     address = identity["address"][0]
                     try:
                         user = user
                         profile = user.profile
-                        profile.dob = datetime.strptime(dob, "%Y-%m-%d").date()
-                        profile.phone_number = phone_number
-                        profile.nin = bvn
-                        profile.address = address
+                        # TODO: These should be re-activated upon update from OKRA
+                        # profile.dob = datetime.strptime(dob, "%Y-%m-%d").date()
+                        # profile.phone_number = phone_number
+                        # profile.nin = bvn
+                        # profile.address = address
                         self._to_save["user"] = user
                         income_data = self._get_processed_income(customerId)
                         if self._is_income_processing_success(income_data):
@@ -197,7 +199,7 @@ class Okra(OkraSetup):
     # A call to OKRA API
     def _get_identity_details(self, customerId):
         id_payload = {"customer": customerId}
-        identity_response = requests.post(url=self._IDENTITY_URL, json=id_payload, headers=self._HEADERS)
+        identity_response = requests.post(url=self._IDENTITY_URL_2, json=id_payload, headers=self._HEADERS)
         return identity_response.json()
     
 

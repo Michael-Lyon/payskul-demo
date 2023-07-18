@@ -210,10 +210,11 @@ def update_client_income_status(request, *args, **kwargs):
         user = request.user
         link = OkraLinkedUser.objects.get(user=user)
         ok = Okra()
-        customerId = user.linked_user.customer_id
+        customerId = link.customer_id
         data = ok.update_customer_income_data(user, customerId)
-
-        return Response(data, status=ok)
+        data["message"] = "Client updated successfully"
+        data["status"] = True
+        return Response(data, status=status.HTTP_200_OK)
     except Exception as e:
             print(e)
             return Response({"message": "An error occured please try again."}, status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -223,10 +224,21 @@ def update_client_income_status(request, *args, **kwargs):
 @api_view(['GET'])
 def loan_list(request):
     # get the users latest loan
-    queryset = Loan.objects.filter(user=request.user, cleared=False).latest('start_date')
-    # queryset = Loan.objects.filter(user=request.user)
-    data = LoanSerializer(queryset, many=True).data
-    return Response(data)
+    if Loan.objects.filter(user=request.user).exists():
+        queryset = Loan.objects.filter(user=request.user, cleared=False).latest('start_date')
+        # queryset = Loan.objects.filter(user=request.user)
+        data = LoanSerializer(queryset, many=True).data
+        return Response({"status": True, "data":data}, status=status.HTTP_200_OK)
+    else:
+        return Response({"status": True, "data": {
+                "service" : None,
+                "amount_needed" : 0,
+                "start_date" : None,
+                "end_date" : None,
+                "amount_to_pay_back" : 0,
+                "total_repayment" : 0,
+                "cleared" : None
+        }}, status=status.HTTP_200_OK)
 
 
 # @csrf_exempt

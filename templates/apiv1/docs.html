@@ -374,6 +374,16 @@
                 updated
                 </pre>
         </div>
+        <div class="col">
+            <h3>Revalidated User for loan</h3>
+            <a href="{% url 'apiv1:core:update_client_income_status' %}">Re-validated user for loan</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:update_client_income_status' %}</span>
+
+                <p>This is used to get the update of a user when they're trying to request another loan. To know if they're still fit to collect another loan or not</p>
+                <pre>
+                    {message: "Client updated successfully", status: True, credit_limit: ....}
+                </pre>
+        </div>
     </div>
 
 
