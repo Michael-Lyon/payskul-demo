@@ -292,9 +292,10 @@ def webhook_view(request):
     if request.method == 'POST':
         # Get the payload sent by the webhook
         payload = request.body
-        okra = Okra()
-        status = okra.validate_update_user_status(payload=payload)
-        print(status)
+        # okra = Okra()
+        print(payload)
+        # status = okra.validate_update_user_status(payload=payload)
+        # print(status)
         return HttpResponse(status=200)
     else:
         payload = json.loads(request.body)
