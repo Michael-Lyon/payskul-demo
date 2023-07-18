@@ -71,8 +71,8 @@ class Okra(OkraSetup):
     # def __init__(self):
         
     # @classmethod
-    def validate_update_user_status(self, payload, user):
-        data = json.loads(payload)
+    def validate_update_user_status(self, payload, user=None):
+        data = payload
         print(data)
         if self._is_valid_auth_success(data):
             customerId = data["customerId"]
@@ -89,7 +89,11 @@ class Okra(OkraSetup):
                     bvn = identity["bvn"]
                     address = identity["address"][0]
                     try:
-                        user = user
+                        if user == None:
+                            identity = identity_data["data"]["identity"][0]
+                            first_name = identity["firstname"]
+                            last_name = identity["lastname"]
+                            user = self._get_user_from_database(first_name, last_name)
                         profile = user.profile
                         # TODO: These should be re-activated upon update from OKRA
                         # profile.dob = datetime.strptime(dob, "%Y-%m-%d").date()
