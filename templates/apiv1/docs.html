@@ -300,23 +300,12 @@
                 <p>
                     <strong>On POST request</strong>
                     <pre>
-                    loan_details : {
+                    loan_details: {
                         service -- what service is the user trying to apply for the loan the id of the service
-                        down_payment -- how much is the down payment supposed to be
                         amount_needed -- how much does the user need?
                         start_date -- when is this loan service active
                         end_date -- when is this loan due
-                        amount_to_pay_back -- how much is the user supposed to pay back},
-                    
-                    bank_details : {
-                        bank_name -- from the list of bank from the get bank api,
-                        bank_account_number -- acccount for the money to be paid into
-                        description -- description of the payment
-                        amount -- amount to be paid into the bank account
-                    }
-
-                    auth : {
-                        pin: user transaction pin
+                        amount_to_pay_back -- how much is the user supposed to pay back
                     }
                 </pre>
 
@@ -409,6 +398,18 @@
             </p>
 
         </div>
+        <div class="col">
+            <h3>POST OKRA PAYLOAD</h3>
+
+            <a href="{% url 'apiv1:core:confirm_okra_link' %}">POST OKRA PAYLOAD</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:confirm_okra_link' %}</span>
+            </p>
+
+            <p>
+                Confirms and validates a user based on the payload.
+            </p>
+
+        </div>
 
 
         <div class="col">
@@ -418,6 +419,14 @@
 
             <a href="{% url 'apiv1:core:service_category' %}">Service Category</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service_category' %}</span>
+        </div>
+        <div class="col">
+            <h3>Service List </h3>
+
+            <p>A list of all Services</p>
+
+            <a href="{% url 'apiv1:core:service' %}">Service List</a>
+            <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:service' %}</span>
         </div>
 
         <div class="col">

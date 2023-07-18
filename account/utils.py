@@ -1,13 +1,32 @@
 import uuid
 import smtplib
+import random
 
 
 from django.core.mail import send_mail
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 
+
+class UniqueRandomNumberGenerator:
+    def __init__(self):
+        self.generated_numbers = set()
+
+    def generate_unique_random(self):
+        while True:
+            new_number = random.randint(0, 999999)
+            new_number_str = f"{new_number:06d}"
+            if new_number_str not in self.generated_numbers:
+                self.generated_numbers.add(new_number_str)
+                return new_number_str
+
+
+
+
+
 def get_code():
-   return  str(uuid.uuid1())[:6]
+   gen = UniqueRandomNumberGenerator()
+   return gen.generate_unique_random()
 
 
 def send_verification_code(email, verification_code):

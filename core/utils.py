@@ -70,7 +70,7 @@ class Okra(OkraSetup):
     # def __init__(self):
         
     # @classmethod
-    def validate_update_user_status(self, payload):
+    def validate_update_user_status(self, payload, user):
         data = json.loads(payload)
         print(data)
         if self._is_valid_auth_success(data):
@@ -83,14 +83,12 @@ class Okra(OkraSetup):
                 identity_data = self._get_identity_details(customerId)
                 if self._is_identity_auth_success(identity_data):
                     identity = identity_data["data"]
-                    first_name = identity["firstname"]
-                    last_name = identity["lastname"]
                     dob = identity["dob"]
                     phone_number = identity["phone"][0]
                     bvn = identity["bvn"]
                     address = identity["address"][0]
                     try:
-                        user = self._get_user_from_database(first_name, last_name)
+                        user = user
                         profile = user.profile
                         profile.dob = datetime.strptime(dob, "%Y-%m-%d").date()
                         profile.phone_number = phone_number

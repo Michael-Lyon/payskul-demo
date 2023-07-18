@@ -68,6 +68,7 @@ class PaymentSlip(models.Model):
         ("failed", "Failed")
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payment_slip")
+    receivers_name = models.CharField(max_length=200, blank=True, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=0.0)
     school = models.ForeignKey(SchoolBank, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default="pending")
