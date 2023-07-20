@@ -26,7 +26,7 @@ def get_expired_loans():
 
         return expired_loans
     except Exception as e:
-        print(e)
+        logger.error(e)
         return None
 
 
