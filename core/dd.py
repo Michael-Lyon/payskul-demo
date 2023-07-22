@@ -43,3 +43,53 @@
           'nin': None, 'photo_id': [{'_id': '647505f653ccae002f53eb6f', 'url': 'https://dv7b45oo546j4.cloudfront.net/NDQ1OTMzMTAxNw%3D%3D.png', 'image_type': 'bvn_photo'}], 'state_of_origin': 'Abia State', 'state_of_residence': 'Lagos State', 'verification_country': 'NG', 'watch_listed': 'No', 'customer': '63d43e042e2c240013b94ed5', 'employer': []}
  
  }
+
+
+
+
+
+
+{'method': 'BALANCE', 
+ 'callback_type': 'BALANCE', 
+ 'callback_code': 'BALANCE_SUCCESS', 
+ 'type': 'CALLBACK', 
+ 'code': 'BALANCE_SUCCESS', 
+ 'callbackURL': 'https://payskul-demo.up.railway.app/core/webhook/', 
+ 'env': 'production', 'status': 'is_success', 'started_at': '2023-07-22T02:21:49.764Z', 'ended_at': '2023-07-22T02:22:37.504Z', 
+ 'message': 'Successfully fetched balance', 'options': {}, 'meta': {}, 
+ 'bankName': 'Kuda Bank', 'bankType': '5f0cf73e8a8bcc18b8156ad7', 
+ 'bankId': '5f0cf73e8a8bcc18b8156ad7', 'bankSlug': 'kuda-bank', 
+ 'record': '64bb3d3d1231db003b293ec3', 'recordId': '64bb3d3d1231db003b293ec3', 'callback_url': 'https://api.okra.ng/v2/callback?record=64bb3d3d1231db003b293ec3&method=BALANCE', 
+ 'customerId': '63d43e042e2c240013b94ed5', 
+ 'customerBvn': '22334507774', 'country': 'NG', 'extras': {}, 
+ 'nuban': '2007084982', 
+ 'balance': {
+     'nuban': '2007084982', 'name': 'ASOMUGHA, CHINONSO MICHAEL',
+     'ledger_balance': 153.37, 'available_balance': 153.37, 'currency': 'NGN', 'status': 'Active', 'accountId': '64ba5a64303403e516f98b3c'
+     }}
+
+
+
+{'method': 'ACCOUNTS', 
+ 'callback_type': 'ACCOUNTS', 'callback_code': 'ACCOUNTS_SUCCESS', 
+ 'type': 'CALLBACK', 'code': 'ACCOUNTS_SUCCESS',
+ 'callbackURL': 'https://payskul-demo.up.railway.app/core/webhook/', 
+ 'env': 'production', 'status': 'is_success', 
+ 'started_at': '2023-07-22T02:21:49.764Z', 
+ 'ended_at': '2023-07-22T02:22:37.518Z', 
+ 'message': 'Successfully fetched accounts', 
+ 'options': {}, 'meta': {}, 'bankName': 'Kuda Bank', 
+ 'bankType': '5f0cf73e8a8bcc18b8156ad7', 
+ 'bankId': '5f0cf73e8a8bcc18b8156ad7', 
+ 'bankSlug': 'kuda-bank', 
+ 'record': '64bb3d3d1231db003b293ec3', 
+ 'recordId': '64bb3d3d1231db003b293ec3', 
+ 'callback_url': 'https://api.okra.ng/v2/callback?record=64bb3d3d1231db003b293ec3&method=ACCOUNTS', 
+ 'customerId': '63d43e042e2c240013b94ed5',
+ 'customerBvn': '22334507774', 'country': 'NG', 'extras': {}, 'nuban': '2007084982', 'account': {'nuban': '2007084982', 'name': 'ASOMUGHA, CHINONSO MICHAEL', 'ledger_balance': 153.37, 'available_balance': 153.37, 'currency': 'NGN', 'status': 'Active', 'account': '64ba5a64303403e516f98b3c', 'accountId': '64ba5a64303403e516f98b3c'}
+ }
+
+
+
+
+{'method': 'AUTH', 'callback_type': 'AUTH', 'callback_code': 'AUTH_SUCCESS', 'type': 'CALLBACK', 'code': 'AUTH_SUCCESS', 'callbackURL': 'https://payskul-demo.up.railway.app/core/webhook/', 'env': 'production', 'status': 'is_success', 'started_at': '2023-07-22T02:21:49.764Z', 'ended_at': '2023-07-22T02:22:37.397Z', 'message': 'Successfully fetched auth', 'options': {}, 'meta': {}, 'bankName': 'Kuda Bank', 'bankType': '5f0cf73e8a8bcc18b8156ad7', 'bankId': '5f0cf73e8a8bcc18b8156ad7', 'bankSlug': 'kuda-bank', 'record': '64bb3d3d1231db003b293ec3', 'recordId': '64bb3d3d1231db003b293ec3', 'callback_url': 'https://api.okra.ng/v2/callback?record=64bb3d3d1231db003b293ec3&method=AUTH', 'customerId': '63d43e042e2c240013b94ed5', 'customerBvn': '22334507774', 'country': 'NG', 'extras': {}, 'auth': {}}

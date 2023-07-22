@@ -81,6 +81,7 @@ class OkraLinkedUser(models.Model):
     initial_limit = models.DecimalField(decimal_places=2, max_digits=100, default=0.0)
     balance_ids = models.CharField(max_length=1000, blank=True, null=True)
     
+    
     # collected_nuban = models.BooleanField(default=False)
     def __str__(self):
         return 'Linked user {}'.format(self.user.username)
