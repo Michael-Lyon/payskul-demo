@@ -327,7 +327,7 @@ def confirm_okra_link(request):
         okra = Okra()
         status = okra.validate_update_user_status(payload=payload, user=user)
         print(status)
-        return HttpResponse(status=200)
+        return Response({"status": status}, status=200)
     else:
         payload = json.loads(request.body)
         print(payload)
