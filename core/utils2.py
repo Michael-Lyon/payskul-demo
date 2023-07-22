@@ -165,6 +165,7 @@ class Okra(OkraSetup):
 
 
     def get_nuban_balances(self, customer):
+        print("Getting nuban balances")
         okra_linked_user = OkraLinkedUser.objects.get(customer_id=customer)
         accounts_response = requests.post(url=self._ACCOUNT_CUSTOMER_URL, json={"customer":customer}, headers= self._HEADERS).json()
         if accounts_response["status"] == "success":
@@ -181,6 +182,7 @@ class Okra(OkraSetup):
         
     
     def get_balance(self, balance_id):
+        print("getting balance")
         response = requests.post(url=self._ACCOUNT_CUSTOMER_URL, json={"id":balance_id}, headers= self._HEADERS).json()
 
         return self._parse_balance(response)
@@ -217,6 +219,7 @@ class Okra(OkraSetup):
     
 
     def _get_processed_income(self, customerId):
+        print("Getting processed income")
         income_response = requests.post(url=self._PROCESS_INCOME_URL,
                                         json={"customer_id": customerId},
                                         headers=self._HEADERS)
