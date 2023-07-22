@@ -73,7 +73,7 @@ class Okra(OkraSetup):
     # @classmethod
     def validate_update_user_status(self, payload, user=None):
         data = payload
-        print(data)
+        print("DATA RECIEVED: ",data)
         if self._is_valid_auth_success(data):
             customerId = data["customerId"]
             self._to_save["customer_id"] = customerId
