@@ -149,7 +149,8 @@ class Okra(OkraSetup):
                     profile.credit_limit = credit_limit
                     profile.credit_validated = True
                     profile.save()
-                    OkraLinkedUser.objects.update(**self._to_save)
+                    obj = OkraLinkedUser.objects.filter(user=profile.user)
+                    obj.update(**self._to_save)
                     self._LOGGER.info(f"New user created: {self._to_save}")
                     return {"credit_limit": credit_limit}
                 else:
@@ -159,6 +160,7 @@ class Okra(OkraSetup):
                 self._LOGGER.error(income_data)
             return {}
         except Exception as e:
+            traceback.print_exc()
             self._LOGGER.error(f"Failed to get income from OKRA(API): {e}")
             self._send_mail("Failed to get income:", error=e)
         return None
