@@ -303,7 +303,7 @@ class DetailListView(generics.ListAPIView):
 def webhook_view(request):
     if request.method == 'POST':
         # Get the payload sent by the webhook
-        payload = request.body
+        payload = json.loads(request.body)
         okra = Okra()
         print(payload)
         status = okra.validate_update_user_status(payload=payload)
