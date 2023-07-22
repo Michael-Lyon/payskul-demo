@@ -307,7 +307,7 @@ def webhook_view(request):
         payload = payload.decode('utf-8')
         payload = json.loads(payload)
         okra = Okra()
-        print(payload)
+        print("PAYLOAD: ",payload)
         status = okra.validate_update_user_status(payload=payload)
         print(status)
         return HttpResponse(status=200)
