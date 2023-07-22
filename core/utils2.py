@@ -14,7 +14,7 @@ import logging
 load_dotenv()
 
 class OkraSetup:
-    _BASE = "https://api.okra.ng/v2/sandbox/"
+    _BASE = "https://api.okra.ng/v2/"
     _LOGGER = logging.getLogger('okra_validator')
 
     # INCOME URLS
