@@ -112,7 +112,7 @@ class Okra(OkraSetup):
                             profile.credit_limit = credit_limit
                             profile.credit_validated = True
                             profile.save()
-                            obj = OkraLinkedUser.objects.get_or_create(**self._to_save)
+                            obj, created = OkraLinkedUser.objects.get_or_create(**self._to_save)
                             obj.save()
                             return True
                         else:
