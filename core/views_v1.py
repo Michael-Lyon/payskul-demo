@@ -14,7 +14,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from account.models import OkraLinkedUser, Profile
-from core.utils import Okra
+from core.utils2 import Okra
 
 from .models import Bank, Loan, PaymentSlip, SchoolBank, Transaction, Wallet, Card, Service, Service_Category
 from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer,ServiceCategorySerializer, DetailSerializer
