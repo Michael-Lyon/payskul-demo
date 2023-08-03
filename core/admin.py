@@ -16,6 +16,62 @@ admin.site.register(Loan)
 admin.site.register(Card)
 admin.site.register(SchoolBank)
 
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ("name", "service_category", "deposit_rate")
+
+    def service_category(self, obj):
+        category = Service_Category.objects.get(id=obj.service_category.id)
+        return category.name
+    
+    service_category.short_description = "Service Category"
+
+class ServiceCategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug")
+
+class SchoolBankAdmin(admin.ModelAdmin):
+    list_display = ("name", "bank_name", "account_number", "verified")
+
+class LoanAdmin(admin.ModelAdmin):
+    list_filter = ("service", "cleared")
+    list_display = ("get_first_name", "get_last_name", "service", "amount_needed", "start_date", "end_date", "amount_to_pay_back", "total_repayments", "cleared", "updated")
+
+    def get_first_name(self, obj):
+        name = User.objects.get(id=obj.user.id)
+        return  name.first_name
+    
+    get_first_name.short_description = "First Name"
+
+    def get_last_name(self, obj):
+        name = User.objects.get(id=obj.user.id)
+        return  name.last_name
+    
+    get_last_name.short_description = "Last Name"
+
+    def service(self, obj):
+        service = Service.objects.get(id=obj.service.id)
+        return service.name
+    
+    service.short_description = "Service"
+
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ("reference", "api_reference", "date")
+    list_filter = ("status", "type")
+    search_fields = ("reference__icontains", "api_reference__icontains")
+
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ("get_first_name", "get_last_name")
+
+    def get_first_name(self, obj):
+        name = User.objects.get(id=obj.user.id)
+        return  name.first_name
+    
+    get_first_name.short_description = "First Name"
+
+    def get_last_name(self, obj):
+        name = User.objects.get(id=obj.user.id)
+        return  name.last_name
+    
+    get_last_name.short_description = "Last Name"
 
 
 
