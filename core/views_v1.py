@@ -58,10 +58,30 @@ def validate_user_loan(request, *args, **kwargs):
         data["success"] = True
         return Response(data, status.HTTP_200_OK)
     except Exception as e:
-            print(e)
-            logger.exception("Exception Occured while validating user loan: " + str(e))
-            data = { "success": False, "message": "An error occured please try again."}
-            return Response(data, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        print(e)
+        logger.exception("Exception Occured while validating user loan: " + str(e))
+        data = { "success": False, "message": "An error occured please try again."}
+        return Response(data, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+@csrf_exempt
+@api_view(['POST'])
+def confirm_okra_link(request):
+    if request.method == 'POST':
+        user = request.user
+        # Get the payload sent by the webhook
+        payload = request.data
+        okra = Okra()
+        try:
+            data = okra.validate_update_user_status(payload=payload, user=user)
+            return Response({"data": data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"message":"An error occured"}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        payload = json.loads(request.body)
+        print(payload)
+        return HttpResponse(status=200)
 
 
 @csrf_exempt
@@ -316,19 +336,3 @@ def webhook_view(request):
         print(payload)
         return HttpResponse(status=200)
 
-
-@csrf_exempt
-@api_view(['POST'])
-def confirm_okra_link(request):
-    if request.method == 'POST':
-        user = request.user
-        # Get the payload sent by the webhook
-        payload = request.data
-        okra = Okra()
-        status = okra.validate_update_user_status(payload=payload, user=user)
-        print(status)
-        return Response({"status": status}, status=200)
-    else:
-        payload = json.loads(request.body)
-        print(payload)
-        return HttpResponse(status=200)
