@@ -13,8 +13,10 @@ logger = logging.getLogger('okra_validator')
 
 PAYMENT_RATE = 0.3 # 30% of the person's monthly salary
 
+
 def get_current_date():
     return date.today()
+
 
 def get_expired_loans():
     # Calculate the date one month ago from today

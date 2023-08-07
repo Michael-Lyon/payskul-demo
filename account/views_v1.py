@@ -67,7 +67,7 @@ class UserListView(generics.ListAPIView):
         user = serializer.save()
         print(user) 
         # instance = serializer.save()
-        
+
 
 @csrf_exempt
 @api_view(['POST'])

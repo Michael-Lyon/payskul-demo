@@ -114,7 +114,7 @@ class Okra(OkraSetup):
                             profile.save()
                             obj, created = OkraLinkedUser.objects.get_or_create(**self._to_save)
                             obj.save()
-                            return {"credit_limit": profile.credit_limit}
+                            return {"status":True,"credit_limit": profile.credit_limit, "credit_validated": profile.credit_validated}
                         else:
                             self._LOGGER.error("Confidence not good enough")
                     else:
@@ -131,7 +131,7 @@ class Okra(OkraSetup):
                 self._send_mail("OKRA_VALIDATION CAUGHT IDENTIFY USER ERROR", e)
         else:
            self._LOGGER.error("Auth auth: %s", data)
-        return  False
+        return  {"status":False,"credit_limit": 0, "credit_validated": False}
     
     
     def update_customer_income_data(self, user, customerId):
@@ -158,7 +158,6 @@ class Okra(OkraSetup):
             else:
                 self._LOGGER.error("Failed to get income")
                 self._LOGGER.error(income_data)
-            return {}
         except Exception as e:
             traceback.print_exc()
             self._LOGGER.error(f"Failed to get income from OKRA(API): {e}")

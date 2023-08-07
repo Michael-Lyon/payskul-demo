@@ -53,10 +53,12 @@ def validate_user_loan(request, *args, **kwargs):
         ok = Okra()
         customerId = user.linked_user.customer_id
         data = ok.update_customer_income_data(user, customerId)
-        data["data"] = {"can_borrow":can_borrow}
-        data["message"] = "User validated successfully"
-        data["success"] = True
-        return Response(data, status.HTTP_200_OK)
+        if data:
+            data["can_borrow"]= can_borrow
+            data["message"] = "User validated successfully"
+            data["status"] = True
+            return Response(data, status.HTTP_200_OK)
+        return Response({"message":"Unable to validate user", "status":False, "can_borrow": False, "credit_limit": 0}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except Exception as e:
         print(e)
         logger.exception("Exception Occured while validating user loan: " + str(e))
