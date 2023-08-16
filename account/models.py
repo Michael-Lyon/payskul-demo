@@ -87,5 +87,3 @@ class OkraLinkedUser(models.Model):
         return 'Linked user {}'.format(self.user.username)
 
 
-
-""

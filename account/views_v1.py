@@ -257,6 +257,111 @@ def get_new_token(request):
         return Response({"message":"Error occured"}, status.HTTP_200_OK)
 
 
+
+@api_view(['GET', 'POST'])
+@authentication_classes([JWTAuthentication])
+# @permission_classes([IsAuthenticated])
+def reset_pin_view(request):
+    """
+    Reset pin for a user.
+
+    GET:
+    Send a verification code to the user's email address.
+
+    - `email` (request data): The email address of the user.
+
+    POST:
+    Reset the user's password using the verification code.
+
+    - `email` (request data): The email address of the user.
+    - `verification_code` (request data): The verification code received by the user.
+    - `pin` (request data): The new pin for the user.
+
+    Returns a JSON response with the following format:
+
+    {
+        "status": <bool>,
+        "message": <str>
+    }
+
+    - `status`: Indicates the status of the operation (True for success, False for failure).
+    - `message`: A message describing the result of the operation.
+
+    GET Example Response (HTTP 200 OK):
+    {
+        "status": true,
+        "message": "Verification code sent"
+    }
+
+    POST Example Response (HTTP 200 OK):
+    {
+        "status": true,
+        "message": "Password reset successfully"
+    }
+
+    Error Responses:
+    - HTTP 400 BAD REQUEST: If the required parameters are missing or invalid.
+    - HTTP 404 NOT FOUND: If the user associated with the provided email address is not found.
+    """
+    if request.method == 'GET':
+        verification_code = get_code() # Define this function to generate the code
+        email = request.data.get('email')  # Use query_params to get email
+
+        if not email:
+            return Response({'status': False, 'message': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            auth, created = UserAuthCodes.objects.get_or_create(user=user)
+            auth.code = verification_code
+            auth.save()
+        except Exception as e:
+            print(e)
+            return Response({'status': False, 'message': 'Unable to generate verification code'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        try:
+            subject = "PaySkul Reset Pin"
+            message = f"""
+            Dear {email},
+            A password reset has been requested on your account.
+            Your verification code is: {verification_code}.
+            """
+            send_mail(subject, message, "admin@example.com", [email])
+            return Response({'status': True, 'message': 'Verification code sent'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'status': False, 'message': 'Unable to send email to user'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    elif request.method == 'POST':
+        # Reset user password
+        email = request.data.get('email')
+        verification_code = request.data.get('verification_code')
+        pin = request.data.get('pin')
+
+        if not email or not verification_code or not pin:
+            return Response({'status': False, 'message': 'Email, verification code, and pin are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        auth = UserAuthCodes.objects.get(user=user)
+        if verification_code == auth.code:
+            profile, created = Profile.objects.get_or_create(user=user)
+            profile.pin = pin
+            profile.save()
+
+            return Response({'status': True, 'message': 'Pin reset successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status': False, 'message': 'Pin reset failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 @api_view(['GET', 'POST'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
