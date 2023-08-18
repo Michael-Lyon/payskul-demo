@@ -109,10 +109,7 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         print(user)
-        raise serializers.ValidationError({
-            "status": False,
-            "message": "Username and or password incorrect."
-        }, code="400")
+        raise serializers.ValidationError("Unable to log in with provided credentials.", code="400")
         # return data
     
     # def get_profile(self, obj):

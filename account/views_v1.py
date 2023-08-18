@@ -35,7 +35,7 @@ from django.core.mail import send_mail
 # import the logging library
 import logging
 # Get an instance of a logger
-logger = logging.getLogger('okra_validator') 
+logger = logging.getLogger('okra_validator')
 
 User = get_user_model()
 # token = Token.objects.get_or_create(user=user)
@@ -46,12 +46,12 @@ class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = "username"
-    
+
     def perform_create(self, serializer):
         """How to add additional context to the create view if u needed to work with the data before saving"""
-        
+
         user = serializer.save()
-        print(user) 
+        print(user)
         # instance = serializer.save()
 
 class UserListView(generics.ListAPIView):
@@ -60,12 +60,12 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = "id"
-    
+
     def perform_create(self, serializer):
         """How to add additional context to the create view if u needed to work with the data before saving"""
-        
+
         user = serializer.save()
-        print(user) 
+        print(user)
         # instance = serializer.save()
 
 
