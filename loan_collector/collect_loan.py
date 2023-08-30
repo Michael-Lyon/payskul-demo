@@ -1,5 +1,5 @@
 from core.models import Transaction, Loan
-from core.utils import Okra
+from okra_utils.utils import Okra
 from account.models import OkraLinkedUser
 from django.utils import timezone
 from payskul.settings import PAYSKUL_ACCOUNT

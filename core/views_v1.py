@@ -7,14 +7,14 @@ from decimal import Decimal
 
 from rest_framework import generics, mixins, status
 from rest_framework.decorators import api_view, permission_classes
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from account.models import OkraLinkedUser, Profile
-from core.utils2 import Okra
+from okra_utils.utils2 import Okra
 
 from .models import Bank, Loan, PaymentSlip, SchoolBank, Transaction, Wallet, Card, Service, Service_Category
 from .serializers import LoanSerializer, TransactionSerializer, WalletSerializer, CardSeriilizer, ServiceSerializer,ServiceCategorySerializer, DetailSerializer
@@ -28,7 +28,7 @@ from django.http import HttpResponse
 
 
 # Get an instance of a logger
-logger = logging.getLogger('okra_validator') 
+logger = logging.getLogger('okra_validator')
 User = get_user_model()
 
 
@@ -37,9 +37,9 @@ User = get_user_model()
 def validate_user_loan(request, *args, **kwargs):
     """Endpoint to certify that a user is eligible for loan facility access
 
-     A get request to get that the user is eligible for loan facility access
+    A get request to get that the user is eligible for loan facility access
     User would be identofied using JWT
-    
+
     On success: {"message": "User validated successfully", "credit_limit": 10000}
     On fail: {"message": "An error occured please try again."}
     """
@@ -93,7 +93,8 @@ def apply_loan(request, *args, **kwargs):
 
     On POST request
         Keyword arguments:
-        
+
+
         loan_details: {
             service -- what service is the user trying to apply for the loan the id of the service
             amount_needed -- how much does the user need?
@@ -101,8 +102,8 @@ def apply_loan(request, *args, **kwargs):
             end_date -- when is this loan due
             amount_to_pay_back -- how much is the user supposed to pay back
         }
-        
-      
+
+
     """
     user = request.user
     method = request.method
@@ -141,8 +142,7 @@ def apply_loan(request, *args, **kwargs):
             return Response({"status": False, "message": serializer.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        
-            
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -215,8 +215,6 @@ def payment_slip(request, *args, **kwargs):
             return Response({"status": False, "message": "Invalid pin"}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"status": False, "message": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-
 
 
 # @csrf_exempt
@@ -304,9 +302,8 @@ class ServiceCategoryListCreateView(generics.ListAPIView):
 class CardListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Card.objects.filter(user=self.request.user)
-    
     serializer_class = CardSeriilizer
-    
+
     def perform_create(self, serializer):
         if serializer.is_valid():
             serializer.save(user=self.request.user)
@@ -324,17 +321,24 @@ class DetailListView(generics.ListAPIView):
 @api_view(['POST'])
 def webhook_view(request):
     if request.method == 'POST':
+        user = request.user
+        print(user)
         # Get the payload sent by the webhook
-        payload = request.body
-        payload = payload.decode('utf-8')
-        payload = json.loads(payload)
+        payload = request.data
         okra = Okra()
-        print("PAYLOAD: ",payload)
-        status = okra.validate_update_user_status(payload=payload)
-        print(status)
-        return HttpResponse(status=200)
+        try:
+            data = okra.validate_update_user_status(payload=payload, user=user)
+            return Response({"data": data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({"message":"An error occured"}, status=status.HTTP_400_BAD_REQUEST)
     else:
         payload = json.loads(request.body)
         print(payload)
         return HttpResponse(status=200)
 
+
+
+
+def link_account_okra_test(request):
+    return render(request, 'core/demo.html')

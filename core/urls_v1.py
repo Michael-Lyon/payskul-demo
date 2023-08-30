@@ -20,5 +20,5 @@ urlpatterns = [
     path("card/", views_v1.CardListCreateView.as_view(), name="card_list_create"),
     path("service/", views_v1.ServiceListCreateView.as_view(), name="service"),
     path("service-category/", views_v1.ServiceCategoryListCreateView.as_view(), name="service_category"),
-    
+    path('connect-okra/', views_v1.link_account_okra_test, name='okra_link_demo'),
 ]

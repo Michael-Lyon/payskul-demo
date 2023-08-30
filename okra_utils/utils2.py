@@ -12,6 +12,7 @@ import traceback
 import logging
 
 load_dotenv()
+TEST = os.getenv("TEST")
 
 class OkraSetup:
     _BASE = "https://api.okra.ng/v2/"
@@ -42,7 +43,7 @@ class OkraSetup:
     # KEYS
     _SECRET = os.getenv("OKRA_SECRET")
     _PUBLIC = os.getenv("OKRA_PUBLIC")
-    
+
     _PAYSTACK_SECRET = os.getenv("PAYSATCK_SECRET")
     _PAYSTACK_PUBLIC = os.getenv("PAYSATCK_PUBLIC")
 
@@ -52,13 +53,13 @@ class OkraSetup:
             "content-type": "application/json",
             "authorization": f"Bearer {_SECRET}"
         }
-    
+
     _PAYSTACK_HEADERS = {
             "accept": "application/json; charset=utf-8",
             "content-type": "application/json",
             "authorization": f"Bearer {_PAYSTACK_SECRET}"
         }
-    
+
 
     # PAYSTACK URLS
     _PAYSTACK_BANKS_LIST_URL= "https://api.paystack.co/bank"
@@ -69,38 +70,24 @@ class OkraSetup:
 class Okra(OkraSetup):
     _to_save = {}
     # def __init__(self):
-        
+
     # @classmethod
     def validate_update_user_status(self, payload, user=None):
         data = payload
-        print("DATA RECIEVED: ",data)
-        if data["method"] == "IDENTITY":
-            customerId = data["customerId"]
+        # print("DATA RECIEVED: ",data)
+        if 'auth' in data:
+            nuban, balance = self._get_account_numbers(data['accounts'])
+            customerId = data["customer_id"]
             self._to_save["customer_id"] = customerId
             self._to_save["registered_record"] = data["record"]
-            self._to_save["registered_bank_id"] = data["bankId"]
+            self._to_save["income_accounts"] = nuban
+            self._to_save['balance_ids'] = balance
+
             try:
-                # TODO: IF IT'S NOT SECCESS AND DUMMY DATA TO JUST TEST WITH
-                
-                # if self._is_identity_auth_success(identity_data):
-                identity = data["identity"]
-                dob = identity["dob"]
-                phone_number = identity["phone"][0]
-                bvn = identity["bvn"]
-                address = identity["address"][0]
-                try:
-                    if user == None:
-                        # identity = identity_data["data"]["identity"]
-                        first_name = identity["firstname"]
-                        last_name = identity["lastname"]
-                        user = self._get_user_from_database(first_name, last_name)
-                    profile = user.profile
-                    # TODO: These should be re-activated upon update from OKRA
-                    profile.dob = datetime.strptime(dob, "%Y-%m-%d").date()
-                    profile.phone_number = phone_number
-                    profile.nin = bvn
-                    profile.address = address
-                    self._to_save["user"] = user
+                profile = user.profile
+                # TODO: Users should be asked to provide dob and things
+                self._to_save["user"] = user
+                if TEST != "TRUE":
                     income_data = self._get_processed_income(customerId)
                     if self._is_income_processing_success(income_data):
                         income = income_data['data']["income"]
@@ -120,20 +107,28 @@ class Okra(OkraSetup):
                     else:
                         self._LOGGER.error("Failed to get income")
                         self._LOGGER.error(income_data)
-                except User.DoesNotExist as e:
-                    self._LOGGER.exception("OKRA_VALIDATION CAUGHT USERERROR: %s", str(e))
-                    self._send_mail("OKRA_VALIDATION CAUGHT USERERROR:", e)
-                    
-                # else:
-                #     logging.error("Identity auth: %s", identity_data)
-            except Exception as e:
-                self._LOGGER.exception("OKRA_VALIDATION CAUGHT IDENTIFY USER ERROR: %s", str(e))
-                self._send_mail("OKRA_VALIDATION CAUGHT IDENTIFY USER ERROR", e)
+                else:
+                    avg_income, credit_limit = 100_000, 70_000
+                    self._to_save["avg_income"] = avg_income
+                    self._to_save["initial_limit"] = credit_limit
+                    profile.credit_limit = credit_limit
+                    profile.credit_validated = True
+                    profile.save()
+                    obj, created = OkraLinkedUser.objects.get_or_create(**self._to_save)
+                    obj.save()
+                    return {"status":True,"credit_limit": profile.credit_limit, "credit_validated": profile.credit_validated}
+            except User.DoesNotExist as e:
+                self._LOGGER.exception("OKRA_VALIDATION CAUGHT USERERROR: %s", str(e))
+                self._send_mail("OKRA_VALIDATION CAUGHT USERERROR:", e)
+            # else:
+            #     logging.error("Identity auth: %s", identity_data)
+
         else:
-           self._LOGGER.error("Auth auth: %s", data)
+            self._LOGGER.error("Auth auth: %s", data)
         return  {"status":False,"credit_limit": 0, "credit_validated": False}
-    
-    
+
+
+
     def update_customer_income_data(self, user, customerId):
         try:
             profile = user.profile
@@ -180,8 +175,9 @@ class Okra(OkraSetup):
             return True
         else:
             return False
-        
-    
+
+
+
     def get_balance(self, balance_id):
         print("getting balance")
         response = requests.post(url=self._ACCOUNT_CUSTOMER_URL, json={"id":balance_id}, headers= self._HEADERS).json()
@@ -196,11 +192,11 @@ class Okra(OkraSetup):
             data["code"] == "AUTH_SUCCESS" and
             data["status"] == "is_success"
         )
-    
+
+
 
     def _is_identity_auth_success(self, identity_data):
         return identity_data["status"] == "success"
-    
 
 
     # A call to OKRA API
@@ -208,33 +204,33 @@ class Okra(OkraSetup):
         id_payload = {"customer": customerId}
         identity_response = requests.post(url=self._IDENTITY_URL, json=id_payload, headers=self._HEADERS)
         return identity_response.json()
-    
 
     # Get user from DB using first_name and last_name fields
     def _get_user_from_database(self, first_name, last_name):
         return User.objects.get(first_name=first_name, last_name=last_name)
-    
+
 
     def _is_income_processing_success(self, income_data):
         return income_data["status"] == "success"
-    
+
 
     def _get_processed_income(self, customerId):
         print("Getting processed income")
         income_response = requests.post(url=self._PROCESS_INCOME_URL,
-                                        json={"customer_id": customerId},
+                                        json={"customer_id": customerId, "version": "2"},
                                         headers=self._HEADERS)
         return income_response.json()
-    
+
 
     def _get_income_confidence(self, income):
         confidence = income["confidence"]
         if isinstance(confidence, str):
             confidence = float(confidence[:-1])
         return confidence
-    
+
 
     def _calculate_credit_limit(self, income):
+        # TODO: HERE
         streams = income["streams"]
         # accounts = ':'.join(stream["account"] for stream in streams)
         banks = ':'.join(stream["bank"] for stream in streams)
@@ -244,24 +240,23 @@ class Okra(OkraSetup):
         # self._to_save["income_accounts"] = accounts
         # self._to_save["income_banks"] = banks
         return avg_income, credit_limit
-    
-    
+
+
     def _get_account_numbers(self, accounts):
             """Gets the user nuban, balance id and bank names"""
             nuban = ':'.join(account["nuban"] for account in accounts)
-            balance = ':'.join(account["balance"] for account in accounts)
-            names = ":".join(account["bank"]["name"] for account in accounts)
-            return nuban, balance, names
-            
+            balance = ':'.join(account["id"] for account in accounts)
+            return nuban, balance
+
 
     def _initiate_payment(self, acc_deb, user, bank_code, amount):
         profile = profile.objects.get(user=user)
         amount = str(amount * 100) # convert amount to KOBO
-        payload = { "email": user.email, 
-            "amount": amount, 
+        payload = { "email": user.email,
+            "amount": amount,
             "bank": {
-                "code": f"{bank_code}", 
-                "account_number": f"{acc_deb}" 
+                "code": f"{bank_code}",
+                "account_number": f"{acc_deb}"
             },
             "birthday": profile.dob.strftime("%Y-%m-%d")
         }
@@ -272,7 +267,7 @@ class Okra(OkraSetup):
 
             return status, ref
         return None
-    
+
 
     # GET THE BALANCE
     def _parse_balance(self, response):
@@ -285,13 +280,13 @@ class Okra(OkraSetup):
     def _send_mail(self, message, error):
         try:
             send_mail(
-                    "PaySkul Error On Okra validation", f"{message}: {error}", 
+                    "PaySkul Error On Okra validation", f"{message}: {error}",
                     from_email=SENDER, recipient_list=["pygod.dev@mail.com"], fail_silently=False
-                   )
+                )
         except Exception as e:
-           self._LOGGER.error("Send mail error: %s", e)
+            self._LOGGER.error("Send mail error: %s", e)
 
-    
+
     @staticmethod
     def bank_list():
         try:
@@ -303,7 +298,7 @@ class Okra(OkraSetup):
         except Exception as e:
             print(e)
         return []
-    
+
 
     @staticmethod
     def paystack_banks():

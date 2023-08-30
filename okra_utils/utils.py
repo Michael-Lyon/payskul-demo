@@ -69,7 +69,6 @@ class OkraSetup:
 class Okra(OkraSetup):
     _to_save = {}
     # def __init__(self):
-        
     # @classmethod
     def validate_update_user_status(self, payload, user=None):
         data = payload
@@ -132,7 +131,6 @@ class Okra(OkraSetup):
         else:
            self._LOGGER.error("Auth auth: %s", data)
         return  False
-    
     
     def update_customer_income_data(self, user, customerId):
         try:

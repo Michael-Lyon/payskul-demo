@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.shortcuts import render
 import requests
 from django.urls import reverse
 from django.contrib.auth import get_user_model, login
@@ -23,7 +24,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.decorators.csrf import csrf_exempt
-from .models import Profile, UserAuthCodes
+from .models import Profile, MyUserAuth
 from .serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
 from .utils import get_code, send_verification_code, verify_email_smtp
 
@@ -99,7 +100,7 @@ def create_user(request):
         serializer = UserSerializer(data={
             "first_name": first_name,
             "last_name": last_name,
-            "username": username,
+            "username": username.lower(),
             'email':email,
             "password": password,
             "profile": {
@@ -114,7 +115,7 @@ def create_user(request):
         if serializer.is_valid():
             serializer.save()
             data = serializer.data
-            # data['verification-code'] = UserAuthCodes.objects.get(id=data['id']).code
+            # data['verification-code'] = MyUserAuth.objects.get(id=data['id']).code
             # user = User.objects.get(id=user_id)
             return Response(data, status.HTTP_201_CREATED)
         else:
@@ -135,9 +136,9 @@ def confirm_email(request):
     code = request.data['code']
     id = request.data['id']
 
-    if not User.objects.filter(id=id).exists() : 
+    if not User.objects.filter(id=id).exists():
         return Response({"status":False,'message': 'Invalid user id'}, status.HTTP_400_BAD_REQUEST)
-    user = User.objects.get(id=id) 
+    user = User.objects.get(id=id)
 
     if int(code) == 123456:
         profile = Profile.objects.get(user=user)
@@ -145,13 +146,14 @@ def confirm_email(request):
         profile.save()
         return Response({"status":True,'message': "Account Verified"}, status.HTTP_200_OK)
 
-    if UserAuthCodes.expired.filter(user=user).exists():
+    if MyUserAuth.expired.filter(user=user).exists():
         return Response({'message': "Token expired"})
-    elif code == UserAuthCodes.objects.get(user=user).code or int(code) == 123456:
+    elif code == MyUserAuth.objects.get(user=user).code or int(code) == 123456:
         profile = Profile.objects.get(user=user)
         profile.signup_confirmation = True
         profile.save()
         return Response({"status":True,'message': "Account Verified"}, status.HTTP_200_OK)
+
     return Response({"status":False,'message': 'Invalid code or user id'}, status.HTTP_400_BAD_REQUEST)
 
 
@@ -166,7 +168,7 @@ def get_tokens_for_user(user):
 
 
 class LoginView(APIView):
-    
+
     @csrf_exempt
     def post(self, request):
         data = request.data
@@ -209,7 +211,7 @@ class ChangePasswordView(generics.UpdateAPIView):
     def get_object(self):
         obj = self.request.user
         return obj
-    
+
     def get_serializer_context(self):
         context = super(ChangePasswordView, self).get_serializer_context()
         context.update({
@@ -235,7 +237,7 @@ def get_new_token(request):
     try:
         user = request.user
         print(user)
-        token = UserAuthCodes.objects.get(user=user)
+        token = MyUserAuth.objects.get(user=user)
         token.save()
         
         token = token.code
@@ -316,7 +318,7 @@ def reset_pin_view(request):
             return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
         try:
-            auth, created = UserAuthCodes.objects.get_or_create(user=user)
+            auth, created = MyUserAuth.objects.get_or_create(user=user)
             auth.code = verification_code
             auth.save()
         except Exception as e:
@@ -350,7 +352,7 @@ def reset_pin_view(request):
         except User.DoesNotExist:
             return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        auth = UserAuthCodes.objects.get(user=user)
+        auth = MyUserAuth.objects.get(user=user)
         if verification_code == auth.code:
             profile, created = Profile.objects.get_or_create(user=user)
             profile.pin = pin
@@ -447,3 +449,5 @@ def reset_password_view(request):
         profile.save()
         
         return Response({'status': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
+
+

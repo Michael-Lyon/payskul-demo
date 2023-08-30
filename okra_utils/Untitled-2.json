@@ -1,0 +1,149 @@
+{
+  "status": "success",
+  "data": {
+    "income": {
+      "confidence": 99.36,
+      "other_streams": null,
+      "streams": [
+        {
+          "details": {
+            "account": [
+              "214219b39ab74f152b0e1d14"
+            ],
+            "bank": [
+              "2d6fe57a4099cc4b210bbec0"
+            ],
+            "monthly_amount": 20000,
+            "number_of_transactions": 1,
+            "occurrence": {
+              "first_date": "2022-04-17T00:00:00Z",
+              "last_date": "2022-04-17T00:00:00Z",
+              "occurrence_this_year": 1,
+              "projected_occurrence_this_year": 9,
+              "total_count": 1
+            },
+            "primary_stream": true,
+            "source": {
+              "name": "Multiple Sources",
+              "type": "other"
+            },
+            "stream_id": "214219b39ab74f152b0e1d14-1",
+            "stream_rank": 1,
+            "type": "Recurrent Credit",
+            "working_days_this_year": 1
+          },
+          "history": {
+            "past_six_months": {
+              "average_per_month": 20000,
+              "max_per_month": 20000,
+              "min_per_month": 20000,
+              "occurrence": 1,
+              "total": 20000
+            },
+            "past_three_months": {
+              "average_per_month": 20000,
+              "max_per_month": 20000,
+              "min_per_month": 20000,
+              "occurrence": 1,
+              "total": 20000
+            },
+            "past_twelve_months": {
+              "average_per_month": 20000,
+              "max_per_month": 20000,
+              "min_per_month": 20000,
+              "occurrence": 1,
+              "total": 20000
+            }
+          }
+        }
+      ],
+      "summary": {
+        "account_age_months": 18,
+        "average_monthly_income": 20000,
+        "current_year": 2022,
+        "last_two_years_income": 0,
+        "last_two_years_to_this_year_projected_income": 267301.48,
+        "last_year_income": 621904.45,
+        "last_year_to_this_year_projected_income": 400952.22,
+        "number_of_streams": 1,
+        "past_six_months": {
+          "average_per_month": 20000,
+          "max_per_month": 20000,
+          "min_per_month": 20000,
+          "occurrence": 1,
+          "total": 20000
+        },
+        "past_three_months": {
+          "average_per_month": 20000,
+          "max_per_month": 20000,
+          "min_per_month": 20000,
+          "occurrence": 1,
+          "total": 20000
+        },
+        "past_twelve_months": {
+          "average_per_month": 20000,
+          "max_per_month": 20000,
+          "min_per_month": 20000,
+          "occurrence": 1,
+          "total": 20000
+        },
+        "primary_stream_age_months": 1,
+        "this_year_projected_sum": 180000
+      },
+      "transactions": [
+        {
+          "id": "225e594be119417b51651588",
+          "stream_ids": [
+            "214219b39ab74f152b0e1d14-1"
+          ],
+          "term": "past_three_months"
+        }
+      ]
+    },
+    "msg": "Income successfully processed!",
+    "record": "23628a6c5c01d47e14b91c87",
+    "receipt": {
+      "status": true,
+      "msg": "Receipt has been successfully created",
+      "data": {
+        "receipt": {
+          "adjustment": {
+            "receipts": []
+          },
+          "charge_breakdown": {
+            "vat": 0
+          },
+          "breakdown": {
+            "discount": 0,
+            "billable_products": []
+          },
+          "billingStatus": true,
+          "adjusted": null,
+          "adjusted_receipt": false,
+          "paid": false,
+          "fixed": false,
+          "adjusted_type": null,
+          "method": "wallet",
+          "charge": 415,
+          "wallet_balance": 40073.85,
+          "addons": [],
+          "archived": false,
+          "micro_lending": false,
+          "ussd_pricing": false,
+          "ussd_pricing_discount": 0,
+          "micro_lending_discount": 0,
+          "plan_term": "postpaid",
+          "owner": "2da6358130a943486f33dced",
+          "type": "income",
+          "currency": "NGN",
+          "plan": "payg",
+          "plan_type": "2da478aa9ce2295ff32a5131",
+          "record": "23628a6c5c01d47e14b91c87",
+          "created_at": "2022-11-02T15:20:37.058Z",
+          "last_updated": "2022-11-02T15:20:37.058Z",
+          "__v": 0
+        }
+      }
+    }
+  }
+}

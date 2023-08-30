@@ -147,14 +147,14 @@ class Transaction(models.Model):
             self.reference = str(uuid.uuid4())[:30]  # Generate a UUID reference
         super().save(*args, **kwargs) 
 
-        
+
 class Bank(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bank")
     name = models.CharField(max_length=100, blank=True, null=True)
     account_number = models.CharField(max_length=100, blank=True, null=True)
     account_name = models.CharField(max_length=100, blank=True, null=True)
     bvn = models.CharField(max_length=100, blank=True, null=True)
-    
+
     class Meta:
         verbose_name = "Bank"
         verbose_name_plural = "Banks"

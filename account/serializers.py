@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from account.tasks import send_auth_mail
 from .utils import verify_email_smtp
-from .models import Profile, UserAuthCodes
+from .models import Profile, MyUserAuth
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from django.core.mail import send_mail
@@ -18,7 +18,7 @@ User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Profile
         fields = ['phone_number', 'dob', 'address', 'nin']
@@ -33,15 +33,15 @@ class ProfileInlineSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
-    
+
     # referrals = serializers.SerializerMethodField()
     # token = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
         fields = ['id','first_name', 'username', 'last_name', 'password', 'email',  'profile']
-        
+
     def create(self, validated_data):
-        # create user 
+        # create user
         # print(validated_data)
         profile_data = validated_data.pop('profile')
         try:
@@ -50,14 +50,15 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
             profile_data["user"] = user
             Profile.objects.create(**profile_data)
+            # MyUserAuth.objects.create(user=user)
             try:
-                token = UserAuthCodes.objects.get(user=user).code
+                token = MyUserAuth.objects.get(user=user)
                 subject = f"PaySkul Password Reset Pin"
                 message = f"""
                 Dear {user.first_name},
                 You have successfully created an account.
                 Your username is {user.username}
-                This is the code to activate your account {token}.
+                This is the code to activate your account {token.code}.
                 """
                 send_mail(subject=subject,
                                     message=message,
@@ -65,6 +66,7 @@ class UserSerializer(serializers.ModelSerializer):
                                     recipient_list=[user.email],
                                     fail_silently=False
                                     )
+                token.save()
                 return user
             except  Exception as e:
                 user.delete()
@@ -74,7 +76,7 @@ class UserSerializer(serializers.ModelSerializer):
                     "message": "Something went wrong. Please try again."
                 }, code="400"
                     )
-            
+
         except Exception as e:
             print(e)
             user.delete()
@@ -84,15 +86,15 @@ class UserSerializer(serializers.ModelSerializer):
             "message": "Something went wrong. Please try again."
             }, code="400"
                 )
-        
+
     # def get_token(self, obj):
     #     print(obj)
     #     return Token.objects.get(user=obj).key
-    
+
     # def get_referrals(self, obj):
     #     print(obj.id)
     #     return Profile.objects.get(user=obj).get_recommened_profiles() if Profile.objects.filter(user=obj).exists() else "No referrals"
-        
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()

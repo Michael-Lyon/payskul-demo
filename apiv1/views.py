@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from core.utils import Okra
+from okra_utils.utils import Okra
 from django.core.mail import send_mail
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail

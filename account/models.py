@@ -53,11 +53,11 @@ class UserAuthExpiredManager(models.Manager):
 
 
 # MODELS TO STORE AUTHENTICTAION CODES
-class UserAuthCodes(models.Model):
+class MyUserAuth(models.Model):
     user = models.OneToOneField(User, related_name="user_auth_code", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
-    code = models.CharField(max_length=10)
+    created_at = models.DateTimeField(default=timezone.now)
+    expires_at = models.DateTimeField(default=timezone.now)
+    code = models.CharField(max_length=10, default="123456")
     expired = UserAuthExpiredManager()
     objects = models.Manager()
 
@@ -73,15 +73,14 @@ class UserAuthCodes(models.Model):
 class OkraLinkedUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="linked_user")
     customer_id = models.CharField(max_length=100)
-    registered_bank_id = models.CharField(max_length=100)
     registered_record = models.CharField(max_length=100)
     income_accounts = models.CharField(max_length=1000, blank=True, null=True)
     income_banks = models.CharField(max_length=1000, blank=True, null=True)
     avg_income = models.DecimalField(decimal_places=2, max_digits=100, default=0.0)
     initial_limit = models.DecimalField(decimal_places=2, max_digits=100, default=0.0)
     balance_ids = models.CharField(max_length=1000, blank=True, null=True)
-    
-    
+
+
     # collected_nuban = models.BooleanField(default=False)
     def __str__(self):
         return 'Linked user {}'.format(self.user.username)

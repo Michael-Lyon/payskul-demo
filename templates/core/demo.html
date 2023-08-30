@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <script src='https://cdn.okra.ng/v2/bundle.js'></script>
+</head>
+
+<body>
+
+
+    <script>
+        Okra.buildWithOptions({
+            name: 'Payskul',
+            env: 'production-sandbox',
+            key: '58449ca8-7923-5f69-b308-275c3c78c790',
+            token: '63f157fbbad20d13e7664894',
+            source: 'link',
+            color: '#c213fe',
+            limit: 24,
+            callback_url: '',
+            redirect_url: '',
+            currency: 'NGN',
+            logo: 'null',
+            onSuccess: function (data) {
+                console.log('success', data);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/core/webhook/');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('Authorization',
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5Mzg3NzkxLCJpYXQiOjE2OTMzODc3OTEsImp0aSI6IjI4Nzg2MDAwNzUxYzQyMDQ5ZGViMTgwYTAwMzg5YWYzIiwidXNlcl9pZCI6OX0.CAtoKmCWxG8TGNMRsG-PlLorgy31tkcKY3YpoJM9SRs'
+                    );
+
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        console.log('Response:', xhr.responseText);
+                    } else {
+                        console.error('Request failed:', xhr.statusText);
+                    }
+                };
+
+                xhr.send(JSON.stringify(data));
+            },
+            onClose: function () {
+                console.log('closed');
+            }
+        });
+    </script>
+
+
+
+</body>
+
+</html>

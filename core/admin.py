@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib import admin
 from .models import Transaction, PaymentSlip
-from .utils import Okra
+from okra_utils.utils import Okra
 from payskul.settings import PAYSKUL_ACCOUNT
 from . models import *
 from django.core.mail import send_mail

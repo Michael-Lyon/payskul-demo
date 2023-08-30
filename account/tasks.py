@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 
-from .models import UserAuthCodes
+from .models import MyUserAuth
 
 User = get_user_model()
 
@@ -16,7 +16,7 @@ def send_auth_mail(user_id):
     Sends auth code mails to users
     """
     user = User.objects.get(id=user_id)
-    token = UserAuthCodes.objects.get(user=user).code
+    token = MyUserAuth.objects.get(user=user).code
     subject = f'PaySkul Pin Verification'
     message = f"""
     Dear {user.first_name},
