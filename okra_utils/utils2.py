@@ -87,6 +87,7 @@ class Okra(OkraSetup):
                 profile = user.profile
                 # TODO: Users should be asked to provide dob and things
                 self._to_save["user"] = user
+                print(TEST)
                 if TEST != "TRUE":
                     income_data = self._get_processed_income(customerId)
                     if self._is_income_processing_success(income_data):
@@ -115,7 +116,7 @@ class Okra(OkraSetup):
                     profile.credit_limit = credit_limit
                     profile.credit_validated = True
                     profile.save()
-                    obj, created = OkraLinkedUser.objects.get_or_create(**self._to_save)
+                    obj = OkraLinkedUser.objects.create(**self._to_save)
                     obj.save()
                     print(obj)
                     return {"status":True,"credit_limit": profile.credit_limit, "credit_validated": profile.credit_validated}
