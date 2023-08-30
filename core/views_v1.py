@@ -43,20 +43,22 @@ def validate_user_loan(request, *args, **kwargs):
     On success: {"message": "User validated successfully", "credit_limit": 10000}
     On fail: {"message": "An error occured please try again."}
     """
+    # TODO: ADD A CHECK TO KNNOW IF IT'S A FIRST TIME OR SECIND TIME
     can_borrow = False
     try:
         user = request.user
         if Loan.objects.filter(user=user).exists():
             can_borrow = False if Loan.objects.filter(user=user, cleared=False).exists() else True
-
+        if OkraLinkedUser.objects.get(user=user).exists():
         # link = OkraLinkedUser.objects.get(user=user)
-        ok = Okra()
-        customerId = user.linked_user.customer_id
-        data = ok.update_customer_income_data(user, customerId)
-        if data:
+            ok = Okra()
+            credit_limit = user.linked_user.initial_limit
+            # data = ok.update_customer_income_data(user, customerId)
+            data = {}
             data["can_borrow"]= can_borrow
             data["message"] = "User validated successfully"
             data["status"] = True
+            data['credit_limit'] = credit_limit
             return Response(data, status.HTTP_200_OK)
         return Response({"message":"Unable to validate user", "status":False, "can_borrow": False, "credit_limit": 0}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except Exception as e:
