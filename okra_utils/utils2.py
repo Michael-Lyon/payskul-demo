@@ -74,8 +74,8 @@ class Okra(OkraSetup):
     # @classmethod
     def validate_update_user_status(self, payload, user=None):
         data = payload
-        print("DATA RECIEVED: ",data)
         if 'auth' in data:
+            print("DATA RECIEVED: ",data)
             nuban, balance = self._get_account_numbers(data['accounts'])
             customerId = data["customer_id"]
             self._to_save["customer_id"] = customerId
@@ -116,6 +116,7 @@ class Okra(OkraSetup):
                     profile.save()
                     obj, created = OkraLinkedUser.objects.get_or_create(**self._to_save)
                     obj.save()
+                    print(obj)
                     return {"status":True,"credit_limit": profile.credit_limit, "credit_validated": profile.credit_validated}
             except User.DoesNotExist as e:
                 self._LOGGER.exception("OKRA_VALIDATION CAUGHT USERERROR: %s", str(e))
