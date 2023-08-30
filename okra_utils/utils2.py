@@ -74,7 +74,7 @@ class Okra(OkraSetup):
     # @classmethod
     def validate_update_user_status(self, payload, user=None):
         data = payload
-        # print("DATA RECIEVED: ",data)
+        print("DATA RECIEVED: ",data)
         if 'auth' in data:
             nuban, balance = self._get_account_numbers(data['accounts'])
             customerId = data["customer_id"]
@@ -124,7 +124,7 @@ class Okra(OkraSetup):
             #     logging.error("Identity auth: %s", identity_data)
 
         else:
-            self._LOGGER.error("Auth auth: %s", data)
+            self._LOGGER.error("Auth was not recieved from Mobile")
         return  {"status":False,"credit_limit": 0, "credit_validated": False}
 
 
