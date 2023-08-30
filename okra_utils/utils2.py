@@ -88,7 +88,7 @@ class Okra(OkraSetup):
                 # TODO: Users should be asked to provide dob and things
                 self._to_save["user"] = user
                 print(TEST)
-                if TEST != "TRUE":
+                if TEST == "FALSE":
                     income_data = self._get_processed_income(customerId)
                     if self._is_income_processing_success(income_data):
                         income = income_data['data']["income"]
