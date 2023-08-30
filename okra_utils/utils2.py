@@ -101,6 +101,7 @@ class Okra(OkraSetup):
                             profile.save()
                             obj = OkraLinkedUser.objects.create(**self._to_save)
                             obj.save()
+                            print(obj)
                             return {"status":True,"credit_limit": profile.credit_limit, "credit_validated": profile.credit_validated}
                         else:
                             self._LOGGER.error("Confidence not good enough")
