@@ -52,7 +52,7 @@ def validate_user_loan(request, *args, **kwargs):
         if OkraLinkedUser.filter.get(user=user).exists():
         # link = OkraLinkedUser.objects.get(user=user)
             ok = Okra()
-            credit_limit = user.linked_user.initial_limit
+            credit_limit = OkraLinkedUser.objects.get(user=user).initial_limit
             # data = ok.update_customer_income_data(user, customerId)
             data = {}
             data["can_borrow"]= can_borrow
