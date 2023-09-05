@@ -87,37 +87,25 @@ class UserSerializer(serializers.ModelSerializer):
             }, code="400"
                 )
 
-    # def get_token(self, obj):
-    #     print(obj)
-    #     return Token.objects.get(user=obj).key
 
-    # def get_referrals(self, obj):
-    #     print(obj.id)
-    #     return Profile.objects.get(user=obj).get_recommened_profiles() if Profile.objects.filter(user=obj).exists() else "No referrals"
 
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
-    # email = serializers.CharField(read_only=True)
-    # profile = serializers.SerializerMethodField(read_only=True)
-    
-    # class Meta:
-    #     model = User
-        
+
     def validate(self, data):
         print(data)
         user = authenticate(**data)
         if user and user.is_active:
             return user
-        print(user)
-        raise serializers.ValidationError("Unable to log in with provided credentials.", code="400")
-        # return data
-    
-    # def get_profile(self, obj):
-    #     return ProfileInlineSerializer(obj.profile, context=self.context).data
-    
-    
+        raise serializers.ValidationError({
+                'detail': 'Unable to log in with provided credentials.',
+                'username': 'Check your username.',
+                'password': 'Check your password.',
+            }, code="authentication_failed")
+
+
 class ChangePasswordSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
@@ -126,7 +114,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('old_password', 'password', 'password2')
-        
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['request'] = self.context.get('request', None)

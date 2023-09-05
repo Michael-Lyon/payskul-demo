@@ -168,13 +168,13 @@ def get_tokens_for_user(user):
 
 
 class LoginView(APIView):
-
     @csrf_exempt
     def post(self, request):
         data = request.data
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
             user = serializer.validated_data
+            # print(user.loan)
             profile = Profile.objects.get(user=user)
             # if profile.signup_confirmation:
             login(request, user)
@@ -239,7 +239,7 @@ def get_new_token(request):
         print(user)
         token = MyUserAuth.objects.get(user=user)
         token.save()
-        
+
         token = token.code
         subject = f'PaySkul Pin Verification'
         message = f"""
@@ -247,12 +247,10 @@ def get_new_token(request):
                 You have successfully created an account.
                 Your username is {user.username}
                 This is the code to activate your account {token}.
-                
                 Token expires in 5 minutes.
                 """
         send_mail(subject, message, ADMIN_USER, [f"{user.email}"], fail_silently=False,
                 )
-        
         return Response({"message":"Token Sent"}, status.HTTP_200_OK)
     except Exception as e:
         logger.exception(f"Error while sending auth code to user: {e}")
