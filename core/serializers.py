@@ -58,7 +58,7 @@ class WalletInlineSerializer(serializers.Serializer):
 class LoanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
-        fields = ('id', 'user', 'service', 'start_date', 'end_date', "amount_to_pay_back",'total_repayment', 'cleared')
+        fields = ('id', 'user', 'service', 'start_date', 'end_date', "amount_needed","amount_to_pay_back",'total_repayment', 'cleared')
 
 
 class LoanInlineSerializer(serializers.Serializer):

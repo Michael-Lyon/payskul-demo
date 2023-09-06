@@ -99,6 +99,8 @@ def apply_loan(request, *args, **kwargs):
         try:
             loan_data = request.data["loan_details"]
             limit = OkraLinkedUser.objects.get(user=user).initial_limit
+            loan_data["amount_needed"] = Decimal(loan_data["amount_needed"])
+            loan_data["amount_to_pay_back"] = Decimal(loan_data["amount_to_pay_back"])
 
             # Check if the user has outstanding loans
             if Loan.objects.filter(user=user, cleared=False).exists():
@@ -108,16 +110,15 @@ def apply_loan(request, *args, **kwargs):
             if loan_data["amount_needed"] > limit:
                 return Response({"status": False, "message": "Loan amount exceeds limit"}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Add loan amount to the wallet if it exists
-            if Wallet.objects.filter(user=user).exists():
-                wallet = Wallet.objects.get(user=user)
-                wallet.amount += loan_data["amount_needed"]
-                wallet.save()
-
             # Save the loan if everything is good
             serializer = LoanSerializer(data=loan_data)
             if serializer.is_valid():
                 serializer.save(user=user)
+                # Add loan amount to the wallet if it exists
+                if Wallet.objects.filter(user=user).exists():
+                    wallet = Wallet.objects.get(user=user)
+                    wallet.amount += loan_data["amount_needed"]
+                    wallet.save()
                 return Response({"status": True, "message": "Loan applied successfully"}, status=status.HTTP_201_CREATED)
             else:
                 return Response({"status": False, "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
