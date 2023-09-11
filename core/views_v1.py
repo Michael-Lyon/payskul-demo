@@ -197,6 +197,7 @@ def payment_slip(request, *args, **kwargs):
             except Loan.DoesNotExist:
                 return Response({"status": False, "message": "No uncleared loan found"}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
+                print(e)
                 return Response({"status": False, "message": "Error creating transaction"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({"status": False, "message": "Invalid pin"}, status=status.HTTP_400_BAD_REQUEST)
