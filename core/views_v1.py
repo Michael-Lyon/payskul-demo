@@ -25,6 +25,7 @@ from rest_framework.permissions import IsAuthenticated
 # import the logging library
 import logging
 from django.http import HttpResponse
+import traceback
 
 
 # Get an instance of a logger
@@ -171,7 +172,7 @@ def payment_slip(request, *args, **kwargs):
                     loan=loan,
                     description=bank_data.get("description", ""),
                     type="SFP",
-                    amount=bank_data.get("amount", 0),
+                    amount=Decimal(bank_data.get("amount", 0)),
                 )
 
                 # Subtract the bank_amount from the amount in the wallet
@@ -198,6 +199,7 @@ def payment_slip(request, *args, **kwargs):
                 return Response({"status": False, "message": "No uncleared loan found"}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
                 print(e)
+                traceback.print_exc()
                 return Response({"status": False, "message": "Error creating transaction"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({"status": False, "message": "Invalid pin"}, status=status.HTTP_400_BAD_REQUEST)
