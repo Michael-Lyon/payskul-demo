@@ -129,62 +129,6 @@ def apply_loan(request, *args, **kwargs):
     return Response({"message": "Invalid HTTP method"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-# @csrf_exempt
-# @api_view(['POST'])
-# def apply_loan(request, *args, **kwargs):
-#     """Endpoint to apply for the users loan
-
-#     On POST request
-#         Keyword arguments:
-
-
-#         loan_details: {
-#             service -- what service is the user trying to apply for the loan the id of the service
-#             amount_needed -- how much does the user need?
-#             start_date -- when is this loan service active
-#             end_date -- when is this loan due
-#             amount_to_pay_back -- how much is the user supposed to pay back
-#         }
-
-
-#     """
-#     user = request.user
-#     method = request.method
-#     can_borrow = False
-
-#     if Loan.objects.filter(user=user).exists():
-#         can_borrow = False if Loan.objects.filter(user=user, cleared=False).exists() else True
-
-#     if method == "POST":
-#         loan_data = request.data["loan_details"]
-#         limit = OkraLinkedUser.objects.get(user=request.user).initial_limit
-
-#         # Validate user transaction pin
-#         if not can_borrow:
-#             return Response({"message": "This user has an outstanding loan."}, status=status.HTTP_400_BAD_REQUEST)
-
-#         # Check if the loan amount is valid and add it to the database
-#         if loan_data["amount_needed"] > limit:
-#             return Response({"status": False, "message": "Loan amount exceeds limit"}, status=status.HTTP_400_BAD_REQUEST)
-
-#         # Save loan to Loan model
-#         serializer = LoanSerializer(data=loan_data)
-#         if serializer.is_valid():
-#             # Add loan amount to wallet
-#             if Wallet.objects.filter(user=user).exists():
-#                 wallet = Wallet.objects.get(user=user)
-#                 wallet.amount += loan_data["amount_needed"]
-#                 wallet.save()
-
-#             # Save the loan if everything is good
-#             serializer.save(user=request.user)
-
-#             return Response({"status": True, "message": "Loan applied successfully"},
-#                                 status=status.HTTP_201_CREATED)
-#         else:
-#             return Response({"status": False, "message": serializer.errors},
-#                             status=status.HTTP_400_BAD_REQUEST)
-
 
 @csrf_exempt
 @api_view(['POST'])
@@ -216,7 +160,7 @@ def payment_slip(request, *args, **kwargs):
         auth_data = request.data.get("auth", {})
 
         # Validate user transaction pin
-        if profile.pin == auth_data.get('pin'):
+        if profile.pin == str(auth_data.get('pin')):
             try:
                 # Get the latest uncleared loan
                 loan = Loan.objects.filter(user=user, cleared=False).latest('start_date')
