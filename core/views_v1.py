@@ -25,6 +25,7 @@ from rest_framework.permissions import IsAuthenticated
 # import the logging library
 import logging
 from django.http import HttpResponse
+import traceback
 
 
 # Get an instance of a logger
@@ -43,20 +44,22 @@ def validate_user_loan(request, *args, **kwargs):
     On success: {"message": "User validated successfully", "credit_limit": 10000}
     On fail: {"message": "An error occured please try again."}
     """
+    # TODO: ADD A CHECK TO KNNOW IF IT'S A FIRST TIME OR SECIND TIME
     can_borrow = False
     try:
         user = request.user
         if Loan.objects.filter(user=user).exists():
             can_borrow = False if Loan.objects.filter(user=user, cleared=False).exists() else True
-
+        if OkraLinkedUser.objects.filter(user=user).exists():
         # link = OkraLinkedUser.objects.get(user=user)
-        ok = Okra()
-        customerId = user.linked_user.customer_id
-        data = ok.update_customer_income_data(user, customerId)
-        if data:
+            ok = Okra()
+            credit_limit = OkraLinkedUser.objects.get(user=user).initial_limit
+            # data = ok.update_customer_income_data(user, customerId)
+            data = {}
             data["can_borrow"]= can_borrow
             data["message"] = "User validated successfully"
             data["status"] = True
+            data['credit_limit'] = credit_limit
             return Response(data, status.HTTP_200_OK)
         return Response({"message":"Unable to validate user", "status":False, "can_borrow": False, "credit_limit": 0}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except Exception as e:
@@ -84,63 +87,48 @@ def confirm_okra_link(request):
         payload = json.loads(request.body)
         print(payload)
         return HttpResponse(status=200)
+    
 
 
-@csrf_exempt
 @api_view(['POST'])
 def apply_loan(request, *args, **kwargs):
-    """Endpoint to apply for the users loan
-
-    On POST request
-        Keyword arguments:
-
-
-        loan_details: {
-            service -- what service is the user trying to apply for the loan the id of the service
-            amount_needed -- how much does the user need?
-            start_date -- when is this loan service active
-            end_date -- when is this loan due
-            amount_to_pay_back -- how much is the user supposed to pay back
-        }
-
-
-    """
+    """Endpoint to apply for a loan."""
     user = request.user
     method = request.method
-    can_borrow = False
-
-    if Loan.objects.filter(user=user).exists():
-        can_borrow = False if Loan.objects.filter(user=user, cleared=False).exists() else True
 
     if method == "POST":
-        loan_data = request.data["loan_details"]
-        limit = OkraLinkedUser.objects.get(user=request.user).initial_limit
+        try:
+            loan_data = request.data["loan_details"]
+            limit = OkraLinkedUser.objects.get(user=user).initial_limit
+            loan_data["amount_needed"] = Decimal(loan_data["amount_needed"])
+            loan_data["amount_to_pay_back"] = Decimal(loan_data["amount_to_pay_back"])
 
-        # Validate user transaction pin
-        if not can_borrow:
-            return Response({"message": "This user has an outstanding loan."}, status=status.HTTP_400_BAD_REQUEST)
+            # Check if the user has outstanding loans
+            if Loan.objects.filter(user=user, cleared=False).exists():
+                return Response({"message": "This user has an outstanding loan."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if the loan amount is valid and add it to the database
-        if loan_data["amount_needed"] > limit:
-            return Response({"status": False, "message": "Loan amount exceeds limit"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Save loan to Loan model
-        serializer = LoanSerializer(data=loan_data)
-        if serializer.is_valid():
-            # Add loan amount to wallet
-            if Wallet.objects.filter(user=user).exists():
-                wallet = Wallet.objects.get(user=user)
-                wallet.amount += loan_data["amount_needed"]
-                wallet.save()
+            # Check if the loan amount is valid
+            if loan_data["amount_needed"] > limit:
+                return Response({"status": False, "message": "Loan amount exceeds limit"}, status=status.HTTP_400_BAD_REQUEST)
 
             # Save the loan if everything is good
-            serializer.save(user=request.user)
+            serializer = LoanSerializer(data=loan_data)
+            if serializer.is_valid():
+                serializer.save(user=user)
+                # Add loan amount to the wallet if it exists
+                if Wallet.objects.filter(user=user).exists():
+                    wallet = Wallet.objects.get(user=user)
+                    wallet.amount += loan_data["amount_needed"]
+                    wallet.save()
+                return Response({"status": True, "message": "Loan applied successfully"}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({"status": False, "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"status": True, "message": "Loan applied successfully"},
-                                status=status.HTTP_201_CREATED)
-        else:
-            return Response({"status": False, "message": serializer.errors},
-                            status=status.HTTP_400_BAD_REQUEST)
+        except KeyError:
+            return Response({"status": False, "message": "Invalid request data"}, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"message": "Invalid HTTP method"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 
 @csrf_exempt
@@ -173,7 +161,7 @@ def payment_slip(request, *args, **kwargs):
         auth_data = request.data.get("auth", {})
 
         # Validate user transaction pin
-        if profile.pin == auth_data.get('pin'):
+        if profile.pin == str(auth_data.get('pin')):
             try:
                 # Get the latest uncleared loan
                 loan = Loan.objects.filter(user=user, cleared=False).latest('start_date')
@@ -184,7 +172,7 @@ def payment_slip(request, *args, **kwargs):
                     loan=loan,
                     description=bank_data.get("description", ""),
                     type="SFP",
-                    amount=bank_data.get("amount", 0),
+                    amount=Decimal(bank_data.get("amount", 0)),
                 )
 
                 # Subtract the bank_amount from the amount in the wallet
@@ -210,6 +198,8 @@ def payment_slip(request, *args, **kwargs):
             except Loan.DoesNotExist:
                 return Response({"status": False, "message": "No uncleared loan found"}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
+                print(e)
+                traceback.print_exc()
                 return Response({"status": False, "message": "Error creating transaction"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({"status": False, "message": "Invalid pin"}, status=status.HTTP_400_BAD_REQUEST)
@@ -316,7 +306,6 @@ class DetailListView(generics.ListAPIView):
     serializer_class = DetailSerializer
 
 
-
 @csrf_exempt
 @api_view(['POST'])
 def webhook_view(request):
@@ -336,8 +325,6 @@ def webhook_view(request):
         payload = json.loads(request.body)
         print(payload)
         return HttpResponse(status=200)
-
-
 
 
 def link_account_okra_test(request):

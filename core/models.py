@@ -133,19 +133,18 @@ class Transaction(models.Model):
     
     # total = Transactions.objects.filter(user=self.user, type="deposit", recieved=True).aggregate(Sum('amount'))
     # return total['amount__sum']
-    
+
     def get_total_payments(self):
         loan = Loan.get_loan(self.user)
         if loan == None:
             return 0
         total = Transaction.objects.filter(loan=loan, user=self.user, type="FR").aggregate(Sum('amount'))
         return total['amount__sum'] or 0 if not total["amount__sum"] else total["amount__sum"]
-    
 
     def save(self, *args, **kwargs):
         if not self.reference:
             self.reference = str(uuid.uuid4())[:30]  # Generate a UUID reference
-        super().save(*args, **kwargs) 
+        super().save(*args, **kwargs)
 
 
 class Bank(models.Model):

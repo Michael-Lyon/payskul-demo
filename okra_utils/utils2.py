@@ -74,8 +74,8 @@ class Okra(OkraSetup):
     # @classmethod
     def validate_update_user_status(self, payload, user=None):
         data = payload
-        # print("DATA RECIEVED: ",data)
         if 'auth' in data:
+            print("DATA RECIEVED: ",data)
             nuban, balance = self._get_account_numbers(data['accounts'])
             customerId = data["customer_id"]
             self._to_save["customer_id"] = customerId
@@ -87,7 +87,8 @@ class Okra(OkraSetup):
                 profile = user.profile
                 # TODO: Users should be asked to provide dob and things
                 self._to_save["user"] = user
-                if TEST != "TRUE":
+                print(TEST)
+                if TEST == "FALSE":
                     income_data = self._get_processed_income(customerId)
                     if self._is_income_processing_success(income_data):
                         income = income_data['data']["income"]
@@ -99,8 +100,9 @@ class Okra(OkraSetup):
                             profile.credit_limit = credit_limit
                             profile.credit_validated = True
                             profile.save()
-                            obj, created = OkraLinkedUser.objects.get_or_create(**self._to_save)
+                            obj = OkraLinkedUser.objects.create(**self._to_save)
                             obj.save()
+                            print(obj)
                             return {"status":True,"credit_limit": profile.credit_limit, "credit_validated": profile.credit_validated}
                         else:
                             self._LOGGER.error("Confidence not good enough")
@@ -114,8 +116,9 @@ class Okra(OkraSetup):
                     profile.credit_limit = credit_limit
                     profile.credit_validated = True
                     profile.save()
-                    obj, created = OkraLinkedUser.objects.get_or_create(**self._to_save)
+                    obj = OkraLinkedUser.objects.create(**self._to_save)
                     obj.save()
+                    print(obj)
                     return {"status":True,"credit_limit": profile.credit_limit, "credit_validated": profile.credit_validated}
             except User.DoesNotExist as e:
                 self._LOGGER.exception("OKRA_VALIDATION CAUGHT USERERROR: %s", str(e))
@@ -124,7 +127,7 @@ class Okra(OkraSetup):
             #     logging.error("Identity auth: %s", identity_data)
 
         else:
-            self._LOGGER.error("Auth auth: %s", data)
+            self._LOGGER.error("Auth was not recieved from Mobile")
         return  {"status":False,"credit_limit": 0, "credit_validated": False}
 
 

@@ -58,7 +58,7 @@ class WalletInlineSerializer(serializers.Serializer):
 class LoanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
-        fields = ('id', 'user', 'service', 'start_date', 'end_date', "amount_to_pay_back",'total_repayment', 'cleared')
+        fields = ('id', 'user', 'service', 'start_date', 'end_date', "amount_needed","amount_to_pay_back",'total_repayment', 'cleared')
 
 
 class LoanInlineSerializer(serializers.Serializer):
@@ -66,8 +66,8 @@ class LoanInlineSerializer(serializers.Serializer):
     user = serializers.CharField(read_only=True)
     service = serializers.CharField(read_only=True)
     type = serializers.CharField(read_only=True)
-    start_date = serializers.DateTimeField(read_only=True)
-    end_date = serializers.DateTimeField(read_only=True)
+    start_date = serializers.DateField(read_only=True)
+    end_date = serializers.DateField(read_only=True)
     amount_needed = serializers.DecimalField(read_only=True, max_digits=100, decimal_places=2)
     amount_to_pay_back = serializers.DecimalField(read_only=True, max_digits=100, decimal_places=2)
     cleared = serializers.BooleanField(read_only=True)
@@ -83,33 +83,27 @@ class CardSeriilizer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = ("id", "user", "number", "name",  "cvv")
-        
-      
+
 class CardInlineSerializer(serializers.Serializer)  :
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     user = serializers.CharField(read_only=True)
     number = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
-    
 
 
 class DetailSerializer(serializers.ModelSerializer):
     wallet = WalletSerializer()
     transactions = TransactionInlineSerializer()
-    loan = LoanInlineSerializer()
-    card = CardInlineSerializer()
+    loan = LoanInlineSerializer(many=True)
     class Meta:
         model = User
-        fields = ("id", "username", "email", "wallet", "transactions", "loan", "card")
-    
+        fields = ("id", "username", "email", "wallet", "transactions", "loan")
+
     def get_transactions(self, obj):
         return TransactionInlineSerializer(obj.transactions, context=self.context).data
-    
+
     def get_loan(self, obj):
-        return LoanInlineSerializer(obj.loan, context=self.context).data
-    
-    def get_card(self, obj):
-        return CardInlineSerializer(obj.card, context=self.context).data
-    
+        return LoanInlineSerializer(obj.loan,many=True, context=self.context).data
+
     def get_wallet(self, obj):
         return WalletInlineSerializer(obj.wallet, context=self.context).data
