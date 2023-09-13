@@ -12,6 +12,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 
 from account.models import OkraLinkedUser, Profile
 from okra_utils.utils2 import Okra
@@ -22,6 +23,7 @@ from rest_framework import serializers
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 # import the logging library
 import logging
 from django.http import HttpResponse
@@ -262,15 +264,34 @@ def read_file(request):
 
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class TransactionListCreateView(generics.ListAPIView):
-    # queryset = Transaction.objects.all()
+class TransactionListCreateView(APIView):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = TransactionSerializer
 
-    def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user)
+    def get(self, request):
+        user = request.user
+        paginator = PageNumberPagination()
+        paginator.page_size = 4  # You can adjust the page size as needed
+        transactions = Transaction.objects.filter(user=user).order_by('-date')
+        result_page = paginator.paginate_queryset(transactions, request)
+
+        serializer = TransactionSerializer(result_page, many=True, context={"request":request})
+
+        loan = Loan.get_loan(self.request.user)
+        total_loan_payments = loan.total_repayment if loan else 0
+        total_fees_paid =Transaction.get_total_fees_paid(self.request.user)
+
+
+        data = {
+            "count": paginator.page.paginator.count,
+            "next": paginator.get_next_link(),
+            "previous": paginator.get_previous_link(),
+            'total_fees_paid': total_fees_paid,
+            'total_loan_payments': total_loan_payments,
+            'results': serializer.data,
+        }
+        return Response(data)
 
 
 

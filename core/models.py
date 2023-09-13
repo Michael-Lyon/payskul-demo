@@ -107,7 +107,7 @@ class Loan(models.Model):
 
     @classmethod
     def get_loan(self, user):
-        return Loan.objects.filter(user=user, cleared=False)[:1] if Loan.objects.filter(user=user, cleared=False).exists() else None
+        return Loan.objects.get(user=user, cleared=False) if Loan.objects.filter(user=user, cleared=False).exists() else None
 
 
 class Transaction(models.Model):
@@ -141,6 +141,11 @@ class Transaction(models.Model):
             return 0
         total = Transaction.objects.filter(loan=loan, user=self.user, type="FR").aggregate(Sum('amount'))
         return total['amount__sum'] or 0 if not total["amount__sum"] else total["amount__sum"]
+
+    @classmethod
+    def get_total_fees_paid(cls, user):
+        total_fees_paid = cls.objects.filter(user=user, type="SFP", status="succeeded").aggregate(Sum('amount'))
+        return total_fees_paid['amount__sum'] or 0
 
     def save(self, *args, **kwargs):
         if not self.reference:

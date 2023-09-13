@@ -20,23 +20,22 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
 
-    total_loan_payments = serializers.SerializerMethodField(read_only=True)
     type = serializers.SerializerMethodField()
 
     class Meta:
         model = Transaction
-        fields = ('id', 'user', 'date', 'amount', 'description', 'type', 'loan', 'total_loan_payments')
+        fields = ('id', 'user', 'date', 'amount', 'description', 'type', 'loan')
 
 
     def get_type(self, obj):
         return dict(Transaction.TRANSACTION_TYPE_CHOICES).get(obj.type)
 
 
-    def get_total_loan_payments(self, obj):
-        if not hasattr(obj, 'id'):
-            return None
-        else:
-            return obj.get_total_payments()
+    # def get_total_loan_payments(self, obj):
+    #     if not hasattr(obj, 'id'):
+    #         return None
+    #     else:
+    #         return obj.get_total_payments()
 
 
 class TransactionInlineSerializer(serializers.Serializer):
