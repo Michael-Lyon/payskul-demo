@@ -87,7 +87,7 @@ def confirm_okra_link(request):
         payload = json.loads(request.body)
         print(payload)
         return HttpResponse(status=200)
-    
+
 
 
 @api_view(['POST'])
@@ -176,9 +176,11 @@ def payment_slip(request, *args, **kwargs):
                 )
 
                 # Subtract the bank_amount from the amount in the wallet
-
-                wallet.amount -= transaction.amount
-                wallet.save()
+                if wallet.amount >= transaction.amount:
+                    wallet.amount -= transaction.amount
+                    wallet.save()
+                else:
+                    return Response({"status": False, "message": f"Transaction Amount Surpassed loaned amount"}, status=status.HTTP_400_BAD_REQUEST)
 
                 # Create the school bank and payment slip
                 school, created = SchoolBank.objects.get_or_create(
@@ -194,7 +196,7 @@ def payment_slip(request, *args, **kwargs):
                     reference=transaction.reference,
                 )
 
-                return Response({"status": True, "message": "Payment applied successfully"}, status=status.HTTP_201_CREATED)
+                return Response({"status": True, "message": "Payment applied successfully", "balance": wallet.amount}, status=status.HTTP_201_CREATED)
             except Loan.DoesNotExist:
                 return Response({"status": False, "message": "No uncleared loan found"}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
@@ -237,7 +239,7 @@ def loan_list(request):
     if Loan.objects.filter(user=request.user).exists():
         queryset = Loan.objects.filter(user=request.user, cleared=False).latest('start_date')
         # queryset = Loan.objects.filter(user=request.user)
-        data = LoanSerializer(queryset, many=True).data
+        data = LoanSerializer(queryset).data
         return Response({"status": True, "data":data}, status=status.HTTP_200_OK)
     else:
         return Response({"status": True, "data": {
@@ -266,9 +268,9 @@ class TransactionListCreateView(generics.ListAPIView):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = TransactionSerializer
-    
+
     def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user) 
+        return Transaction.objects.filter(user=self.request.user)
 
 
 

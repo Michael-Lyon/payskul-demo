@@ -59,7 +59,7 @@ class PaymentSlip(models.Model):
     they are approved, the payment would be made.
     and the status would be updated accordingly.
     """
-    
+
     PAYMENT_CHOICES = (
         ("pending", "Pending"),
         ("cancelled", "Cancelled"),
@@ -94,7 +94,7 @@ class Loan(models.Model):
         verbose_name = "Loan"
         verbose_name_plural = "Loans"
 
-    
+
     def clean(self):
         if self.user and not self.cleared:
             existing_loan = Loan.objects.filter(user=self.user, cleared=False).exists()
@@ -104,7 +104,7 @@ class Loan(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user } on loan of {self.amount_needed}  from {self.start_date} to {self.end_date}"
-    
+
     @classmethod
     def get_loan(self, user):
         return Loan.objects.filter(user=user, cleared=False)[:1] if Loan.objects.filter(user=user, cleared=False).exists() else None
@@ -113,7 +113,8 @@ class Loan(models.Model):
 class Transaction(models.Model):
     TRANSACTION_TYPE_CHOICES = [
         ('FR', 'Fee Repayment'),
-        ('SFP', 'School Fees Payment'),
+        ('SFP', 'Fees Paid'),
+        ('LN', 'Wallet Top Up'),
     ]
     TRANSACTION_STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -130,7 +131,7 @@ class Transaction(models.Model):
     description = models.CharField(max_length=200, blank=True, null=True)
     status = models.CharField(max_length=20, default="pending", choices=TRANSACTION_STATUS_CHOICES)
     type = models.CharField(max_length=3, choices=TRANSACTION_TYPE_CHOICES, default='WT')
-    
+
     # total = Transactions.objects.filter(user=self.user, type="deposit", recieved=True).aggregate(Sum('amount'))
     # return total['amount__sum']
 
@@ -175,11 +176,8 @@ class Card(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     number = models.CharField(max_length=100, blank=True, null=True)
     cvv = models.CharField(max_length=100, blank=True, null=True)
-    
     class Meta:
         verbose_name = "Card"
         verbose_name_plural = "Cards"
-        
     def __str__(self):
         return f"Card for {self.user}"
-    
