@@ -798,3 +798,13 @@ Traceback (most recent call last):
                                             ^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'Loan' object has no attribute 'get_total_payments'
 "GET /core/transactions/ HTTP/1.1" 500 103053
+Internal Server Error: /core/payment-slip/
+"POST /core/payment-slip/ HTTP/1.1" 500 55
+Internal Server Error: /core/payment-slip/
+"POST /core/payment-slip/ HTTP/1.1" 500 55
+Internal Server Error: /core/payment-slip/
+"POST /core/payment-slip/ HTTP/1.1" 500 55
+Internal Server Error: /core/payment-slip/
+"POST /core/payment-slip/ HTTP/1.1" 500 55
+Internal Server Error: /core/payment-slip/
+"POST /core/payment-slip/ HTTP/1.1" 500 55

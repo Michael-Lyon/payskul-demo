@@ -53,31 +53,6 @@ class SchoolBank(models.Model):
         return f"School: {self.name} Bank Name: {self.bank_name} Account: {self.account_number} verified: {self.verified}"
 
 
-class PaymentSlip(models.Model):
-    """
-    This model is used to store information about payments and once
-    they are approved, the payment would be made.
-    and the status would be updated accordingly.
-    """
-
-    PAYMENT_CHOICES = (
-        ("pending", "Pending"),
-        ("cancelled", "Cancelled"),
-        ("approved", "Approved"),
-        ("succeeded", "Succeeded"),
-        ("failed", "Failed")
-    )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payment_slip")
-    receivers_name = models.CharField(max_length=200, blank=True, null=True)
-    amount = models.DecimalField(max_digits=100, decimal_places=2, default=0.0)
-    school = models.ForeignKey(SchoolBank, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default="pending")
-    reference = models.CharField(max_length=30, blank=True, null=True)
-
-    def __str__(self):
-        return f"Payment Slip for "
-
-
 class Loan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="loan", blank=True, null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True)
@@ -109,6 +84,29 @@ class Loan(models.Model):
     def get_loan(self, user):
         return Loan.objects.get(user=user, cleared=False) if Loan.objects.filter(user=user, cleared=False).exists() else None
 
+class PaymentSlip(models.Model):
+    """
+    This model is used to store information about payments and once
+    they are approved, the payment would be made.
+    and the status would be updated accordingly.
+    """
+
+    PAYMENT_CHOICES = (
+        ("pending", "Pending"),
+        ("cancelled", "Cancelled"),
+        ("approved", "Approved"),
+        ("succeeded", "Succeeded"),
+        ("failed", "Failed")
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payment_slip")
+    receivers_name = models.CharField(max_length=200, blank=True, null=True)
+    amount = models.DecimalField(max_digits=100, decimal_places=2, default=0.0)
+    school = models.ForeignKey(SchoolBank, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default="pending")
+    reference = models.CharField(max_length=30, blank=True, null=True)
+
+    def __str__(self):
+        return f"Payment Slip for "
 
 class Transaction(models.Model):
     TRANSACTION_TYPE_CHOICES = [
@@ -120,7 +118,7 @@ class Transaction(models.Model):
         ('pending', 'Pending'),
         ('cancelled', 'Cancelled'),
         ('failed', 'Failed'),
-        ('succeeded', 'Succeeded'),
+        ('success', 'Success'),
     ]
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE, related_name='loan_transaction', blank=True, null=True)
     reference = models.CharField(max_length=30, blank=True, null=True)

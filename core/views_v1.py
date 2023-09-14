@@ -28,7 +28,7 @@ from rest_framework.pagination import PageNumberPagination
 import logging
 from django.http import HttpResponse
 import traceback
-
+from django.db import transaction as _transaction
 
 # Get an instance of a logger
 logger = logging.getLogger('okra_validator')
@@ -122,6 +122,13 @@ def apply_loan(request, *args, **kwargs):
                     wallet = Wallet.objects.get(user=user)
                     wallet.amount += loan_data["amount_needed"]
                     wallet.save()
+                Transaction.objects.create(
+                    loan=serializer.instance,
+                    user=user,
+                    amount=serializer.instance.amount_needed,
+                    status='success',
+                    type="LN",
+                )
                 return Response({"status": True, "message": "Loan applied successfully"}, status=status.HTTP_201_CREATED)
             else:
                 return Response({"status": False, "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -166,39 +173,39 @@ def payment_slip(request, *args, **kwargs):
         if profile.pin == str(auth_data.get('pin')):
             try:
                 # Get the latest uncleared loan
-                loan = Loan.objects.filter(user=user, cleared=False).latest('start_date')
+                with _transaction.atomic():
+                    loan = Loan.objects.filter(user=user, cleared=False).latest('start_date')
+                    payment_amount = Decimal(bank_data.get("amount", 0))
 
-                # Create a transaction for fee payment
-                transaction = Transaction.objects.create(
-                    user=user,
-                    loan=loan,
-                    description=bank_data.get("description", ""),
-                    type="SFP",
-                    amount=Decimal(bank_data.get("amount", 0)),
-                )
+                    # Subtract the bank_amount from the amount in the wallet
+                    if wallet.amount >= payment_amount:
+                        school, created = SchoolBank.objects.get_or_create(
+                            bank_name=bank_data.get("bank_name", ""),
+                            account_number=bank_data.get("bank_account_number", ""),
+                        )
+                        # Create a transaction for fee payment
+                        transaction = Transaction.objects.create(
+                            user=user,
+                            loan=loan,
+                            description=bank_data.get("description", ""),
+                            type="SFP",
+                            amount=Decimal(payment_amount),
+                        )
 
-                # Subtract the bank_amount from the amount in the wallet
-                if wallet.amount >= transaction.amount:
-                    wallet.amount -= transaction.amount
-                    wallet.save()
-                else:
-                    return Response({"status": False, "message": f"Transaction Amount Surpassed loaned amount"}, status=status.HTTP_400_BAD_REQUEST)
+                        PaymentSlip.objects.create(
+                        receivers_name=bank_data.get("receivers_name", ""),
+                        user=user,
+                        amount=payment_amount,
+                        school=school,
+                        reference=transaction.reference,
+                        )
 
-                # Create the school bank and payment slip
-                school, created = SchoolBank.objects.get_or_create(
-                    bank_name=bank_data.get("bank_name", ""),
-                    account_number=bank_data.get("bank_account_number", ""),
-                )
+                        wallet.amount = wallet.amount - payment_amount
+                        wallet.save()
 
-                PaymentSlip.objects.create(
-                    receivers_name=bank_data.get("receivers_name", ""),
-                    user=user,
-                    amount=transaction.amount,
-                    school=school,
-                    reference=transaction.reference,
-                )
-
-                return Response({"status": True, "message": "Payment applied successfully", "balance": wallet.amount}, status=status.HTTP_201_CREATED)
+                        return Response({"status": True, "message": "Payment applied successfully", "balance": wallet.amount}, status=status.HTTP_201_CREATED)
+                    else:
+                        return Response({"status": False, "message": f"Transaction Amount Surpassed loaned amount"}, status=status.HTTP_400_BAD_REQUEST)
             except Loan.DoesNotExist:
                 return Response({"status": False, "message": "No uncleared loan found"}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
@@ -288,7 +295,7 @@ class TransactionListCreateView(APIView):
             "next": paginator.get_next_link(),
             "previous": paginator.get_previous_link(),
             'total_fees_paid': total_fees_paid,
-            'total_loan_payments': total_loan_payments,
+            'total_loan_repayment': total_loan_payments,
             'results': serializer.data,
         }
         return Response(data)

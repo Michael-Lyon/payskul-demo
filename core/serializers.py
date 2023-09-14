@@ -24,7 +24,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ('id', 'user', 'date', 'amount', 'description', 'type', 'loan')
+        fields = ('id', 'user', 'date', 'amount', 'status' ,'description', 'type', 'loan')
 
 
     def get_type(self, obj):
