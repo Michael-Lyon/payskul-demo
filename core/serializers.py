@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from datetime import date
 
 # from account.serializers import ProfileInlineSerializer
 from . models import *
@@ -62,9 +63,19 @@ class WalletInlineSerializer(serializers.Serializer):
 
 
 class LoanSerializer(serializers.ModelSerializer):
+    days_left = serializers.SerializerMethodField()
+
     class Meta:
         model = Loan
-        fields = ('id', 'user', 'service', 'start_date', 'end_date', "amount_needed","amount_to_pay_back",'total_repayment', 'cleared')
+        fields = ('id', 'user', 'service', 'start_date', 'end_date', 'amount_needed', 'amount_to_pay_back', 'total_repayment', 'cleared', 'days_left')
+
+    def get_days_left(self, obj):
+        if obj.end_date and not obj.cleared:
+            today = date.today()
+            if today <= obj.end_date:
+                days_left = (obj.end_date - today).days
+                return days_left
+        return None
 
 
 class LoanInlineSerializer(serializers.Serializer):
