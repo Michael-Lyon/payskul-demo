@@ -274,7 +274,7 @@
     Error Responses:
     - HTTP 400 BAD REQUEST: If the required parameters are missing or invalid.
     - HTTP 404 NOT FOUND: If the user associated with the provided email address is not found.
-    
+
                 </pre>
         </div>
         <div class="col">
@@ -306,7 +306,7 @@
             <pre>
                 <code>
                     {
-                     "token": access key
+                    "token": access key
                     }
                     </code>
                 </pre>
@@ -330,7 +330,7 @@
 
                 A get request to get that the user is eligible for loan facility access
                 User would be identofied using JWT
-                
+
                 On success: {"success": true, "message": "User validated successfully", "data": {"credit_limit": 10000, "can_borrow": true/false}}
                 On fail: {"success": false,"message": "An error occured please try again."}
             </p>
@@ -410,11 +410,11 @@
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:loan_list' %}</span>
                 <pre>
                 To get the current loan for a user:
-                
-                service 
-                amount_needed 
-                start_date 
-                end_date 
+
+                service
+                amount_needed
+                start_date
+                end_date
                 amount_to_pay_back
                 total_repayment
                 cleared
@@ -491,21 +491,6 @@
 
             <a href="{% url 'apiv1:core:bank_list' %}">Banks List</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:bank_list' %}</span>
-        </div>
-        <div class="col">
-            <h3>Change Password</h3>
-
-            <a href="{% url 'apiv1:account:change_password' %}">change password</a>
-            <p>Endpoint: <span class="endpoint">{% url 'apiv1:account:change_password' %}</span>
-
-                <p>
-                    data = {
-                    "old_password": "1234rewqasdf",
-                    "password":"1234qwerasdf",
-                    "password2":"1234qwerasdf",
-
-                    }
-                </p>
         </div>
     </div>
 

@@ -442,9 +442,7 @@ def reset_password_view(request):
         if not default_token_generator.check_token(user, verification_code):
             return Response({'status': False, 'message': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)
         
-        profile = Profile.objects.get(user=user)
-        profile.pin = password
-        profile.save()
+        user.set_password(password)
         
         return Response({'status': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
 

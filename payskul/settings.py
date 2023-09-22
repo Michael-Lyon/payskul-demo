@@ -272,6 +272,7 @@ LOGGING = {
 
 
 PAYSKUL_ACCOUNT = "123456789787"
+PASSWORD_RESET_TOKEN_EXPIRE = 3600
 
 # This scheduler config will:
 # - Store jobs in the project database
