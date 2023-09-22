@@ -24,6 +24,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
+from dotenv import load_dotenv
+import os
 # import the logging library
 import logging
 from django.http import HttpResponse
@@ -33,7 +35,7 @@ from django.db import transaction as _transaction
 # Get an instance of a logger
 logger = logging.getLogger('okra_validator')
 User = get_user_model()
-
+load_dotenv()
 
 @csrf_exempt
 @api_view(['Get'])
@@ -359,3 +361,71 @@ def webhook_view(request):
 
 def link_account_okra_test(request):
     return render(request, 'core/demo.html')
+
+class ExtendLoanView(APIView):
+    def post(self, request, date):
+        loan = Loan.get_loan(user=request.user)
+        loan.end_date = date
+        loan.save()
+
+        return Response(status=status.HTTP_200_OK)
+    
+class LoanRepaymentView(APIView):
+
+    _PAYSTACK_SECRET = os.getenv("PAYSATCK_SECRET")
+
+    _PAYSTACK_HEADERS = {
+        "accept": "application/json; charset=utf-8",
+        "content-type": "application/json",
+        "authorization": f"Bearer {_PAYSTACK_SECRET}"
+    }
+
+    def post(self, request, reference_id, amount_paid):
+
+        loan = Loan.get_loan(user=request.user)
+
+        response = requests.get(
+            url=f"https://api.paystack.co/transaction/verify/{reference_id}",
+            headers=self._PAYSTACK_HEADERS
+        )
+
+        if response.status_code == 200:
+            amount = response['data']['amount']
+            loan.total_repayment = loan.total_repayment + amount
+            loan.save()
+
+            transaction = Transaction.objects.create(
+                user = request.user,
+                loan = loan,
+                api_reference = response['data']['reference'],
+                amount = amount,
+                status  = "success",
+                type = 'FR',
+                description = 'Loan Repayment'
+            )
+            transaction.save()
+
+            if loan.amount_to_pay_back == loan.total_repayment:
+                loan.cleared = True
+                loan.save()
+            return Response({'message':'Success!'}, status=status.HTTP_200_OK)
+        
+        else :
+            transaction = Transaction.objects.create(
+                user = request.user,
+                loan = loan,
+                amount = amount_paid,
+                status  = "failed",
+                type = 'FR',
+                description = 'Loan Repayment'
+            )
+            transaction.save()
+            return Response({'message':'Transaction Failed!'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class ReferralView(APIView):
+    def get(self, request):
+        profile = Profile.objects.get(user=request.user)
+        my_refs = profile.get_recommened_profiles()
+
+        return Response({'referrals':my_refs}, status=status.HTTP_200_OK)
