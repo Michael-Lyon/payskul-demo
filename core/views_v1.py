@@ -369,7 +369,7 @@ class ExtendLoanView(APIView):
         loan.save()
 
         return Response(status=status.HTTP_200_OK)
-    
+
 class LoanRepaymentView(APIView):
 
     _PAYSTACK_SECRET = os.getenv("PAYSATCK_SECRET")
@@ -387,7 +387,7 @@ class LoanRepaymentView(APIView):
         response = requests.get(
             url=f"https://api.paystack.co/transaction/verify/{reference_id}",
             headers=self._PAYSTACK_HEADERS
-        )
+        ).json()
 
         if response.status_code == 200:
             amount = response['data']['amount']
@@ -409,7 +409,6 @@ class LoanRepaymentView(APIView):
                 loan.cleared = True
                 loan.save()
             return Response({'message':'Success!'}, status=status.HTTP_200_OK)
-        
         else :
             transaction = Transaction.objects.create(
                 user = request.user,
@@ -421,7 +420,6 @@ class LoanRepaymentView(APIView):
             )
             transaction.save()
             return Response({'message':'Transaction Failed!'}, status=status.HTTP_400_BAD_REQUEST)
-        
 
 class ReferralView(APIView):
     def get(self, request):
