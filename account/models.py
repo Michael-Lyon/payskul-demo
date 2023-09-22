@@ -17,7 +17,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     ref_code = models.CharField(max_length=15, null=True, blank=True)
-    pin = models.CharField(max_length=15, blank=True, null=True)
+    pin = models.CharField(max_length=15, blank=True, null=True, default="123456")
     recomended_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='ref_by')
     signup_confirmation = models.BooleanField(default=False)
     dob = models.DateField(null=True, blank=True)
