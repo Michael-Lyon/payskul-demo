@@ -130,8 +130,6 @@ class Transaction(models.Model):
     status = models.CharField(max_length=20, default="pending", choices=TRANSACTION_STATUS_CHOICES)
     type = models.CharField(max_length=3, choices=TRANSACTION_TYPE_CHOICES, default='WT')
 
-    # total = Transactions.objects.filter(user=self.user, type="deposit", recieved=True).aggregate(Sum('amount'))
-    # return total['amount__sum']
 
     def get_total_payments(self):
         loan = Loan.get_loan(self.user)
@@ -139,6 +137,7 @@ class Transaction(models.Model):
             return 0
         total = Transaction.objects.filter(loan=loan, user=self.user, type="FR").aggregate(Sum('amount'))
         return total['amount__sum'] or 0 if not total["amount__sum"] else total["amount__sum"]
+
 
     @classmethod
     def get_total_fees_paid(cls, user):

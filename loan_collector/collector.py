@@ -4,5 +4,5 @@ from loan_collector import collect_loan
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(collect_loan.check_expired_loans, 'interval', minutes=1500)
     scheduler.start()
+    scheduler.add_job(collect_loan.check_expired_loans, 'interval', minutes=1500)

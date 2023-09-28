@@ -21,12 +21,15 @@ from django.contrib.auth.tokens import default_token_generator
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.sites.shortcuts import get_current_site
-
+from django.db.models import Q
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.decorators.csrf import csrf_exempt
-from .models import Profile, MyUserAuth
-from .serializers import LoginSerializer, ChangePasswordSerializer, UserSerializer
-from .utils import get_code, send_verification_code, verify_email_smtp
+
+from account.customs import CustomPagination
+from scheduled_tasks.my_tasks import schedule_email_task
+from .models import Profile, MyUserAuth, SecurityQuestion
+from .serializers import LoginSerializer, ChangePasswordSerializer, SecurityQuestionSerializer, UserSerializer
+from .utils import check_pin, get_code, send_verification_code, verify_email_smtp
 
 from core.serializers import DetailSerializer
 from payskul.settings import ADMIN_USER
@@ -55,6 +58,13 @@ class UserDetailView(generics.RetrieveAPIView):
         print(user)
         # instance = serializer.save()
 
+
+class SecurityQuestionListAPIView(generics.ListAPIView):
+    serializer_class = SecurityQuestionSerializer
+    queryset = SecurityQuestion.objects.all()
+    pagination_class = CustomPagination
+
+
 class UserListView(generics.ListAPIView):
     # print(timezone.make_aware(
     #     datetime.utcnow() + timedelta(minutes=10),  timezone.get_current_timezone()))
@@ -69,63 +79,66 @@ class UserListView(generics.ListAPIView):
         print(user)
         # instance = serializer.save()
 
-
 @csrf_exempt
 @api_view(['POST'])
 def create_user(request):
     """User gets created here
 
     Keyword arguments:
-    fullname -- user fullname
-    email -- user email
+    first_name -- first name
+    last_name -- last name
+    username -- username
     phone_number -- user phone number
-    password -- 6 digit pin
-    confirm_password -- 6 digit pin
+    email -- email
+    password --password
+    security_question_1 -- ID of the first security question
+    security_answer_1 -- Answer to the first security question
+    security_question_2 -- ID of the second security question
+    security_answer_2 -- Answer to the second security question
 
     Return: return_description
     """
-    data = request.data
-    password = data['password']
-    phone_number = data['phone_number']
-    email = data['email']
-    confirm_password = data['confirm_password']
-    # and not(User.objects.filter(email=email)
-    if len(password) >= 6 and password == confirm_password :
-        fullname = data['fullname'].split()
-        if len(fullname) > 2:
-            username = fullname[1]
-        first_name = fullname[0]
-        last_name = fullname[-1]
-        username = first_name[:3] + last_name[:3] + get_code()[:3].lower()
+    try:
+        data = request.data
+        password = data['password']
+        phone_number = data['phone_number']
+        email = data['email']
+        first_name = data['first_name']
+        username = data['username']
+        last_name = data["last_name"]
+        security_question_1 = data['security_question_1']
+        security_answer_1 = data['security_answer_1']
+        security_question_2 = data['security_question_2']
+        security_answer_2 = data['security_answer_2']
+        pin = data['pin']
+
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(detail={"message": f"Email already exists."})
         serializer = UserSerializer(data={
             "first_name": first_name,
             "last_name": last_name,
             "username": username.lower(),
-            'email':email,
+            'email': email,
             "password": password,
             "profile": {
-                "phone_number": phone_number
+                "phone_number": phone_number,
+                "security_question_1": security_question_1,
+                "security_answer_1": security_answer_1,
+                "security_question_2": security_question_2,
+                "security_answer_2": security_answer_2,
+                "pin": pin
             }
         })
 
-        """
-        TODO: Change this process to a background process with celery
-        Sends auth code mails to users
-        """
         if serializer.is_valid():
             serializer.save()
             data = serializer.data
-            # data['verification-code'] = MyUserAuth.objects.get(id=data['id']).code
-            # user = User.objects.get(id=user_id)
             return Response(data, status.HTTP_201_CREATED)
         else:
             raise serializers.ValidationError(serializer.errors)
-    else:
-        raise serializers.ValidationError({
-            "status": False,
-            "message": "Invalid signup data."
-        }, code="400")
-
+    except KeyError as e:
+        print(e)
+        raise serializers.ValidationError(detail={"message": f"missing fields:{e}"})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -258,17 +271,10 @@ def get_new_token(request):
 
 
 
-@api_view(['GET', 'POST'])
-@authentication_classes([JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@api_view(['POST'])
 def reset_pin_view(request):
     """
     Reset pin for a user.
-
-    GET:
-    Send a verification code to the user's email address.
-
-    - `email` (request data): The email address of the user.
 
     POST:
     Reset the user's password using the verification code.
@@ -287,11 +293,6 @@ def reset_pin_view(request):
     - `status`: Indicates the status of the operation (True for success, False for failure).
     - `message`: A message describing the result of the operation.
 
-    GET Example Response (HTTP 200 OK):
-    {
-        "status": true,
-        "message": "Verification code sent"
-    }
 
     POST Example Response (HTTP 200 OK):
     {
@@ -300,43 +301,10 @@ def reset_pin_view(request):
     }
 
     Error Responses:
-    - HTTP 400 BAD REQUEST: If the required parameters are missing or invalid.
     - HTTP 404 NOT FOUND: If the user associated with the provided email address is not found.
     """
-    if request.method == 'GET':
-        verification_code = get_code() # Define this function to generate the code
-        email = request.data.get('email')  # Use query_params to get email
 
-        if not email:
-            return Response({'status': False, 'message': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            auth, created = MyUserAuth.objects.get_or_create(user=user)
-            auth.code = verification_code
-            auth.save()
-        except Exception as e:
-            print(e)
-            return Response({'status': False, 'message': 'Unable to generate verification code'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        try:
-            subject = "PaySkul Reset Pin"
-            message = f"""
-            Dear {email},
-            A password reset has been requested on your account.
-            Your verification code is: {verification_code}.
-            """
-            send_mail(subject, message, "admin@example.com", [email])
-            return Response({'status': True, 'message': 'Verification code sent'}, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({'status': False, 'message': 'Unable to send email to user'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    elif request.method == 'POST':
+    if request.method == 'POST':
         # Reset user password
         email = request.data.get('email')
         verification_code = request.data.get('verification_code')
@@ -362,12 +330,68 @@ def reset_pin_view(request):
 
 
 
+@api_view(["POST"])
+def reset_pin_auth_code(request):
+    if request.method == 'POST':
+        try:
+            email = request.data.get('email')
+            security_question_id = request.data.get('security_question_id')
+            security_question_answer = request.data.get('security_question_answer')
+
+            # Retrieve the user by email
+            user = User.objects.filter(email=email).first()
+            if not user:
+                return Response({'message': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Retrieve the security question associated with the selected ID
+            try:
+                security_question = SecurityQuestion.objects.get(pk=security_question_id)
+            except SecurityQuestion.DoesNotExist:
+                return Response({"status":False,'message': 'Invalid security question'}, status=status.HTTP_400_BAD_REQUEST)
+            # Check if the security question and answer match
+
+            print(Profile.objects.get(user=user))
+            if user.profile.security_question_1 == security_question or user.profile.security_question_2 == security_question:
+                print("heyyyyy")
+
+            security_question_match = (
+                Q(profile__security_question_1=security_question, profile__security_answer_1=security_question_answer) |
+
+                Q(profile__security_question_2=security_question, profile__security_answer_2=security_question_answer)
+            )
+
+            print(security_question_match)
+
+            if not User.objects.filter(pk=user.pk).filter(security_question_match).exists():
+                return Response({"status": False, 'message': 'Incorrect security question answer'}, status=status.HTTP_400_BAD_REQUEST)
+
+            auth_code = get_code()
+            user_auth, created = MyUserAuth.objects.get_or_create(user=user)
+            user_auth.code = auth_code
+            user_auth.save()
+
+            # Schedule the email task to send the authentication code
+            try:
+                schedule_email_task(send_verification_code, [user.email, auth_code], delay_seconds=2)
+                return Response({"status": True, 'message': 'Authentication code sent successfully'}, status=status.HTTP_200_OK)
+            except Exception as e:
+                print("An error occurred while sending auth code email:", e)
+                return Response({"status": False, 'message': 'An error occurred while sending email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        except Exception as e:
+            print(e)
+            return Response({"status": False, 'message': 'An error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response({"status": False, 'message': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+
 @api_view(['GET', 'POST'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def reset_password_view(request):
     """
-    Reset pin for a user.
+    Reset Password for a user.
 
     GET:
     Send a verification code to the user's email address.
@@ -407,43 +431,38 @@ def reset_password_view(request):
     - HTTP 400 BAD REQUEST: If the required parameters are missing or invalid.
     - HTTP 404 NOT FOUND: If the user associated with the provided email address is not found.
     """
-    
-    
+
     if request.method == 'GET':
         # Send verification code to the user
         email = request.data.get('email')
         if not email:
             return Response({'status': False, 'message': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
-        
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         verification_code = default_token_generator.make_token(user)
         send_verification_code(email, verification_code)  # Implement your own email sending logic
-        
         return Response({'status': True, 'message': 'Verification code sent'}, status=status.HTTP_200_OK)
-    
+
     elif request.method == 'POST':
         # Reset user password
         email = request.data.get('email')
         verification_code = request.data.get('verification_code')
         password = request.data.get('password')
-        
+
         if not email or not verification_code or not password:
             return Response({'status': False, 'message': 'Email, verification code, and password are required'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         if not default_token_generator.check_token(user, verification_code):
             return Response({'status': False, 'message': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)
-        
         user.set_password(password)
-        
         return Response({'status': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
 
 

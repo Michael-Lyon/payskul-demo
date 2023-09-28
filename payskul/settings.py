@@ -150,15 +150,11 @@ HASHID_FIELD_ALLOW_INT_LOOKUP = True
 HASHID_FIELD_ENABLE_HASHID_OBJECT = False
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# CELERY_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-if ENV == "LOCAL":
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ADMIN_USER = "pygod.dev@mail.com"
+EMAIL_USE_SSL = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.payskul.com'
 EMAIL_PORT = 465
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'mail@payskul.com'
 EMAIL_HOST_PASSWORD = 'Attention@123'
 
@@ -175,7 +171,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES ': [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
-    ], 
+    ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 3,
 }

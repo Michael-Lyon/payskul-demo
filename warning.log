@@ -808,3 +808,705 @@ Internal Server Error: /core/payment-slip/
 "POST /core/payment-slip/ HTTP/1.1" 500 55
 Internal Server Error: /core/payment-slip/
 "POST /core/payment-slip/ HTTP/1.1" 500 55
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 93, in create_user
+    username = data['username']
+               ~~~~^^^^^^^^^^^^
+KeyError: 'username'
+"POST /account/create-user/ HTTP/1.1" 500 104030
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 56, in create
+    schedule_email_task(schedule_email_task, args=[user], delay_seconds=3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 12, in schedule_email_task
+    trigger = DateTrigger(run_date=future_time)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/triggers/date.py", line 22, in __init__
+    self.run_date = convert_to_datetime(run_date, timezone, 'run_date')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/util.py", line 145, in convert_to_datetime
+    raise TypeError('Unsupported type for %s: %s' % (arg_name, input.__class__.__name__))
+TypeError: Unsupported type for run_date: float
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 60, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 69, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 145216
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 56, in create
+    schedule_email_task(schedule_email_task, args=[user], delay_seconds=3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 12, in schedule_email_task
+    trigger = DateTrigger(run_date=future_time)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/triggers/date.py", line 22, in __init__
+    self.run_date = convert_to_datetime(run_date, timezone, 'run_date')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/util.py", line 145, in convert_to_datetime
+    raise TypeError('Unsupported type for %s: %s' % (arg_name, input.__class__.__name__))
+TypeError: Unsupported type for run_date: float
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 61, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 70, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 145171
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 57, in create
+    schedule_email_task(schedule_email_task, args=[user], delay_seconds=3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 12, in schedule_email_task
+    trigger = DateTrigger(run_date=future_time)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/triggers/date.py", line 22, in __init__
+    self.run_date = convert_to_datetime(run_date, timezone, 'run_date')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/util.py", line 145, in convert_to_datetime
+    raise TypeError('Unsupported type for %s: %s' % (arg_name, input.__class__.__name__))
+TypeError: Unsupported type for run_date: float
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 62, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 71, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 145111
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 57, in create
+    schedule_email_task(schedule_email_task, args=[user], delay_seconds=3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 15, in schedule_email_task
+    scheduler.add_job(email_function, args=args, trigger=trigger)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/schedulers/base.py", line 438, in add_job
+    job = Job(self, **job_kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 49, in __init__
+    self._modify(id=id or uuid4().hex, **kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 180, in _modify
+    check_callable_args(func, args, kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/util.py", line 391, in check_callable_args
+    raise ValueError('The following arguments have not been supplied: %s' %
+ValueError: The following arguments have not been supplied: args, delay_seconds
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 62, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 71, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 160075
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 57, in create
+    schedule_email_task(schedule_email_task, args=[user], delay_seconds=3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 15, in schedule_email_task
+    scheduler.add_job(email_function, args=args, trigger=trigger)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/schedulers/base.py", line 438, in add_job
+    job = Job(self, **job_kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 49, in __init__
+    self._modify(id=id or uuid4().hex, **kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 180, in _modify
+    check_callable_args(func, args, kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/util.py", line 391, in check_callable_args
+    raise ValueError('The following arguments have not been supplied: %s' %
+ValueError: The following arguments have not been supplied: args, delay_seconds
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 62, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 71, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 160075
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 57, in create
+    schedule_email_task(schedule_email_task, user, 3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 15, in schedule_email_task
+    scheduler.add_job(email_function, args=args, trigger=trigger)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/schedulers/base.py", line 427, in add_job
+    'args': tuple(args) if args is not None else (),
+            ^^^^^^^^^^^
+TypeError: 'User' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 62, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 71, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 143465
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 57, in create
+    schedule_email_task(schedule_email_task, [user], 3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 15, in schedule_email_task
+    scheduler.add_job(email_function, args=args, trigger=trigger)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/schedulers/base.py", line 438, in add_job
+    job = Job(self, **job_kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 49, in __init__
+    self._modify(id=id or uuid4().hex, **kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 180, in _modify
+    check_callable_args(func, args, kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/util.py", line 391, in check_callable_args
+    raise ValueError('The following arguments have not been supplied: %s' %
+ValueError: The following arguments have not been supplied: args, delay_seconds
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 62, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 71, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 160018
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 57, in create
+    schedule_email_task(schedule_email_task, [user], 3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 20, in schedule_email_task
+    scheduler.add_job(email_function, args=email_function_args, trigger=trigger)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/schedulers/base.py", line 438, in add_job
+    job = Job(self, **job_kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 49, in __init__
+    self._modify(id=id or uuid4().hex, **kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 180, in _modify
+    check_callable_args(func, args, kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/util.py", line 391, in check_callable_args
+    raise ValueError('The following arguments have not been supplied: %s' %
+ValueError: The following arguments have not been supplied: email_function_args, delay_seconds
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 62, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 71, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 159920
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 57, in create
+    schedule_email_task(schedule_email_task, email_function_args=[user], delay_seconds=3)
+  File "/Users/pygod/python_projects/payskul/scheduled_tasks/my_tasks.py", line 20, in schedule_email_task
+    scheduler.add_job(email_function, args=email_function_args, trigger=trigger)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/schedulers/base.py", line 438, in add_job
+    job = Job(self, **job_kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 49, in __init__
+    self._modify(id=id or uuid4().hex, **kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/job.py", line 180, in _modify
+    check_callable_args(func, args, kwargs)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/apscheduler/util.py", line 391, in check_callable_args
+    raise ValueError('The following arguments have not been supplied: %s' %
+ValueError: The following arguments have not been supplied: email_function_args, delay_seconds
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 62, in create
+    raise serializers.ValidationError(
+rest_framework.exceptions.ValidationError: {'status': ErrorDetail(string='False', code='400'), 'message': ErrorDetail(string='Something went wrong. Please try again.', code='400')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 112, in create_user
+    serializer.save()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/serializers.py", line 212, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/serializers.py", line 71, in create
+    user.delete()
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/db/models/base.py", line 1111, in delete
+    raise ValueError(
+ValueError: User object can't be deleted because its id attribute is set to None.
+"POST /account/create-user/ HTTP/1.1" 500 160022
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 113, in create_user
+    if pin.isdigit() and len(pin) == 6:
+       ^^^^^^^^^^^
+AttributeError: 'int' object has no attribute 'isdigit'
+"POST /account/create-user/ HTTP/1.1" 500 106626
+Internal Server Error: /account/create-user/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 113, in create_user
+    if check_pin(pin):
+       ^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/utils.py", line 17, in check_pin
+    if re.match(pattern, pin):
+       ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.4_1/Frameworks/Python.framework/Versions/3.11/lib/python3.11/re/__init__.py", line 166, in match
+    return _compile(pattern, flags).match(string)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected string or bytes-like object, got 'int'
+"POST /account/create-user/ HTTP/1.1" 500 113940
+Internal Server Error: /account/reset-pin-auth-code/
+"POST /account/reset-pin-auth-code/ HTTP/1.1" 500 46
+Internal Server Error: /account/reset-pin-auth-code/
+"POST /account/reset-pin-auth-code/ HTTP/1.1" 500 46
+Internal Server Error: /account/reset-pin-auth-code/
+"POST /account/reset-pin-auth-code/ HTTP/1.1" 500 46
+Internal Server Error: /account/reset-pin-auth-code/
+"POST /account/reset-pin-auth-code/ HTTP/1.1" 500 46
+Internal Server Error: /account/reset-pin-auth-code/
+"POST /account/reset-pin-auth-code/ HTTP/1.1" 500 46
+Internal Server Error: /account/reset-pin-auth-code/
+"POST /account/reset-pin-auth-code/ HTTP/1.1" 500 46

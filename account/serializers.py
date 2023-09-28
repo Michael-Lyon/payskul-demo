@@ -5,8 +5,9 @@ from hashid_field import Hashid
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from account.tasks import send_auth_mail
-from .utils import verify_email_smtp
-from .models import Profile, MyUserAuth
+from scheduled_tasks.my_tasks import schedule_email_task
+from .utils import send_signup_email, verify_email_smtp
+from .models import Profile, MyUserAuth, SecurityQuestion
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from django.core.mail import send_mail
@@ -18,12 +19,22 @@ User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    security_question_1 = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
+    security_answer_1 = serializers.CharField(write_only=True)
 
+    security_question_2 = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
+    security_answer_2 = serializers.CharField(write_only=True)
+    pin = serializers.IntegerField(write_only=True)
     class Meta:
         model = Profile
-        fields = ['phone_number', 'dob', 'address', 'nin']
+        fields = ['phone_number', 'dob', 'address', 'nin', 'security_question_1', 'security_answer_1','security_question_2', 'security_answer_2', "pin"]
         read_only_fields = ('signup_confirmation',)
 
+
+class SecurityQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SecurityQuestion
+        fields = ['id', 'question_text']
 
 class ProfileInlineSerializer(serializers.Serializer):
     nin = serializers.CharField(read_only=True)
@@ -36,6 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     # referrals = serializers.SerializerMethodField()
     # token = serializers.SerializerMethodField(read_only=True)
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
         fields = ['id','first_name', 'username', 'last_name', 'password', 'email',  'profile']
@@ -49,26 +61,15 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(validated_data['password'])
             user.save()
             profile_data["user"] = user
-            Profile.objects.create(**profile_data)
+            profile = Profile.objects.create(**profile_data)
+            profile.ref_code = user.username
+            profile.save()
             # MyUserAuth.objects.create(user=user)
             try:
-                token = MyUserAuth.objects.get(user=user)
-                subject = f"PaySkul Password Reset Pin"
-                message = f"""
-                Dear {user.first_name},
-                You have successfully created an account.
-                Your username is {user.username}
-                This is the code to activate your account {token.code}.
-                """
-                send_mail(subject=subject,
-                                    message=message,
-                                    from_email=admin_mail,
-                                    recipient_list=[user.email],
-                                    fail_silently=False
-                                    )
-                token.save()
+                schedule_email_task(send_signup_email, email_function_args=[user], delay_seconds=1)
                 return user
             except  Exception as e:
+                print(e)
                 user.delete()
                 raise serializers.ValidationError(
                 {
@@ -86,8 +87,6 @@ class UserSerializer(serializers.ModelSerializer):
             "message": "Something went wrong. Please try again."
             }, code="400"
                 )
-
-
 
 
 class LoginSerializer(serializers.Serializer):

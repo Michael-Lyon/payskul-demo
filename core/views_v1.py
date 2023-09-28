@@ -362,64 +362,86 @@ def webhook_view(request):
 def link_account_okra_test(request):
     return render(request, 'core/demo.html')
 
+
 class ExtendLoanView(APIView):
-    def post(self, request, date):
-        loan = Loan.get_loan(user=request.user)
+    authentication_classes = [JWTAuthentication]
+    def post(self, request):
+        date = request.data.get('date')
+        pin = request.data.get('pin')
+        pin = request.data.get('pin')
+
+        if request.user.profile.pin != pin:
+            return Response({"status":False,'message': 'Invalid Pin'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            loan = Loan.get_loan(user=request.user)
+        except Loan.DoesNotExist:
+            return Response({"status":False,'message': 'Loan not found'}, status=status.HTTP_404_NOT_FOUND)
+
         loan.end_date = date
         loan.save()
 
-        return Response(status=status.HTTP_200_OK)
+        return Response({"status":True,'message': 'Loan extended successfully'}, status=status.HTTP_200_OK)
 
 class LoanRepaymentView(APIView):
+    authentication_classes = [JWTAuthentication]
+    PAYSTACK_SECRET = os.getenv("PAYSATCK_SECRET")
+    PAYSTACK_VERIFY_URL = "https://api.paystack.co/transaction/verify/"
 
-    _PAYSTACK_SECRET = os.getenv("PAYSATCK_SECRET")
-
-    _PAYSTACK_HEADERS = {
+    PAYSTACK_HEADERS = {
         "accept": "application/json; charset=utf-8",
         "content-type": "application/json",
-        "authorization": f"Bearer {_PAYSTACK_SECRET}"
+        "authorization": f"Bearer {PAYSTACK_SECRET}"
     }
 
-    def post(self, request, reference_id, amount_paid):
+    def post(self, request):
+        amount_paid = request.data.get('amount_paid')
+        reference_id = request.data.get('reference_id')
+        pin = request.data.get('pin')
 
-        loan = Loan.get_loan(user=request.user)
+        if request.user.profile.pin != pin:
+            return Response({"status":False,'message': 'Invalid Pin'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            loan = Loan.get_loan(user=request.user)
+        except Loan.DoesNotExist:
+            return Response({'message': 'Loan not found'}, status=status.HTTP_404_NOT_FOUND)
 
         response = requests.get(
-            url=f"https://api.paystack.co/transaction/verify/{reference_id}",
-            headers=self._PAYSTACK_HEADERS
+            url=f"{self.PAYSTACK_VERIFY_URL}{reference_id}",
+            headers=self.PAYSTACK_HEADERS
         ).json()
 
-        if response.status_code == 200:
+        if response.get('status') == True:
             amount = response['data']['amount']
-            loan.total_repayment = loan.total_repayment + amount
+            loan.total_repayment += amount
             loan.save()
 
             transaction = Transaction.objects.create(
-                user = request.user,
-                loan = loan,
-                api_reference = response['data']['reference'],
-                amount = amount,
-                status  = "success",
-                type = 'FR',
-                description = 'Loan Repayment'
+                user=request.user,
+                loan=loan,
+                api_reference=response['data']['reference'],
+                amount=amount,
+                status="success",
+                type='FR',
+                description='Loan Repayment'
             )
             transaction.save()
 
             if loan.amount_to_pay_back == loan.total_repayment:
                 loan.cleared = True
                 loan.save()
-            return Response({'message':'Success!'}, status=status.HTTP_200_OK)
-        else :
+            return Response({'message': 'Success!'}, status=status.HTTP_200_OK)
+        else:
             transaction = Transaction.objects.create(
-                user = request.user,
-                loan = loan,
-                amount = amount_paid,
-                status  = "failed",
-                type = 'FR',
-                description = 'Loan Repayment'
+                user=request.user,
+                loan=loan,
+                amount=amount_paid,
+                status="failed",
+                type='FR',
+                description='Loan Repayment'
             )
             transaction.save()
-            return Response({'message':'Transaction Failed!'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Transaction Failed!'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ReferralView(APIView):
     def get(self, request):

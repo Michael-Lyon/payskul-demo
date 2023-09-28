@@ -64,10 +64,11 @@ class WalletInlineSerializer(serializers.Serializer):
 
 class LoanSerializer(serializers.ModelSerializer):
     days_left = serializers.SerializerMethodField()
+    loan_balance = serializers.SerializerMethodField()
 
     class Meta:
         model = Loan
-        fields = ('id', 'user', 'service', 'start_date', 'end_date', 'amount_needed', 'amount_to_pay_back', 'total_repayment', 'cleared', 'days_left')
+        fields = ('id', 'user', 'service', 'start_date', 'end_date', 'amount_needed', 'amount_to_pay_back', 'total_repayment', 'cleared', 'days_left', 'loan_balance')
 
     def get_days_left(self, obj):
         if obj.end_date and not obj.cleared:
@@ -76,6 +77,9 @@ class LoanSerializer(serializers.ModelSerializer):
                 days_left = (obj.end_date - today).days
                 return days_left
         return None
+
+    def get_loan_balance(self, obj):
+        return obj.amount_to_pay_back - obj.total_repayment
 
 
 class LoanInlineSerializer(serializers.Serializer):
