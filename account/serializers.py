@@ -12,7 +12,7 @@ from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
 from django.core.mail import send_mail
 from django.contrib.auth.password_validation import validate_password
-
+import traceback
 User = get_user_model()
 
 
@@ -59,7 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
             profile.ref_code = user.username
             profile.save()
             code = get_code()
-            auth = MyUserAuth.objects.get_or_create(user=user)
+            auth, created = MyUserAuth.objects.get_or_create(user=user)
             auth.code = code
             auth.save()
             try:
@@ -77,6 +77,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         except Exception as e:
             print(e)
+            traceback.print_exc()
             user.delete()
             raise serializers.ValidationError(
                 {

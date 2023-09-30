@@ -91,11 +91,6 @@ def create_user(request):
     phone_number -- user phone number
     email -- email
     password --password
-    # security_question_1 -- ID of the first security question
-    # security_answer_1 -- Answer to the first security question
-    # security_question_2 -- ID of the second security question
-    # security_answer_2 -- Answer to the second security question
-    # pin -- transaction pin
 
     Return: return_description
     """
@@ -107,11 +102,6 @@ def create_user(request):
         first_name = data['first_name']
         username = data['username']
         last_name = data["last_name"]
-        # security_question_1 = data['security_question_1']
-        # security_answer_1 = data['security_answer_1']
-        # security_question_2 = data['security_question_2']
-        # security_answer_2 = data['security_answer_2']
-        # pin = data['pin']
 
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError(detail={"message": f"Email already exists."})
@@ -123,14 +113,8 @@ def create_user(request):
             "password": password,
             "profile": {
                 "phone_number": phone_number,
-                # "security_question_1": security_question_1,
-                # "security_answer_1": security_answer_1,
-                # "security_question_2": security_question_2,
-                # "security_answer_2": security_answer_2,
-                # "pin": pin
             }
         })
-
         if serializer.is_valid():
             serializer.save()
             data = serializer.data
@@ -259,13 +243,13 @@ def reset_pin_auth_code(request):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return Response({'message': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status":False, 'message': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Retrieve the user's sensitive data
         try:
             sensitive_data = SensitiveData.objects.get(user=user)
         except SensitiveData.DoesNotExist:
-            return Response({'message': 'Sensitive data not found for this user'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"status":False, 'message': 'Sensitive data not found for this user'}, status=status.HTTP_404_NOT_FOUND)
 
         # Define a counter to keep track of correct answers
         correct_answers_count = 0
@@ -296,9 +280,9 @@ def reset_pin_auth_code(request):
             auth.code = code
             auth.save()
             schedule_email_task(send_verification_code, [user.email, code, 'pin'], 2)
-            return Response({'message': 'Verification successful'}, status=status.HTTP_200_OK)
+            return Response({"status":True,'message': 'Verification successful'}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'Verification failed'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status":False, 'message': 'Verification failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SecurityQAApiView(APIView):
@@ -315,7 +299,7 @@ class SecurityQAApiView(APIView):
         security_answer_2 = request.data.get('security_answer_2', '')
         security_question_3 = request.data.get('security_question_3', '')
         security_answer_3 = request.data.get('security_answer_3', '')
-        transaction_pin = request.data.get('transaction_pin', '')
+        transaction_pin = request.data.get('pin', '')
 
 
         # Check if security questions and answers are provided
