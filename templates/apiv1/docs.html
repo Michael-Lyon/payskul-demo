@@ -69,17 +69,17 @@
 
 
                         <pre>
-    <em>Sample data: </em>
-    <code>
-    {
-    fullname -- user fullname
-    email -- user email
-    phone_number -- user phone number
-    password -- 6 digit pin
-    confirm_password -- 6 digit pin
-    }
-    </code>
-    </pre>
+                        <em>Sample data: </em>
+                            <code>
+                            {
+                            fullname -- user fullname
+                            email -- user email
+                            phone_number -- user phone number
+                            password -- 6 digit pin
+                            confirm_password -- 6 digit pin
+                            }
+                            </code>
+                        </pre>
 
                         Response:
                         { 'email': 'pygod_pyoer123@icloud.com',
@@ -369,7 +369,8 @@
             <a href="{% url 'apiv1:core:payment_slip' %}">Paymetn Slip</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:payment_slip' %}</span>
 
-                <p>This is an endpoint that allows a user to make payments for the schools fees aside from the immidiate payment when applying for the loan</p>
+                <p>This is an endpoint that allows a user to make payments for the schools fees aside from the immidiate
+                    payment when applying for the loan</p>
                 <p>
                     <strong>On POST request</strong>
                     <pre>
@@ -392,9 +393,12 @@
                 </pre>
 
                     <p><strong>On Responsse: </strong></p>
-                    <p>success &rarr; {"status": True, "message": "Payment applied successfully"}, status=status.HTTP_201_CREATED</p>
-                    <p>error &rarr; {"status": False, "message": "No uncleared loan found"}, status=status.HTTP_404_NOT_FOUND</p>
-                    <p>error &rarr; {"status": False, "message": "Error creating transaction"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)</p>
+                    <p>success &rarr; {"status": True, "message": "Payment applied successfully"},
+                        status=status.HTTP_201_CREATED</p>
+                    <p>error &rarr; {"status": False, "message": "No uncleared loan found"},
+                        status=status.HTTP_404_NOT_FOUND</p>
+                    <p>error &rarr; {"status": False, "message": "Error creating transaction"},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)</p>
                     <p>error &rarr; {"status": False, "message": "Invalid pin"}, status=status.HTTP_400_BAD_REQUEST</p>
                     <p>error &rarr; {"success": false, message:"An error has occured."}</p>
 
@@ -426,7 +430,8 @@
             <a href="{% url 'apiv1:core:update_client_income_status' %}">Re-validated user for loan</a>
             <p>Endpoint: <span class="endpoint">{% url 'apiv1:core:update_client_income_status' %}</span>
 
-                <p>This is used to get the update of a user when they're trying to request another loan. To know if they're still fit to collect another loan or not</p>
+                <p>This is used to get the update of a user when they're trying to request another loan. To know if
+                    they're still fit to collect another loan or not</p>
                 <pre>
                     {message: "Client updated successfully", status: True, credit_limit: ....}
                 </pre>

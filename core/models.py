@@ -46,6 +46,7 @@ class Service(models.Model):
 class SchoolBank(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     bank_name = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=1000, blank=True)
     account_number = models.CharField(max_length=100, blank=True, null=True)
     verified = models.BooleanField(default=False)
 
@@ -99,8 +100,9 @@ class PaymentSlip(models.Model):
         ("failed", "Failed")
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payment_slip")
-    receivers_name = models.CharField(max_length=200, blank=True, null=True)
+    recipient = models.CharField(max_length=200, blank=True, null=True)
     amount = models.DecimalField(max_digits=100, decimal_places=2, default=0.0)
+    description = models.TextField(blank=True, max_length=200, null=True)
     school = models.ForeignKey(SchoolBank, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default="pending")
     reference = models.CharField(max_length=30, blank=True, null=True)

@@ -8,6 +8,7 @@ urlpatterns = [
     path('create-user/', views_v1.create_user, name="create_user"),
     path('reset-password/', views_v1.reset_password_view, name='reset_password'),
     path('security-questions/', views_v1.SecurityQuestionListAPIView.as_view(), name='security-question-list'),
+    path('set-pin-questions/', views_v1.SecurityQAApiView.as_view(), name='set_pin_questions'),
     path('reset-pin-auth-code/', views_v1.reset_pin_auth_code, name='reset_pin_auth_code'),
     path('reset-pin/', views_v1.reset_pin_view, name='reset_pin'),
     path('list-user/', views_v1.UserListView.as_view(), name="list_user"),

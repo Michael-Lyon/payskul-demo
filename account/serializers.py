@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from account.tasks import send_auth_mail
 from scheduled_tasks.my_tasks import schedule_email_task
-from .utils import send_signup_email, verify_email_smtp
+from .utils import get_code, send_signup_email, verify_email_smtp
 from .models import Profile, MyUserAuth, SecurityQuestion
 from payskul.settings import ADMIN_USER
 from payskul.settings import EMAIL_HOST_USER as admin_mail
@@ -19,15 +19,9 @@ User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    security_question_1 = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
-    security_answer_1 = serializers.CharField(write_only=True)
-
-    security_question_2 = serializers.PrimaryKeyRelatedField(queryset=SecurityQuestion.objects.all())
-    security_answer_2 = serializers.CharField(write_only=True)
-    pin = serializers.IntegerField(write_only=True)
     class Meta:
         model = Profile
-        fields = ['phone_number', 'dob', 'address', 'nin', 'security_question_1', 'security_answer_1','security_question_2', 'security_answer_2', "pin"]
+        fields = ['phone_number', 'dob', 'address']
         read_only_fields = ('signup_confirmation',)
 
 
@@ -64,9 +58,12 @@ class UserSerializer(serializers.ModelSerializer):
             profile = Profile.objects.create(**profile_data)
             profile.ref_code = user.username
             profile.save()
-            # MyUserAuth.objects.create(user=user)
+            code = get_code()
+            auth = MyUserAuth.objects.get_or_create(user=user)
+            auth.code = code
+            auth.save()
             try:
-                schedule_email_task(send_signup_email, email_function_args=[user], delay_seconds=1)
+                schedule_email_task(send_signup_email, email_function_args=[user, code], delay_seconds=1)
                 return user
             except  Exception as e:
                 print(e)

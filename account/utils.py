@@ -2,6 +2,7 @@ import uuid
 import smtplib
 import random
 import re
+import bcrypt
 
 from django.core.mail import send_mail
 from payskul.settings import ADMIN_USER
@@ -17,6 +18,7 @@ def check_pin(pin):
    if re.match(pattern, pin):
       return True
    return  False
+
 class UniqueRandomNumberGenerator:
    def __init__(self):
       self.generated_numbers = set()
@@ -53,14 +55,16 @@ def get_code():
 
 
 
-def send_signup_email(user):
+def send_signup_email(user, code):
    try:
-      subject = "Welcome to Our Website"
+      subject = "Welcome to PaySkul LTD. Your friendly Loan service provider."
       message = f"""
       Dear {user.first_name},
 
       Thank you for signing up for our platform! Your account has been successfully created.
       Your username is {user.username}.
+
+      Your email verification code is {code}. Expires in five minutes
 
       If you have any questions or need assistance, please don't hesitate to contact us.
 
@@ -70,7 +74,7 @@ def send_signup_email(user):
       send_mail(
          subject=subject,
          message=message,
-         from_email="your_email@example.com",  # Replace with your email
+         from_email="no-reply@payskulltd.com",  # Replace with your email
          recipient_list=[user.email],
          fail_silently=False,
       )
@@ -78,15 +82,15 @@ def send_signup_email(user):
       print("Email sending failed:", e)
 
 
-def send_verification_code(email, verification_code):
+def send_verification_code(email, verification_code, type):
    subject = f"PaySkul Password Reset Pin"
    message = f"""
    Dear {email},
-   A password reset has been requested on yor account.
+   A {type} reset has been requested on yor account.
    Your reset code is {verification_code}.
    Expires in 5 minutes
    """
-   send_mail(subject, message, ADMIN_USER,[email] )
+   send_mail(subject, message, "no-reply@payskulltd.com",[email] )
 
 
 
@@ -102,6 +106,17 @@ def verify_email_smtp(email):
          return True
       else:
          return False
+
+
+
+def hash_value(value):
+   salt = bcrypt.gensalt()
+   hashed = bcrypt.hashpw(value.encode('utf-8'), salt)
+   return hashed.decode('utf-8')
+
+def check_hashed_value(input, stored):
+   return bcrypt.checkpw(input.encode('utf-8'), stored.encode('utf-8'))
+
 
 
 

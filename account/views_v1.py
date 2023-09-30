@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 import requests
 from django.urls import reverse
 from django.contrib.auth import get_user_model, login
@@ -27,9 +27,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from account.customs import CustomPagination
 from scheduled_tasks.my_tasks import schedule_email_task
-from .models import Profile, MyUserAuth, SecurityQuestion
+from .models import Profile, MyUserAuth, SecurityQuestion, SensitiveData
 from .serializers import LoginSerializer, ChangePasswordSerializer, SecurityQuestionSerializer, UserSerializer
-from .utils import check_pin, get_code, send_verification_code, verify_email_smtp
+from .utils import check_hashed_value, check_pin, get_code, hash_value, send_verification_code, verify_email_smtp
 
 from core.serializers import DetailSerializer
 from payskul.settings import ADMIN_USER
@@ -91,10 +91,11 @@ def create_user(request):
     phone_number -- user phone number
     email -- email
     password --password
-    security_question_1 -- ID of the first security question
-    security_answer_1 -- Answer to the first security question
-    security_question_2 -- ID of the second security question
-    security_answer_2 -- Answer to the second security question
+    # security_question_1 -- ID of the first security question
+    # security_answer_1 -- Answer to the first security question
+    # security_question_2 -- ID of the second security question
+    # security_answer_2 -- Answer to the second security question
+    # pin -- transaction pin
 
     Return: return_description
     """
@@ -106,11 +107,11 @@ def create_user(request):
         first_name = data['first_name']
         username = data['username']
         last_name = data["last_name"]
-        security_question_1 = data['security_question_1']
-        security_answer_1 = data['security_answer_1']
-        security_question_2 = data['security_question_2']
-        security_answer_2 = data['security_answer_2']
-        pin = data['pin']
+        # security_question_1 = data['security_question_1']
+        # security_answer_1 = data['security_answer_1']
+        # security_question_2 = data['security_question_2']
+        # security_answer_2 = data['security_answer_2']
+        # pin = data['pin']
 
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError(detail={"message": f"Email already exists."})
@@ -122,11 +123,11 @@ def create_user(request):
             "password": password,
             "profile": {
                 "phone_number": phone_number,
-                "security_question_1": security_question_1,
-                "security_answer_1": security_answer_1,
-                "security_question_2": security_question_2,
-                "security_answer_2": security_answer_2,
-                "pin": pin
+                # "security_question_1": security_question_1,
+                # "security_answer_1": security_answer_1,
+                # "security_question_2": security_question_2,
+                # "security_answer_2": security_answer_2,
+                # "pin": pin
             }
         })
 
@@ -139,6 +140,9 @@ def create_user(request):
     except KeyError as e:
         print(e)
         raise serializers.ValidationError(detail={"message": f"missing fields:{e}"})
+
+
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -170,6 +174,7 @@ def confirm_email(request):
     return Response({"status":False,'message': 'Invalid code or user id'}, status.HTTP_400_BAD_REQUEST)
 
 
+
 # @csrf_exempt
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -178,96 +183,6 @@ def get_tokens_for_user(user):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }
-
-
-class LoginView(APIView):
-    @csrf_exempt
-    def post(self, request):
-        data = request.data
-        serializer = LoginSerializer(data=data)
-        if serializer.is_valid():
-            user = serializer.validated_data
-            # print(user.loan)
-            profile = Profile.objects.get(user=user)
-            # if profile.signup_confirmation:
-            login(request, user)
-            auth_token = get_tokens_for_user(user=user)
-            return Response({"status":True,"message": "User Logged in", "data": {
-                'id': user.id,
-                "last_name":user.last_name,
-                "first_name":user.first_name,
-                "username":user.username,
-                'email':user.email,
-                "details": DetailSerializer(user).data,
-                "profile":{
-                    "id":profile.id,
-                    "nin":profile.nin,
-                    "dob":profile.dob,
-                    "verified": profile.signup_confirmation,
-                    "address":profile.address,
-                    "phone_number":profile.phone_number,
-                    "has_active_loan": profile.has_active_loan,
-                    "credit_limit":profile.credit_limit,
-                    "credit_validated":profile.credit_validated
-                },
-                "jwt_token": auth_token
-                }}, status.HTTP_200_OK)
-        # return Response({"message": "Account not verified or wrong login info", })
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
-class ChangePasswordView(generics.UpdateAPIView):
-    queryset = User.objects.all()
-    authentication_classes = (JWTAuthentication,)
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ChangePasswordSerializer
-
-    def get_object(self):
-        obj = self.request.user
-        return obj
-
-    def get_serializer_context(self):
-        context = super(ChangePasswordView, self).get_serializer_context()
-        context.update({
-            'request': self.request
-        })
-        return context
-    
-    @csrf_exempt
-    def put(self, request, *args, **kwargs):
-        instance = self.get_object()
-        request = self.request
-        serializer = self.serializer_class(instance, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'status': True, 'message': 'Password changed successfully'}, status.HTTP_200_OK )
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
-
-# @csrf_exempt
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def get_new_token(request):
-    try:
-        user = request.user
-        print(user)
-        token = MyUserAuth.objects.get(user=user)
-        token.save()
-
-        token = token.code
-        subject = f'PaySkul Pin Verification'
-        message = f"""
-                Dear {user.first_name},
-                You have successfully created an account.
-                Your username is {user.username}
-                This is the code to activate your account {token}.
-                Token expires in 5 minutes.
-                """
-        send_mail(subject, message, ADMIN_USER, [f"{user.email}"], fail_silently=False,
-                )
-        return Response({"message":"Token Sent"}, status.HTTP_200_OK)
-    except Exception as e:
-        logger.exception(f"Error while sending auth code to user: {e}")
-        return Response({"message":"Error occured"}, status.HTTP_200_OK)
 
 
 
@@ -279,7 +194,6 @@ def reset_pin_view(request):
     POST:
     Reset the user's password using the verification code.
 
-    - `email` (request data): The email address of the user.
     - `verification_code` (request data): The verification code received by the user.
     - `pin` (request data): The new pin for the user.
 
@@ -293,11 +207,10 @@ def reset_pin_view(request):
     - `status`: Indicates the status of the operation (True for success, False for failure).
     - `message`: A message describing the result of the operation.
 
-
     POST Example Response (HTTP 200 OK):
     {
         "status": true,
-        "message": "Password reset successfully"
+        "message": "Pin reset successfully"
     }
 
     Error Responses:
@@ -306,83 +219,152 @@ def reset_pin_view(request):
 
     if request.method == 'POST':
         # Reset user password
-        email = request.data.get('email')
         verification_code = request.data.get('verification_code')
         pin = request.data.get('pin')
 
-        if not email or not verification_code or not pin:
-            return Response({'status': False, 'message': 'Email, verification code, and pin are required'}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            auth = MyUserAuth.objects.get(code=verification_code)
 
-        auth = MyUserAuth.objects.get(user=user)
-        if verification_code == auth.code:
-            profile, created = Profile.objects.get_or_create(user=user)
-            profile.pin = pin
-            profile.save()
-
-            return Response({'status': True, 'message': 'Pin reset successfully'}, status=status.HTTP_200_OK)
-        else:
+            if verification_code == auth.code:
+                sensitive_data = SensitiveData.objects.get(user=auth.user)
+                sensitive_data.transaction_pin_hash = hash_value(pin)
+                sensitive_data.save()  # Save the updated sensitive data
+                return Response({'status': True, 'message': 'Pin reset successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'status': False, 'message': 'Pin reset failed'}, status=status.HTTP_400_BAD_REQUEST)
+        except MyUserAuth.DoesNotExist:
+            return Response({'status': False, 'message': "Pin reset failed, Auth code doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
+        except SensitiveData.DoesNotExist:
+            return Response({'status': False, 'message': "Pin reset failed, Sensitive data not found"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print("Error on reset pin: %s" % e)
             return Response({'status': False, 'message': 'Pin reset failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 
 @api_view(["POST"])
 def reset_pin_auth_code(request):
     if request.method == 'POST':
+        email = request.data.get('email')
+        security_question_1 = request.data.get('security_question_1', '')
+        security_question_2 = request.data.get('security_question_2', '')
+        security_question_3 = request.data.get('security_question_3', '')
+        security_answer_1 = request.data.get('security_answer_1', '')
+        security_answer_2 = request.data.get('security_answer_2', '')
+        security_answer_3 = request.data.get('security_answer_3', '')
+
+                # Retrieve the user by email
         try:
-            email = request.data.get('email')
-            security_question_id = request.data.get('security_question_id')
-            security_question_answer = request.data.get('security_question_answer')
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'message': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Retrieve the user by email
-            user = User.objects.filter(email=email).first()
-            if not user:
-                return Response({'message': 'User with this email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        # Retrieve the user's sensitive data
+        try:
+            sensitive_data = SensitiveData.objects.get(user=user)
+        except SensitiveData.DoesNotExist:
+            return Response({'message': 'Sensitive data not found for this user'}, status=status.HTTP_404_NOT_FOUND)
 
-            # Retrieve the security question associated with the selected ID
-            try:
-                security_question = SecurityQuestion.objects.get(pk=security_question_id)
-            except SecurityQuestion.DoesNotExist:
-                return Response({"status":False,'message': 'Invalid security question'}, status=status.HTTP_400_BAD_REQUEST)
-            # Check if the security question and answer match
+        # Define a counter to keep track of correct answers
+        correct_answers_count = 0
 
-            print(Profile.objects.get(user=user))
-            if user.profile.security_question_1 == security_question or user.profile.security_question_2 == security_question:
-                print("heyyyyy")
+        # Verify the security questions and answers
+        if (
+            sensitive_data.security_question_1.question_text == security_question_1 and
+            check_hashed_value(security_answer_1, sensitive_data.security_answer_1_hash)
+        ):
+            correct_answers_count += 1
 
-            security_question_match = (
-                Q(profile__security_question_1=security_question, profile__security_answer_1=security_question_answer) |
+        if (
+            sensitive_data.security_question_2.question_text == security_question_2 and
+            check_hashed_value(security_answer_2, sensitive_data.security_answer_2_hash)
+        ):
+            correct_answers_count += 1
 
-                Q(profile__security_question_2=security_question, profile__security_answer_2=security_question_answer)
-            )
+        if (
+            sensitive_data.security_question_3.question_text == security_question_3 and
+            check_hashed_value(security_answer_3, sensitive_data.security_answer_3_hash)
+        ):
+            correct_answers_count += 1
 
-            print(security_question_match)
+        # Check if at least two out of three are correct
+        if correct_answers_count >= 2:
+            code = get_code()
+            auth = MyUserAuth.objects.get(user=user)
+            auth.code = code
+            auth.save()
+            schedule_email_task(send_verification_code, [user.email, code, 'pin'], 2)
+            return Response({'message': 'Verification successful'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Verification failed'}, status=status.HTTP_400_BAD_REQUEST)
 
-            if not User.objects.filter(pk=user.pk).filter(security_question_match).exists():
-                return Response({"status": False, 'message': 'Incorrect security question answer'}, status=status.HTTP_400_BAD_REQUEST)
 
-            auth_code = get_code()
-            user_auth, created = MyUserAuth.objects.get_or_create(user=user)
-            user_auth.code = auth_code
-            user_auth.save()
+class SecurityQAApiView(APIView):
+    authentication_classes = [JWTAuthentication]
 
-            # Schedule the email task to send the authentication code
-            try:
-                schedule_email_task(send_verification_code, [user.email, auth_code], delay_seconds=2)
-                return Response({"status": True, 'message': 'Authentication code sent successfully'}, status=status.HTTP_200_OK)
-            except Exception as e:
-                print("An error occurred while sending auth code email:", e)
-                return Response({"status": False, 'message': 'An error occurred while sending email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def post(self, request):
+        # Get the user
+        user = request.user
 
-        except Exception as e:
-            print(e)
-            return Response({"status": False, 'message': 'An error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    else:
-        return Response({"status": False, 'message': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        # Retrieve security questions and answers from the request data
+        security_question_1 = request.data.get('security_question_1', '')
+        security_answer_1 = request.data.get('security_answer_1', '')
+        security_question_2 = request.data.get('security_question_2', '')
+        security_answer_2 = request.data.get('security_answer_2', '')
+        security_question_3 = request.data.get('security_question_3', '')
+        security_answer_3 = request.data.get('security_answer_3', '')
+        transaction_pin = request.data.get('transaction_pin', '')
+
+
+        # Check if security questions and answers are provided
+        if (
+            security_question_1 and security_answer_1 and
+            security_question_2 and security_answer_2 and
+            security_question_3 and security_answer_3 and transaction_pin
+        ):
+            # Hash the answers
+            security_answer_1_hash = hash_value(security_answer_1)
+            security_answer_2_hash = hash_value(security_answer_2)
+            security_answer_3_hash = hash_value(security_answer_3)
+            transaction_pin_hash = hash_value(transaction_pin)
+
+            # Get the security question from the database
+            security_question_1, created = SecurityQuestion.objects.get_or_create(security_question_1)
+
+            security_question_2, created = SecurityQuestion.objects.get_or_create(security_question_2)
+
+            security_question_3, created = SecurityQuestion.objects.get_or_create(security_question_3)
+            # Create or update the security questions and answers for the user
+            security_data, created = SensitiveData.objects.get_or_create(user=user)
+            security_data.security_question_1 = security_question_1
+            security_data.security_answer_1_hash = security_answer_1_hash
+            security_data.security_question_2 = security_question_2
+            security_data.security_answer_2_hash = security_answer_2_hash
+            security_data.security_question_3 = security_question_3
+            security_data.security_answer_3_hash = security_answer_3_hash
+            security_data.transaction_pin_hash = transaction_pin_hash
+            security_data.save()
+
+            return Response({"status":True,'message': 'Security questions and answers updated successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Invalid input data'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    # def get(self, request):
+    #     # Retrieve the user's security questions
+    #     try:
+    #         security_data = SensitiveData.objects.get(user=request.user)
+    #         data = {
+    #             'security_question_1': security_data.security_question_1,
+    #             'security_question_2': security_data.security_question_2,
+    #             'security_question_3': security_data.security_question_3,
+    #         }
+    #         return Response(data, status=status.HTTP_200_OK)
+    #     except SensitiveData.DoesNotExist:
+    #         return Response({'message': 'Security questions not set'}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 
@@ -397,7 +379,7 @@ def reset_password_view(request):
     Send a verification code to the user's email address.
 
     - `email` (request data): The email address of the user.
-    
+
     POST:
     Reset the user's password using the verification code.
 
@@ -465,4 +447,95 @@ def reset_password_view(request):
         user.set_password(password)
         return Response({'status': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
 
+
+class LoginView(APIView):
+    @csrf_exempt
+    def post(self, request):
+        data = request.data
+        serializer = LoginSerializer(data=data)
+        if serializer.is_valid():
+            user = serializer.validated_data
+            # print(user.loan)
+            profile = Profile.objects.get(user=user)
+            # if profile.signup_confirmation:
+            login(request, user)
+            auth_token = get_tokens_for_user(user=user)
+            return Response({"status":True,"message": "User Logged in", "data": {
+                'id': user.id,
+                "last_name":user.last_name,
+                "first_name":user.first_name,
+                "username":user.username,
+                'email':user.email,
+                "details": DetailSerializer(user).data,
+                "profile":{
+                    "id":profile.id,
+                    "nin":profile.nin,
+                    "dob":profile.dob,
+                    "verified": profile.signup_confirmation,
+                    "address":profile.address,
+                    "phone_number":profile.phone_number,
+                    "has_active_loan": profile.has_active_loan,
+                    "credit_limit":profile.credit_limit,
+                    "credit_validated":profile.credit_validated
+                },
+                "jwt_token": auth_token
+                }}, status.HTTP_200_OK)
+        # return Response({"message": "Account not verified or wrong login info", })
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+
+    def get_object(self):
+        obj = self.request.user
+        return obj
+
+    def get_serializer_context(self):
+        context = super(ChangePasswordView, self).get_serializer_context()
+        context.update({
+            'request': self.request
+        })
+        return context
+
+    @csrf_exempt
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+        request = self.request
+        serializer = self.serializer_class(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status': True, 'message': 'Password changed successfully'}, status.HTTP_200_OK )
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+# @csrf_exempt
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def get_new_token(request):
+    try:
+        user = request.user
+        print(user)
+        token = MyUserAuth.objects.get(user=user)
+        token.save()
+
+        token = token.code
+        subject = f'PaySkul Pin Verification'
+        message = f"""
+                Dear {user.first_name},
+                You have successfully created an account.
+                Your username is {user.username}
+                This is the code to activate your account {token}.
+                Token expires in 5 minutes.
+                """
+        send_mail(subject, message, ADMIN_USER, [f"{user.email}"], fail_silently=False,
+                )
+        return Response({"message":"Token Sent"}, status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception(f"Error while sending auth code to user: {e}")
+        return Response({"message":"Error occured"}, status.HTTP_200_OK)
 

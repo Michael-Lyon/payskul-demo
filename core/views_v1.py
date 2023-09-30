@@ -150,26 +150,34 @@ def payment_slip(request, *args, **kwargs):
     Endpoint to apply for the user's loan.
 
     On POST request:
+    {
+        - schoool_details: {
+            "recipient": "Name of  sender",
+            "school_name": "Name of the school",
+            "school_address": " address of the school",
+        }
+
         - bank_details: {
-            "receivers_name": "Name of the receiver",
             "bank_name": "Name of the bank",
             "bank_account_number": "Account number",
             "description": "Description of the payment",
             "amount": "Amount to be paid into the bank account"
-        }
+        },
 
         - auth: {
             "pin": "User transaction pin"
         }
+    }
     """
     user = request.user
     method = request.method
-    profile = user.profile
+    profile = user.sensitive
     wallet = Wallet.objects.get(user=user)
 
     if method == "POST":
         bank_data = request.data.get("bank_details", {})
         auth_data = request.data.get("auth", {})
+        school_data = request.data.get("school_details", {})
 
         # Validate user transaction pin
         if profile.pin == str(auth_data.get('pin')):
@@ -180,10 +188,13 @@ def payment_slip(request, *args, **kwargs):
                     payment_amount = Decimal(bank_data.get("amount", 0))
 
                     # Subtract the bank_amount from the amount in the wallet
+                    # TODO: Validate banks
                     if wallet.amount >= payment_amount:
                         school, created = SchoolBank.objects.get_or_create(
-                            bank_name=bank_data.get("bank_name", ""),
-                            account_number=bank_data.get("bank_account_number", ""),
+                            name=school_data.get("school_name"),
+                            address=school_data.get("school_address"),
+                            bank_name=bank_data.get("bank_name"),
+                            account_number=bank_data.get("bank_account_number"),
                         )
                         # Create a transaction for fee payment
                         transaction = Transaction.objects.create(
@@ -195,10 +206,11 @@ def payment_slip(request, *args, **kwargs):
                         )
 
                         PaymentSlip.objects.create(
-                        receivers_name=bank_data.get("receivers_name", ""),
+                        recipient=school_data.get("recipient", ""),
                         user=user,
                         amount=payment_amount,
                         school=school,
+                        description=bank_data.get("description"),
                         reference=transaction.reference,
                         )
 
@@ -367,7 +379,6 @@ class ExtendLoanView(APIView):
     authentication_classes = [JWTAuthentication]
     def post(self, request):
         date = request.data.get('date')
-        pin = request.data.get('pin')
         pin = request.data.get('pin')
 
         if request.user.profile.pin != pin:
