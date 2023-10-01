@@ -314,12 +314,13 @@ class SecurityQAApiView(APIView):
             security_answer_3_hash = hash_value(security_answer_3)
             transaction_pin_hash = hash_value(transaction_pin)
 
+
             # Get the security question from the database
-            security_question_1, created = SecurityQuestion.objects.get_or_create(security_question_1)
+            security_question_1, created = SecurityQuestion.objects.get_or_create(question_text=security_question_1)
 
-            security_question_2, created = SecurityQuestion.objects.get_or_create(security_question_2)
+            security_question_2, created = SecurityQuestion.objects.get_or_create(question_text=security_question_2)
 
-            security_question_3, created = SecurityQuestion.objects.get_or_create(security_question_3)
+            security_question_3, created = SecurityQuestion.objects.get_or_create(question_text=security_question_3)
             # Create or update the security questions and answers for the user
             security_data, created = SensitiveData.objects.get_or_create(user=user)
             security_data.security_question_1 = security_question_1
