@@ -398,7 +398,7 @@ def reset_password_view(request):
             return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
         code = get_code()
-        auth = MyUserAuth.objects.get(user=user)
+        auth, created = MyUserAuth.objects.get_or_create(user=user)
         auth.code = code
         auth.save()
         send_verification_code(email, code, "password")  # Implement your own email sending logic
