@@ -354,7 +354,6 @@ class SecurityQAApiView(APIView):
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
 def reset_password_view(request):
     """
     Reset Password for a user.
