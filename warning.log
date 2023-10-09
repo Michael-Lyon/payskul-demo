@@ -1785,3 +1785,70 @@ Traceback (most recent call last):
     raise self.model.MultipleObjectsReturned(
 account.models.SecurityQuestion.MultipleObjectsReturned: get() returned more than one SecurityQuestion -- it returned 2!
 "POST /account/set-pin-questions/ HTTP/1.1" 500 117953
+Internal Server Error: /account/reset-password/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 398, in reset_password_view
+    send_verification_code(email, verification_code)  # Implement your own email sending logic
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: send_verification_code() missing 1 required positional argument: 'type'
+"GET /account/reset-password/?email=mickilyon@outlook.com HTTP/1.1" 500 100897
+Internal Server Error: /account/reset-password/
+Traceback (most recent call last):
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/account/views_v1.py", line 418, in reset_password_view
+    if not default_token_generator.check_token(user, verification_code):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/pygod/python_projects/payskul/env/lib/python3.11/site-packages/django/contrib/auth/tokens.py", line 59, in check_token
+    ts_b36, _ = token.split("-")
+                ^^^^^^^^^^^
+AttributeError: 'int' object has no attribute 'split'
+"POST /account/reset-password/ HTTP/1.1" 500 104031

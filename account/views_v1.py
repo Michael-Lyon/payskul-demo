@@ -337,20 +337,6 @@ class SecurityQAApiView(APIView):
             return Response({'message': 'Invalid input data'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-    # def get(self, request):
-    #     # Retrieve the user's security questions
-    #     try:
-    #         security_data = SensitiveData.objects.get(user=request.user)
-    #         data = {
-    #             'security_question_1': security_data.security_question_1,
-    #             'security_question_2': security_data.security_question_2,
-    #             'security_question_3': security_data.security_question_3,
-    #         }
-    #         return Response(data, status=status.HTTP_200_OK)
-    #     except SensitiveData.DoesNotExist:
-    #         return Response({'message': 'Security questions not set'}, status=status.HTTP_404_NOT_FOUND)
-
-
 
 
 @api_view(['GET', 'POST'])
@@ -398,8 +384,9 @@ def reset_password_view(request):
     """
 
     if request.method == 'GET':
+        print(request)
         # Send verification code to the user
-        email = request.data.get('email')
+        email = request.GET.get('email')
         if not email:
             return Response({'status': False, 'message': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -407,8 +394,11 @@ def reset_password_view(request):
         except User.DoesNotExist:
             return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        verification_code = default_token_generator.make_token(user)
-        send_verification_code(email, verification_code)  # Implement your own email sending logic
+        code = get_code()
+        auth = MyUserAuth.objects.get(user=user)
+        auth.code = code
+        auth.save()
+        send_verification_code(email, code, "password")  # Implement your own email sending logic
         return Response({'status': True, 'message': 'Verification code sent'}, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
@@ -425,9 +415,10 @@ def reset_password_view(request):
         except User.DoesNotExist:
             return Response({'status': False, 'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        if not default_token_generator.check_token(user, verification_code):
+        if MyUserAuth.expired.filter(user=user).exists():
             return Response({'status': False, 'message': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)
         user.set_password(password)
+        user.save()
         return Response({'status': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
 
 
