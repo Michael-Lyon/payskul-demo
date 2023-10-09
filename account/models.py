@@ -33,6 +33,7 @@ class Profile(models.Model):
     credit_limit = models.DecimalField(max_digits=100, decimal_places=2, default=0.0)
     has_active_loan = models.BooleanField(default=False)
     credit_validated = models.BooleanField(default=False)
+    pin_set = models.BooleanField(default=False)
 
 
     def __str__(self):
@@ -62,6 +63,7 @@ class SensitiveData(models.Model):
     security_answer_2_hash = models.CharField(max_length=128)
     security_question_3 = models.ForeignKey(SecurityQuestion, blank=True, null=True, on_delete=models.SET_NULL, related_name="q3")
     security_answer_3_hash = models.CharField(max_length=128, blank=True, null=True)
+    
 
 
 

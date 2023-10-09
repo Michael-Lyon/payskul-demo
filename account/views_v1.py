@@ -332,6 +332,9 @@ class SecurityQAApiView(APIView):
             security_data.transaction_pin_hash = transaction_pin_hash
             security_data.save()
 
+            profile = Profile.objects.get(user=user)
+            profile.pin_set = True
+
             return Response({"status":True,'message': 'Security questions and answers updated successfully'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'Invalid input data'}, status=status.HTTP_400_BAD_REQUEST)
@@ -444,6 +447,7 @@ class LoginView(APIView):
                 "profile":{
                     "id":profile.id,
                     "nin":profile.nin,
+                    "pin_set":profile.pin_set,
                     "dob":profile.dob,
                     "verified": profile.signup_confirmation,
                     "address":profile.address,
