@@ -408,10 +408,7 @@ class LoanRepaymentView(APIView):
     def post(self, request):
         amount_paid = request.data.get('amount_paid')
         reference_id = request.data.get('reference_id')
-        pin = request.data.get('pin')
 
-        if request.user.profile.pin != pin:
-            return Response({"status":False,'message': 'Invalid Pin'}, status=status.HTTP_400_BAD_REQUEST)
         try:
             loan = Loan.get_loan(user=request.user)
         except Loan.DoesNotExist:

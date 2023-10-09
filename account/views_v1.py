@@ -354,7 +354,6 @@ class SecurityQAApiView(APIView):
 
 
 @api_view(['GET', 'POST'])
-@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def reset_password_view(request):
     """
