@@ -47,13 +47,13 @@ INSTALLED_APPS = [
     'book_store',
     'apiv1',
     # "okra_things",
-    
+
     # packages
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
-    'django_celery_beat', 
+    'django_celery_beat',
     'drf_yasg',
 ]
 

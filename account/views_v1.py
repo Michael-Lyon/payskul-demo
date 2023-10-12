@@ -158,7 +158,6 @@ def confirm_email(request):
     return Response({"status":False,'message': 'Invalid code or user id'}, status.HTTP_400_BAD_REQUEST)
 
 
-
 # @csrf_exempt
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -226,20 +225,19 @@ def reset_pin_view(request):
 
 
 
-
-
 @api_view(["POST"])
 def reset_pin_auth_code(request):
     if request.method == 'POST':
         email = request.data.get('email')
         security_question_1 = request.data.get('security_question_1', '')
         security_question_2 = request.data.get('security_question_2', '')
-        security_question_3 = request.data.get('security_question_3', '')
         security_answer_1 = request.data.get('security_answer_1', '')
         security_answer_2 = request.data.get('security_answer_2', '')
+
+        security_question_3 = request.data.get('security_question_3', '')
         security_answer_3 = request.data.get('security_answer_3', '')
 
-                # Retrieve the user by email
+        # Retrieve the user by email
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -304,10 +302,10 @@ class SecurityQAApiView(APIView):
 
         # Check if security questions and answers are provided
         if (
-            security_question_1 and security_answer_1 and
-            security_question_2 and security_answer_2 and
-            security_question_3 and security_answer_3 and transaction_pin
-        ):
+                security_question_1 and security_answer_1 and
+                security_question_2 and security_answer_2 or
+                (security_question_3 and security_answer_3) and transaction_pin
+            ):
             # Hash the answers
             security_answer_1_hash = hash_value(security_answer_1)
             security_answer_2_hash = hash_value(security_answer_2)
