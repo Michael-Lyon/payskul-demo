@@ -383,7 +383,7 @@ class ExtendLoanView(APIView):
         pin = request.data.get('pin')
         sensitive_data = SensitiveData.objects.get(user=request.user)
 
-        if check_hashed_value(pin, sensitive_data.transaction_pin_hash,):
+        if not check_hashed_value(pin, sensitive_data.transaction_pin_hash,):
             return Response({"status":False,'message': 'Invalid Pin'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
