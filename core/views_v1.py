@@ -14,7 +14,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 
-from account.models import OkraLinkedUser, Profile
+from account.models import OkraLinkedUser, Profile, SensitiveData
+from account.utils import check_hashed_value
 from okra_utils.utils2 import Okra
 
 from .models import Bank, Loan, PaymentSlip, SchoolBank, Transaction, Wallet, Card, Service, Service_Category
@@ -380,17 +381,21 @@ class ExtendLoanView(APIView):
     def post(self, request):
         date = request.data.get('date')
         pin = request.data.get('pin')
+        sensitive_data = SensitiveData.objects.get(user=request.user)
 
-        if request.user.profile.pin != pin:
+        if check_hashed_value(pin, sensitive_data.transaction_pin_hash,):
             return Response({"status":False,'message': 'Invalid Pin'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             loan = Loan.get_loan(user=request.user)
+            loan.end_date = date
+            loan.save()
         except Loan.DoesNotExist:
             return Response({"status":False,'message': 'Loan not found'}, status=status.HTTP_404_NOT_FOUND)
+        finally:
+            if not loan:
+                return Response({"status":False,'message': 'Loan not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        loan.end_date = date
-        loan.save()
 
         return Response({"status":True,'message': 'Loan extended successfully'}, status=status.HTTP_200_OK)
 
