@@ -332,6 +332,7 @@ class SecurityQAApiView(APIView):
 
             profile = Profile.objects.get(user=user)
             profile.pin_set = True
+            profile.save()
 
             return Response({"status":True,'message': 'Security questions and answers updated successfully'}, status=status.HTTP_200_OK)
         else:
