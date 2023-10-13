@@ -21,8 +21,8 @@ User = get_user_model()
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['phone_number', 'dob', 'address']
-        read_only_fields = ('signup_confirmation',)
+        fields = ['phone_number', 'address',"credit_limit", "ref_code", 'dob', "pin_set", "has_active_loan"]
+        read_only_fields = ("credit_limit", "ref_code", 'dob', "pin_set", "has_active_loan")
 
 
 class SecurityQuestionSerializer(serializers.ModelSerializer):

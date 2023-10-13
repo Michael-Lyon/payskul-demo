@@ -15,5 +15,7 @@ urlpatterns = [
     path('list-user/<str:username>/', views_v1.UserDetailView.as_view(), name="list_user"),
     path('email-verify/', views_v1.confirm_email, name="confirm_email"),
     path('login/', views_v1.LoginView.as_view(), name='login'),
+    path('profile/', views_v1.ProfileApiView.as_view(), name='profile'),
+    path('profile/update/', views_v1.ProfileUpdateView.as_view(), name='profile_update'),
     path('get-auth-token/', views_v1.get_new_token, name='get_new_token'),
 ]

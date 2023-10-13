@@ -100,6 +100,7 @@ def apply_loan(request, *args, **kwargs):
     """Endpoint to apply for a loan."""
     user = request.user
     method = request.method
+    profile = user.profile
 
     if method == "POST":
         try:
@@ -132,7 +133,9 @@ def apply_loan(request, *args, **kwargs):
                     status='success',
                     type="LN",
                 )
-                return Response({"status": True, "message": "Loan applied successfully"}, status=status.HTTP_201_CREATED)
+                profile.has_active_loan = True
+                profile.save()
+                return Response({"status": True, "message": "Loan applied successfully", "has_active_loan": profile.has_active_loan}, status=status.HTTP_201_CREATED)
             else:
                 return Response({"status": False, "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

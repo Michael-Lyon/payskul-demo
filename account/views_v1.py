@@ -28,7 +28,7 @@ from django.views.decorators.csrf import csrf_exempt
 from account.customs import CustomPagination
 from scheduled_tasks.my_tasks import schedule_email_task
 from .models import Profile, MyUserAuth, SecurityQuestion, SensitiveData
-from .serializers import LoginSerializer, ChangePasswordSerializer, SecurityQuestionSerializer, UserSerializer
+from .serializers import LoginSerializer, ChangePasswordSerializer, ProfileSerializer, SecurityQuestionSerializer, UserSerializer
 from .utils import check_hashed_value, check_pin, get_code, hash_value, send_verification_code, verify_email_smtp
 
 from core.serializers import DetailSerializer
@@ -340,6 +340,32 @@ class SecurityQAApiView(APIView):
 
 
 
+class ProfileApiView(APIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileSerializer
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        profile = Profile.objects.get(user=user)
+        serializer = ProfileSerializer(profile, context={"request":self.request})
+
+        return Response(serializer.data)
+
+
+class ProfileUpdateView(generics.UpdateAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # Retrieve the authenticated user from the request
+        user = self.request.user
+
+        # Filter the queryset to get the user's profile
+        obj, created = Profile.objects.get_or_create(user=user)
+        return obj
+
+
 
 @api_view(['GET', 'POST'])
 def reset_password_view(request):
@@ -515,4 +541,5 @@ def get_new_token(request):
     except Exception as e:
         logger.exception(f"Error while sending auth code to user: {e}")
         return Response({"message":"Error occured"}, status.HTTP_200_OK)
+
 
