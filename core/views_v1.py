@@ -175,16 +175,17 @@ def payment_slip(request, *args, **kwargs):
     """
     user = request.user
     method = request.method
-    profile = user.sensitive
+    sensitive_data = SensitiveData.objects.get(user=user)
     wallet = Wallet.objects.get(user=user)
 
     if method == "POST":
         bank_data = request.data.get("bank_details", {})
         auth_data = request.data.get("auth", {})
         school_data = request.data.get("school_details", {})
+        pin = str(auth_data.get('pin'))
 
         # Validate user transaction pin
-        if profile.pin == str(auth_data.get('pin')):
+        if check_hashed_value(pin, sensitive_data.transaction_pin_hash):
             try:
                 # Get the latest uncleared loan
                 with _transaction.atomic():
@@ -426,6 +427,8 @@ class LoanRepaymentView(APIView):
             url=f"{self.PAYSTACK_VERIFY_URL}{reference_id}",
             headers=self.PAYSTACK_HEADERS
         ).json()
+
+        print(response)
 
         if response.get('status') == True:
             amount = response['data']['amount']

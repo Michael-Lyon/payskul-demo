@@ -22,6 +22,6 @@ urlpatterns = [
     path("service-category/", views_v1.ServiceCategoryListCreateView.as_view(), name="service_category"),
     path('connect-okra/', views_v1.link_account_okra_test, name='okra_link_demo'),
     path("extend-loan/", views_v1.ExtendLoanView.as_view(), name="extend_loan"),
-    path('loan-repayment', views_v1.LoanRepaymentView.as_view(), name='loan_repayment'),
+    path('loan-repayment/', views_v1.LoanRepaymentView.as_view(), name='loan_repayment'),
     path('referrals', views_v1.ReferralView.as_view(), name='referrals'),
 ]
