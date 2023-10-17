@@ -431,7 +431,8 @@ class LoanRepaymentView(APIView):
         print(response)
 
         if response.get('status') == True:
-            amount = response['data']['amount']
+            amount = Decimal(int(response['data']['amount']) / 10)
+            # if int(amount_paid) == amount:
             loan.total_repayment += amount
             loan.save()
 
@@ -450,6 +451,7 @@ class LoanRepaymentView(APIView):
                 loan.cleared = True
                 loan.save()
             return Response({'message': 'Success!'}, status=status.HTTP_200_OK)
+            # return Response({'message': 'Amount Mismatch'}, status=status.HTTP_200_OK)
         else:
             transaction = Transaction.objects.create(
                 user=request.user,
