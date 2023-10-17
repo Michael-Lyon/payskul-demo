@@ -41,8 +41,11 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger('okra_validator')
 
+
 User = get_user_model()
 # token = Token.objects.get_or_create(user=user)
+
+# TODO: MAKE SURE THAT A USER THAT DOESNT HAVE HIS EMAIL VERIFIED CAN'T DO ANYTHING LET IT BE A FORM OF PERMISSION
 
 class UserDetailView(generics.RetrieveAPIView):
     # print(timezone.make_aware(

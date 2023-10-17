@@ -38,6 +38,9 @@ logger = logging.getLogger('okra_validator')
 User = get_user_model()
 load_dotenv()
 
+# TODO: MAKE SURE THAT A USER THAT DOESNT HAVE HIS EMAIL VERIFIED CAN'T DO ANYTHING LET IT BE A FORM OF PERMISSION
+
+
 @csrf_exempt
 @api_view(['Get'])
 def validate_user_loan(request, *args, **kwargs):
@@ -415,7 +418,7 @@ class LoanRepaymentView(APIView):
     }
 
     def post(self, request):
-        amount_paid = request.data.get('amount_paid')
+        amount_paid = Decimal(request.data.get('amount_paid'))
         reference_id = request.data.get('reference_id')
 
         try:
@@ -431,16 +434,16 @@ class LoanRepaymentView(APIView):
         print(response)
 
         if response.get('status') == True:
-            amount = Decimal(int(response['data']['amount']) / 10)
+            amount = Decimal(float(response['data']['amount']) / 10)
             # if int(amount_paid) == amount:
-            loan.total_repayment += amount
+            loan.total_repayment += amount_paid
             loan.save()
 
             transaction = Transaction.objects.create(
                 user=request.user,
                 loan=loan,
                 api_reference=response['data']['reference'],
-                amount=amount,
+                amount=amount_paid,
                 status="success",
                 type='FR',
                 description='Loan Repayment'
