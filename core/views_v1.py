@@ -405,7 +405,7 @@ class ExtendLoanView(APIView):
 
 class LoanRepaymentView(APIView):
     authentication_classes = [JWTAuthentication]
-    PAYSTACK_SECRET = os.getenv("PAYSATCK_SECRET")
+    PAYSTACK_SECRET = os.getenv("PAYSTACK_SECRET")
     PAYSTACK_VERIFY_URL = "https://api.paystack.co/transaction/verify/"
 
     PAYSTACK_HEADERS = {
