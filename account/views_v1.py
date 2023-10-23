@@ -206,9 +206,10 @@ def reset_pin_view(request):
     if request.method == 'POST':
         # Reset user password
         verification_code = request.data.get('verification_code')
-        pin = request.data.get('pin')
+        pin = str(request.data.get('pin'))
 
         try:
+            verification_code = str(verification_code)
             auth = MyUserAuth.objects.get(code=verification_code)
 
             if verification_code == auth.code:
@@ -488,7 +489,6 @@ class LoginView(APIView):
                 }}, status.HTTP_200_OK)
         # return Response({"message": "Account not verified or wrong login info", })
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
 
 
 class ChangePasswordView(generics.UpdateAPIView):
